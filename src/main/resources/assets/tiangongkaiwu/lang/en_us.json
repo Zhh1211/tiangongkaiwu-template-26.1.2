@@ -2,12 +2,12 @@
   "itemGroup.tiangongkaiwu": "Example Mod Tab",
   "block.tiangongkaiwu.example_block": "Example Block",
   "item.tiangongkaiwu.example_item": "Example Item",
-
   "tiangongkaiwu.configuration.title": "Tiangong Kaiwu Configs",
   "tiangongkaiwu.configuration.section.tiangongkaiwu.common.toml": "Tiangong Kaiwu Configs",
   "tiangongkaiwu.configuration.section.tiangongkaiwu.common.toml.title": "Tiangong Kaiwu Configs",
   "tiangongkaiwu.configuration.items": "Item List",
   "tiangongkaiwu.configuration.logDirtBlock": "Log Dirt Block",
   "tiangongkaiwu.configuration.magicNumberIntroduction": "Magic Number Text",
-  "tiangongkaiwu.configuration.magicNumber": "Magic Number"
+  "tiangongkaiwu.configuration.magicNumber": "Magic Number",
+  "item.tiangongkaiwu.rice_seed": "Rice Seed"
 }
