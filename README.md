@@ -1,26 +1,120 @@
+# 《天工开物》 —— 一场 AI 辅助开发的模组实验
 
-Installation information
+<p align="center">
+  <img src="https://img.shields.io/badge/Minecraft-26.1.2-green" alt="Minecraft">
+  <img src="https://img.shields.io/badge/NeoForge-26.1.2.76-blue" alt="NeoForge">
+  <img src="https://img.shields.io/badge/License-MIT-yellow" alt="License">
+  <img src="https://img.shields.io/badge/AI-Assisted-orange" alt="AI Assisted">
+</p>
 
-This template repository can be directly cloned to get you started with a new
-mod. Simply create a new repository cloned from this one, by following the
-instructions provided by [GitHub](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-repository-from-a-template).
+> **一个初二学生，零 Java 基础，在 AI 的帮助下，试图把 1637 年的明代百科全书画进方块世界。**
 
-Once you have your clone, simply open the repository in the IDE of your choice. The usual recommendation for an IDE is either IntelliJ IDEA or Eclipse.
+---
 
-If at any point you are missing libraries in your IDE, or you've run into problems you can
-run `gradlew --refresh-dependencies` to refresh the local cache. `gradlew clean` to reset everything 
-{this does not affect your code} and then start the process again.
+## 🧪 这是一场实验
 
-Mapping Names:
-============
-By default, the MDK is configured to use the official mapping names from Mojang for methods and fields 
-in the Minecraft codebase. These names are covered by a specific license. All modders should be aware of this
-license. For the latest license text, refer to the mapping file itself, or the reference copy here:
-https://github.com/NeoForged/NeoForm/blob/main/Mojang.md
+这个项目的目标不仅仅是做一个 Minecraft 模组，更是为了回答一个问题：
 
-Additional Resources: 
-==========
-Community Documentation: https://docs.neoforged.net/  
-NeoForged Discord: https://discord.neoforged.net/
-=======
-# tiangongkaiwu-template-26.1.2
+> **“在今天，一个不会写代码的人，能用 AI 开发出什么样的软件？”**
+
+我是初二学生，没有学过 Java，模组开发经验为零。所有的代码、配置、资源文件，都是通过对话式 AI（Claude / DeepSeek 等）生成的，我负责的是：
+
+- 提出需求
+- 判断方案是否合理
+- 取舍功能
+- 修复 AI 生成的 bug
+- 做产品的设计决策
+
+**换句话说：我是产品经理，AI 是程序员，GitHub 是版本管理，Minecraft 是运行环境。**
+
+目前这个实验已经走到了第一步：建立模组框架，完成第一个物品的注册与资源加载。
+
+---
+
+## 📖 模组本身在做什么？
+
+你在遗迹里找到一页泛黄的古纸，上面写着你读不懂的文言文：
+
+> *“天覆地載，物數號萬，而事亦因之曲成而不遺。豈人力也哉？”*
+
+你需要一座 **翰墨台**，把这些残页“翻译”成现代语言。每译一页，你就解锁一项古代工艺——从种水稻、制盐、炼铁，到造纸、染布、铸器。
+
+**这不是普通的农业模组，而是用游戏形式呈现的中国古代科技史。**
+
+---
+
+## 🎯 核心玩法：翻译古籍，解锁文明
+
+### 1. 寻找残页
+在沙漠神殿、废弃矿井、地牢等遗迹中，找到 **《天工》残页**。
+
+### 2. 翻译古文
+在 **翰墨台** 的 GUI 中，从词块池里挑选正确的词语，按顺序拼成译文。
+
+| 玩家语言 | 残页原文 | 目标译文 |
+|---|---|---|
+| 中文玩家 | 文言文 | 现代白话文 |
+| 海外玩家 | 简体中文 | 玩家母语（英/俄/日等） |
+
+**所有人都需要“做题”——没有人能跳过翻译直接获得知识。**
+
+### 3. 解锁工艺
+翻译正确后，解锁对应的配方或制作方法。从《乃粒》开始，逐步走完《天工开物》全十八篇。
+
+---
+
+## 🌾 第一部：《乃粒》——贵五谷而贱金玉
+
+你的旅程从全书的根基——粮食开始。
+
+### 第一阶段：作物
+- 🌾 水稻——水田种植，漫长生长，高产主食
+- 🌾 小麦——旱地种植，磨粉制面
+- 🌿 菽（黄豆）——固氮养地，榨油制腐
+
+### 第二阶段：加工
+- 稻谷 → 糙米 → 精米
+- 小麦 → 面粉 → 面食
+- 菽 → 豆油 / 豆腐
+
+### 第三阶段：增产
+- 轮作、施肥、灌溉、育种——农事渐成体系
+
+### 第四阶段：自循环
+- 秸秆还田、粪肥归土——农田不再是消耗品
+
+---
+
+## 🧭 后续篇章
+
+| 卷章 | 主题 | 内容 |
+|---|---|---|
+| 粹精 | 粮食深加工 | 石磨、风车、制粉 |
+| 作咸 | 制盐 | 晒盐、煮盐、腌渍 |
+| 甘嗜 | 制糖 | 甘蔗、甜菜、饴糖 |
+| 陶埏 | 陶瓷 | 黏土、陶轮、窑炉 |
+| 冶铸 | 金属冶炼 | 铸铁、锻铁、青铜 |
+| 杀青 | 造纸 | 竹纸、皮纸、书卷 |
+| 彰施 | 染色 | 植物染料、染布 |
+| 及更多…… |
+
+---
+
+## 📦 当前进度
+
+| 状态 | 内容 |
+|---|---|
+| ✅ 已完成 | 模组框架、水稻种子物品（`rice_seed`）、中英文语言文件 |
+| 🚧 开发中 | 水稻种植系统（CropBlock） |
+| 📋 规划中 | 翰墨台 GUI、加工链、更多作物 |
+| ⚠️ 待修复 | `rice_seed` 贴图加载问题（紫黑色方块）——欢迎有经验的大佬指点 |
+
+---
+
+## 🛠️ 构建与运行
+
+```bash
+git clone https://github.com/Zhh1211/tiangongkaiwu-template-26.1.2.git
+cd tiangongkaiwu-template-26.1.2
+./gradlew build
+./gradlew runClient
