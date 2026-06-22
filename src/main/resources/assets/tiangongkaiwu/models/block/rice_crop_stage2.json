@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cross",
+  "textures": {
+    "crop": "tiangongkaiwu:block/rice_crop_stage2"
+  }
+}
