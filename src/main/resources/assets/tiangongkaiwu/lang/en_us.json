@@ -9,5 +9,8 @@
   "tiangongkaiwu.configuration.logDirtBlock": "Log Dirt Block",
   "tiangongkaiwu.configuration.magicNumberIntroduction": "Magic Number Text",
   "tiangongkaiwu.configuration.magicNumber": "Magic Number",
-  "item.tiangongkaiwu.rice_seed": "Rice Seed"
+  "item.tiangongkaiwu.rice_seed": "Rice Seed",
+  "block.tiangongkaiwu.rice_crop": "Rice Crop",
+  "block.tiangongkaiwu.hanmo_tai": "Hanmo Tai",
+  "item.tiangongkaiwu.can_ye": "Tiangong Fragment"
 }

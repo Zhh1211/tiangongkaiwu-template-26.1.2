@@ -1,3 +1,6 @@
 {
-    "item.tiangongkaiwu.rice_seed": "水稻种子"
+    "item.tiangongkaiwu.rice_seed": "水稻种子",
+    "block.tiangongkaiwu.rice_crop": "水稻",
+    "block.tiangongkaiwu.hanmo_tai": "翰墨台",
+    "item.tiangongkaiwu.can_ye": "《天工》残页"
 }
