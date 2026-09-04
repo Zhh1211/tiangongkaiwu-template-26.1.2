@@ -1,9 +1,11 @@
 package com.example.tiangongkaiwu.block;
 
+import com.example.tiangongkaiwu.menu.HanmoTaiMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -16,11 +18,14 @@ public class HanmoTaiBlock extends Block {
         super(properties);
     }
 
-    // 去掉 @Override，因为签名可能不完全匹配父类
+    // 暂时去掉 @Override，直到确认父类签名
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player,
                                   InteractionHand hand, BlockHitResult hit) {
-        if (!level.isClientSide()) {  // ← 改为方法调用
-            player.sendSystemMessage(Component.literal("§6翰墨台正在准备中... 功能开发中。"));
+        if (!level.isClientSide()) {
+            player.openMenu(new SimpleMenuProvider(
+                (containerId, inventory, p) -> new HanmoTaiMenu(containerId, inventory),
+                Component.literal("翰墨台")
+            ));
             return InteractionResult.SUCCESS;
         }
         return InteractionResult.SUCCESS;
