@@ -13,7 +13,7 @@ public class HanmoTaiMenu extends AbstractContainerMenu {
 
     public static final DeferredHolder<MenuType<?>, MenuType<HanmoTaiMenu>> HANMO_TAI_MENU =
             TiangongKaiwu.MENUS.register("hanmo_tai_menu",
-                    () -> IMenuTypeExtension.create(HanmoTaiMenu::new));
+                    () -> IMenuTypeExtension.create((windowId, playerInventory, extraData) -> new HanmoTaiMenu(windowId, playerInventory)));
 
     public HanmoTaiMenu(int containerId, Inventory playerInventory) {
         super(HANMO_TAI_MENU.get(), containerId);
