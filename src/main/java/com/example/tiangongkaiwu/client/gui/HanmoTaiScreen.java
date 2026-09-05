@@ -1,34 +1,24 @@
-package com.example.tiangongkaiwu.menu;
+package com.example.tiangongkaiwu.client.gui;
 
-import com.example.tiangongkaiwu.TiangongKaiwu;
-import net.minecraft.core.registries.Registries;
+import com.example.tiangongkaiwu.menu.HanmoTaiMenu;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.MenuType;
-import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.registries.DeferredHolder;
-import net.neoforged.neoforge.registries.DeferredRegister;
 
-public class HanmoTaiMenu extends AbstractContainerMenu {
+public class HanmoTaiScreen extends AbstractContainerScreen<HanmoTaiMenu> {
 
-    public static final DeferredRegister<MenuType<?>> MENUS =
-            DeferredRegister.create(Registries.MENU, TiangongKaiwu.MODID);
-
-    public static final DeferredHolder<MenuType<?>, MenuType<HanmoTaiMenu>> HANMO_TAI_MENU =
-            MENUS.register("hanmo_tai_menu", () -> new MenuType<HanmoTaiMenu>(HanmoTaiMenu::new));
-
-    public HanmoTaiMenu(int containerId, Inventory playerInventory) {
-        super(HANMO_TAI_MENU.get(), containerId);
+    public HanmoTaiScreen(HanmoTaiMenu menu, Inventory playerInventory, Component title) {
+        super(menu, playerInventory, title);
     }
 
     @Override
-    public ItemStack quickMoveStack(Player player, int slot) {
-        return ItemStack.EMPTY;
+    protected void renderBg(GuiGraphics guiGraphics, float partialTick, int mouseX, int mouseY) {
+        // 翰墨台界面背景后续用贴图完善
     }
 
     @Override
-    public boolean stillValid(Player player) {
-        return true;
+    protected void renderLabels(GuiGraphics guiGraphics, int mouseX, int mouseY) {
+        guiGraphics.drawString(this.font, this.title, this.titleLabelX, this.titleLabelY, 0x404040, false);
     }
 }

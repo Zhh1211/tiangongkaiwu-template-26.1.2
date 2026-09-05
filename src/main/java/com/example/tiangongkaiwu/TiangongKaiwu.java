@@ -6,7 +6,6 @@ import com.mojang.logging.LogUtils;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.BlockItem;
@@ -35,6 +34,7 @@ import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 import com.example.tiangongkaiwu.block.RiceCropBlock;
+import com.example.tiangongkaiwu.block.HanmoTaiBlock;
 import com.example.tiangongkaiwu.item.CanYeItem;
 
 @Mod(TiangongKaiwu.MODID)
@@ -56,11 +56,11 @@ public class TiangongKaiwu {
     // 示例内容（后续可删除）
     // ============================================================
     public static final DeferredBlock<Block> EXAMPLE_BLOCK = BLOCKS.registerSimpleBlock("example_block",
-            p -> p.mapColor(MapColor.STONE));
+            BlockBehaviour.Properties.of().mapColor(MapColor.STONE));
     public static final DeferredItem<BlockItem> EXAMPLE_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("example_block",
             EXAMPLE_BLOCK);
     public static final DeferredItem<Item> EXAMPLE_ITEM = ITEMS.registerSimpleItem("example_item",
-            p -> p.food(new FoodProperties.Builder()
+            new Item.Properties().food(new FoodProperties.Builder()
                     .alwaysEdible().nutrition(1).saturationModifier(2f).build()));
 
     // ============================================================
@@ -68,23 +68,21 @@ public class TiangongKaiwu {
     // ============================================================
     public static final DeferredBlock<Block> RICE_CROP = BLOCKS.register(
         "rice_crop",
-        registryName -> new RiceCropBlock(
+        () -> new RiceCropBlock(
             BlockBehaviour.Properties.of()
                 .mapColor(MapColor.PLANT)
-                .noCollision()
+                .noCollission()
                 .randomTicks()
                 .instabreak()
                 .sound(SoundType.CROP)
-                .setId(ResourceKey.create(Registries.BLOCK, registryName))
         )
     );
 
     public static final DeferredItem<BlockItem> RICE_SEED = ITEMS.register(
         "rice_seed",
-        registryName -> new BlockItem(
+        () -> new BlockItem(
             RICE_CROP.get(),
             new Item.Properties()
-                .setId(ResourceKey.create(Registries.ITEM, registryName))
         )
     );
 
@@ -93,21 +91,19 @@ public class TiangongKaiwu {
     // ============================================================
     public static final DeferredBlock<HanmoTaiBlock> HANMO_TAI = BLOCKS.register(
         "hanmo_tai",
-        registryName -> new HanmoTaiBlock(
+        () -> new HanmoTaiBlock(
             BlockBehaviour.Properties.of()
                 .mapColor(MapColor.WOOD)
                 .strength(2.5f, 3.0f)
                 .noOcclusion()
-                .setId(ResourceKey.create(Registries.BLOCK, registryName))
         )
     );
 
     public static final DeferredItem<CanYeItem> CAN_YE = ITEMS.register(
         "can_ye",
-        registryName -> new CanYeItem(
+        () -> new CanYeItem(
             new Item.Properties()
                 .stacksTo(1)
-                .setId(ResourceKey.create(Registries.ITEM, registryName))
         )
     );
 
