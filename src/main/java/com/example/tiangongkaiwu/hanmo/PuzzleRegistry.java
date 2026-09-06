@@ -12,8 +12,9 @@ import java.util.Optional;
 /**
  * 题库缓存。
  *
- * 题库放在 data/ 下，只有服务端会加载；客户端通过自定义网络包逐题获取，
- * 因此这里的静态缓存只在服务端有意义，客户端侧恒为空。
+ * 服务端：题库放 data/ 下，由 PuzzleLoader 在数据包重载时填充；
+ * 客户端：data 包读不到，玩家登录后由 PuzzleSyncPayload 网络包全量下发、
+ * 同样经 {@link #replaceAll} 填充（两处共用同一静态缓存与入口）。
  */
 public final class PuzzleRegistry {
 

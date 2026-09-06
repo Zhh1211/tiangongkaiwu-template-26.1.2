@@ -1,11 +1,14 @@
 package com.example.tiangongkaiwu;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import com.mojang.logging.LogUtils;
 
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
@@ -31,6 +34,9 @@ import net.neoforged.neoforge.common.extensions.IMenuTypeExtension;
 import net.neoforged.neoforge.event.AddReloadListenerEvent;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.network.PacketDistributor;
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredItem;
@@ -39,7 +45,10 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import com.example.tiangongkaiwu.block.RiceCropBlock;
 import com.example.tiangongkaiwu.block.HanmoTaiBlock;
 import com.example.tiangongkaiwu.block.entity.HanmoTaiBlockEntity;
+import com.example.tiangongkaiwu.hanmo.Puzzle;
 import com.example.tiangongkaiwu.hanmo.PuzzleLoader;
+import com.example.tiangongkaiwu.hanmo.PuzzleRegistry;
+import com.example.tiangongkaiwu.hanmo.network.PuzzleSyncPayload;
 import com.example.tiangongkaiwu.item.CanYeItem;
 import com.example.tiangongkaiwu.menu.HanmoTaiMenu;
 
@@ -168,6 +177,7 @@ public class TiangongKaiwu {
         NeoForge.EVENT_BUS.register(this);
 
         modEventBus.addListener(this::addCreative);
+        modEventBus.addListener(this::onRegisterPayloads);
 
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
     }
@@ -203,5 +213,35 @@ public class TiangongKaiwu {
     @SubscribeEvent
     public void onAddReloadListeners(AddReloadListenerEvent event) {
         event.addListener(new PuzzleLoader());
+    }
+
+    /**
+     * 注册题库同步网络包（服务端 → 客户端）。
+     * 客户端 handler 直接灌进 PuzzleRegistry，题库在单机客户端物理端也能拿到。
+     */
+    private void onRegisterPayloads(RegisterPayloadHandlersEvent event) {
+        event.registrar("1").playToClient(
+                PuzzleSyncPayload.TYPE,
+                PuzzleSyncPayload.STREAM_CODEC,
+                (payload, context) -> {
+                    PuzzleRegistry.replaceAll(payload.puzzles());
+                    LOGGER.info("[天工开物] 客户端收到题库，共 {} 道", payload.puzzles().size());
+                });
+    }
+
+    /**
+     * 玩家进入世界后，把服务端已加载的全量题库下发给该玩家客户端。
+     */
+    @SubscribeEvent
+    public void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
+        if (!(event.getEntity() instanceof ServerPlayer serverPlayer)) {
+            return;
+        }
+        List<Puzzle> puzzles = PuzzleRegistry.all();
+        if (puzzles.isEmpty()) {
+            return;
+        }
+        PacketDistributor.sendToPlayer(serverPlayer, new PuzzleSyncPayload(puzzles));
+        LOGGER.info("[天工开物] 已向玩家 {} 下发题库 {} 道", serverPlayer.getName().getString(), puzzles.size());
     }
 }

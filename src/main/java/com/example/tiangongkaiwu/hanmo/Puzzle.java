@@ -1,5 +1,9 @@
 package com.example.tiangongkaiwu.hanmo;
 
+import io.netty.buffer.ByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+
 import java.util.List;
 
 /**
@@ -10,4 +14,12 @@ import java.util.List;
  * @param sentences 三句话，逐句翻译，翻对一句才显示下一句
  */
 public record Puzzle(String id, String entry, List<PuzzleSentence> sentences) {
+
+    /** 网络流编解码：id + entry(UTF8) + sentences(句列表)。客户端经题库同步包拿到整道题。 */
+    public static final StreamCodec<ByteBuf, Puzzle> STREAM_CODEC = StreamCodec.composite(
+            ByteBufCodecs.stringUtf8(262144), Puzzle::id,
+            ByteBufCodecs.stringUtf8(262144), Puzzle::entry,
+            PuzzleSentence.STREAM_CODEC.apply(ByteBufCodecs.list()), Puzzle::sentences,
+            Puzzle::new
+    );
 }
