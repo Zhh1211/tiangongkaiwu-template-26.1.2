@@ -9,6 +9,10 @@
       "entry": "naili_juan/naili_zonglun"
     }
   ],
+  "condition": {
+    "type": "modonomicon:advancement",
+    "advancement_id": "tiangongkaiwu:unlock/naili_do"
+  },
   "pages": [
     {
       "type": "modonomicon:text",
