@@ -17,6 +17,14 @@
     {
       "type": "modonomicon:text",
       "text": "entry.tiangongkaiwu.naili_mai.page1"
+    },
+    {
+      "type": "modonomicon:text",
+      "text": "entry.tiangongkaiwu.naili_mai.page2"
+    },
+    {
+      "type": "modonomicon:text",
+      "text": "entry.tiangongkaiwu.naili_mai.page3"
     }
   ]
 }
