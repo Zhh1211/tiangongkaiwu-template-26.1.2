@@ -67,6 +67,7 @@ public class HanmoTaiScreen extends AbstractContainerScreen<HanmoTaiMenu> {
     private static final int INK_HILITE  = 0xFF6E635A; // 瓶身高光
     private static final int INK_HOLD    = 0xFF3C2E1E; // 墨瓶空台（未放墨）
     private static final int TEXT_DARK   = 0xFF3B2C1A; // 深色文字（桌面/纸面上）
+    private static final int NOTE_COLOR  = 0xFF7A6344; // 难字注文字（比正文浅的旧墨色）
     private static final int CHIP_TEXT   = 0xFF241A0E; // 词块文字（近黑）
     private static final int FLOAT_EDGE  = 0xFFC9A227; // 随鼠标浮动词块的描边（金，醒目）
 
@@ -669,7 +670,7 @@ public class HanmoTaiScreen extends AbstractContainerScreen<HanmoTaiMenu> {
                 INV_LABEL_X, INV_LABEL_Y, TEXT_DARK, false);
     }
 
-    /** 题面：第 N 句小标 + 文言居中；译毕时改为完成语。 */
+    /** 题面：第 N 句小标 + 文言居中；译毕时改为完成语。文言下方依 notes 画难字注（一行一条）。 */
     private void drawSentence(GuiGraphics guiGraphics, int px, int py, int pw, int ph) {
         if (this.completed) {
             drawCenteredWrapped(guiGraphics, Component.translatable("gui.tiangongkaiwu.hanmo_done").getString(),
@@ -682,7 +683,40 @@ public class HanmoTaiScreen extends AbstractContainerScreen<HanmoTaiMenu> {
                 Component.translatable("gui.tiangongkaiwu.hanmo_sentence", n, total),
                 px + 8, py + 3, TEXT_DARK, false);
         String wenyan = this.activePuzzle.sentences().get(this.sentenceIndex).wenyan();
-        drawCenteredWrapped(guiGraphics, wenyan, px + 4, py + 17, pw - 8, 13, TEXT_DARK);
+        // 返回文言排完后的行底，供难字注接续排版（文言多行时自动下移/放不下则不再画注）
+        int wenyanEndY = drawCenteredWrapped(guiGraphics, wenyan, px + 4, py + 17, pw - 8, 13, TEXT_DARK);
+        List<String> notes = this.activePuzzle.sentences().get(this.sentenceIndex).notes();
+        drawNotes(guiGraphics, px, py, pw, ph, wenyanEndY, notes);
+    }
+
+    /**
+     * 残页卡内难字注：紧跟文言排完的行底显示，每条注单独一行。
+     * 单行超宽按字符截断（防溢出到纸上边界外），纸底余位不足则放弃。
+     */
+    private void drawNotes(GuiGraphics guiGraphics, int px, int py, int pw, int ph,
+                           int startY, List<String> notes) {
+        if (notes == null || notes.isEmpty()) {
+            return;
+        }
+        String prefix = Component.translatable("gui.tiangongkaiwu.hanmo_note").getString();
+        int maxW = pw - 8;
+        int x = px + 4;
+        int y = startY + 1;
+        for (String note : notes) {
+            if (y + 13 > py + ph) {
+                break; // 纸底余位不足
+            }
+            String text = prefix + note;
+            // 单行内截断，绝不让注换行溢出残页纸
+            while (this.font.width(text) > maxW && text.length() > prefix.length()) {
+                text = text.substring(0, text.length() - 1);
+            }
+            if (text.length() > prefix.length()) {
+                int tx = x + (maxW - this.font.width(text)) / 2;
+                guiGraphics.drawString(this.font, text, tx, y, NOTE_COLOR, false);
+            }
+            y += 13;
+        }
     }
 
     /** 词块文本 → chip/格子宽：实测字宽 + 左右内边距。多语言/任意词长自适应。 */
@@ -792,9 +826,9 @@ public class HanmoTaiScreen extends AbstractContainerScreen<HanmoTaiMenu> {
         }
     }
 
-    /** 通用换行绘制（按实际字宽拆行），每行居中。 */
-    private void drawCenteredWrapped(GuiGraphics guiGraphics, String text, int x, int y,
-                                     int maxW, int lineH, int color) {
+    /** 通用换行绘制（按实际字宽拆行），每行居中。返回排完后的下一行顶部 y。 */
+    private int drawCenteredWrapped(GuiGraphics guiGraphics, String text, int x, int y,
+                                    int maxW, int lineH, int color) {
         StringBuilder line = new StringBuilder();
         int lineW = 0;
         for (int i = 0; i < text.length(); i++) {
@@ -811,7 +845,9 @@ public class HanmoTaiScreen extends AbstractContainerScreen<HanmoTaiMenu> {
         }
         if (line.length() > 0) {
             drawCenteredLine(guiGraphics, line.toString(), x, y, maxW, color);
+            y += lineH;
         }
+        return y;
     }
 
     private void drawCenteredLine(GuiGraphics guiGraphics, String text, int x, int y,

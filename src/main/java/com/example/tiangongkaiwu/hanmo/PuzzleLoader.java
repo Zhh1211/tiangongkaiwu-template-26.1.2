@@ -54,10 +54,18 @@ public class PuzzleLoader extends SimpleJsonResourceReloadListener {
                         tokens.add(tokenElement.getAsString());
                     }
 
+                    // notes 可选：无此字段的旧题库也照常加载
+                    List<String> notes = new ArrayList<>();
+                    if (sentenceObj.has("notes")) {
+                        for (JsonElement noteElement : sentenceObj.getAsJsonArray("notes")) {
+                            notes.add(noteElement.getAsString());
+                        }
+                    }
+
                     if (tokens.isEmpty()) {
                         throw new IllegalArgumentException("tokens 不能为空");
                     }
-                    sentences.add(new PuzzleSentence(wenyan, List.copyOf(tokens)));
+                    sentences.add(new PuzzleSentence(wenyan, List.copyOf(tokens), List.copyOf(notes)));
                 }
 
                 loaded.add(new Puzzle(id, entry, List.copyOf(sentences)));
