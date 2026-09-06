@@ -36,16 +36,20 @@ public class HanmoTaiMenu extends AbstractContainerMenu {
     private final Container container;
     private final ContainerLevelAccess access;
 
-    /** 客户端构造：无方块位置，用 NULL 访问（与工作台菜单同样的做法）。 */
+    /** 客户端构造（注册工厂经 IMenuTypeExtension 调用）：无方块位置，用空容器占位 + NULL 访问。 */
     public HanmoTaiMenu(int containerId, Inventory playerInventory) {
-        this(containerId, playerInventory, ContainerLevelAccess.NULL);
+        this(containerId, playerInventory, new SimpleContainer(INPUT_SLOT_COUNT), ContainerLevelAccess.NULL);
     }
 
-    /** 服务端构造：传入方块位置，用于 stillValid 距离判定与关闭时归还物品。 */
-    public HanmoTaiMenu(int containerId, Inventory playerInventory, ContainerLevelAccess access) {
+    /**
+     * 服务端构造：传入方块实体的真实容器与方块位置。
+     * 容器直接指向 HanmoTaiBlockEntity，材料留在方块内，
+     * 关闭界面不归还、不丢失。
+     */
+    public HanmoTaiMenu(int containerId, Inventory playerInventory, Container container, ContainerLevelAccess access) {
         super(HANMO_TAI_MENU.get(), containerId);
         this.access = access;
-        this.container = new SimpleContainer(INPUT_SLOT_COUNT);
+        this.container = container;
 
         // 左侧三个专用槽：残页 / 墨水 / 纸，各槽只收自己的材料
         this.addSlot(new MaterialSlot(this.container, SLOT_CAN_YE, INPUT_X, INPUT_Y, HanmoTaiMenu::isFragment));
@@ -123,14 +127,7 @@ public class HanmoTaiMenu extends AbstractContainerMenu {
         return stillValid(this.access, player, TiangongKaiwu.HANMO_TAI.get());
     }
 
-    @Override
-    public void removed(Player player) {
-        super.removed(player);
-        // 只在服务端（真实 access）归还：客户端 access 为 NULL，execute 不会执行，避免同步问题
-        this.access.execute((level, pos) -> this.clearContainer(player, this.container));
-    }
-
-    /** 输入容器，供“译”逻辑读取。 */
+    /** 材料容器（服务端为方块实体的容器，客户端为空占位）。供“译”逻辑读取。 */
     public Container getContainer() {
         return this.container;
     }
