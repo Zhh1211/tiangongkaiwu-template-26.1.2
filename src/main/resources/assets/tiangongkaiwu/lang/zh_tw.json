@@ -15,5 +15,9 @@
     "entry.tiangongkaiwu.naili_do.name": "稻",
     "entry.tiangongkaiwu.naili_do.page1": "凡稻種最多。不黏者禾曰秥，米曰粳；黏者禾曰稌，米曰糯。",
     "entry.tiangongkaiwu.naili_mai.name": "麥",
-    "entry.tiangongkaiwu.naili_mai.page1": "凡麥有數種。小麥曰來，麥之長也；大麥曰牟、曰穬；雜麥曰雀、曰蕎。"
+    "entry.tiangongkaiwu.naili_mai.page1": "凡麥有數種。小麥曰來，麥之長也；大麥曰牟、曰穬；雜麥曰雀、曰蕎。",
+    "itemGroup.tiangongkaiwu": "天工開物",
+    "gui.tiangongkaiwu.hanmo_slot_canye": "殘頁",
+    "gui.tiangongkaiwu.hanmo_slot_ink": "墨",
+    "gui.tiangongkaiwu.hanmo_slot_paper": "紙"
 }

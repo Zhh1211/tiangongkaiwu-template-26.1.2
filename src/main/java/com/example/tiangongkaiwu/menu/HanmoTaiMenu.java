@@ -28,10 +28,10 @@ public class HanmoTaiMenu extends AbstractContainerMenu {
     public static final int SLOT_PAPER = 2;    // 纸
     public static final int INPUT_SLOT_COUNT = 3;
 
-    // 输入槽左上角（左侧竖排）。GUI 贴图定稿后按新布局调整。
-    private static final int INPUT_X = 12;
-    private static final int INPUT_Y = 17;
-    private static final int INPUT_GAP = 18;
+    // 输入槽左上角（左侧竖排）。画布 256×224，与 HanmoTaiScreen 色块布局一致。
+    private static final int INPUT_X = 16;
+    private static final int INPUT_Y = 18;
+    private static final int INPUT_GAP = 28;
 
     private final Container container;
     private final ContainerLevelAccess access;
@@ -56,16 +56,16 @@ public class HanmoTaiMenu extends AbstractContainerMenu {
         this.addSlot(new MaterialSlot(this.container, SLOT_INK, INPUT_X, INPUT_Y + INPUT_GAP, HanmoTaiMenu::isInk));
         this.addSlot(new MaterialSlot(this.container, SLOT_PAPER, INPUT_X, INPUT_Y + INPUT_GAP * 2, HanmoTaiMenu::isPaper));
 
-        // 玩家背包 3x9（索引 3..29）
+        // 玩家背包 3x9（索引 3..29）：画布 256×224，背包区置于下半部（左对齐输入槽）
         for (int row = 0; row < 3; row++) {
             for (int col = 0; col < 9; col++) {
-                this.addSlot(new Slot(playerInventory, col + row * 9 + 9, 8 + col * 18, 84 + row * 18));
+                this.addSlot(new Slot(playerInventory, col + row * 9 + 9, 16 + col * 18, 142 + row * 18));
             }
         }
 
         // 快捷栏（索引 30..38）
         for (int i = 0; i < 9; i++) {
-            this.addSlot(new Slot(playerInventory, i, 8 + i * 18, 142));
+            this.addSlot(new Slot(playerInventory, i, 16 + i * 18, 200));
         }
     }
 
