@@ -1,5 +1,6 @@
 package com.example.tiangongkaiwu.item;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -19,7 +20,7 @@ public class CanYeItem extends Item {
      */
     @Override
     public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-        tooltip.add(Component.literal("§7" + "一张泛黄的古纸，上面写着看不懂的文字。"));
-        tooltip.add(Component.literal("§7" + "或许翰墨台能帮你解读它。"));
+        tooltip.add(Component.translatable("item.tiangongkaiwu.can_ye.tooltip1").withStyle(ChatFormatting.GRAY));
+        tooltip.add(Component.translatable("item.tiangongkaiwu.can_ye.tooltip2").withStyle(ChatFormatting.GRAY));
     }
 }

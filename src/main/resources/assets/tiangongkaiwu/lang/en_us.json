@@ -11,6 +11,8 @@
   "block.tiangongkaiwu.rice_crop": "Rice Crop",
   "block.tiangongkaiwu.hanmo_tai": "Hanmo Tai",
   "item.tiangongkaiwu.can_ye": "Tiangong Fragment",
+  "item.tiangongkaiwu.can_ye.tooltip1": "A yellowed scrap of paper covered in writing you cannot read.",
+  "item.tiangongkaiwu.can_ye.tooltip2": "Perhaps the Hanmo Tai can help you decipher it.",
   "item.tiangongkaiwu.songyan_mo": "Pine Soot Ink",
   "item.tiangongkaiwu.xuan_zhi": "Xuan Paper",
   "book.tiangongkaiwu.naili.name": "Tiangong Kaiwu: On Grains (Naili)",
@@ -26,5 +28,6 @@
   "entry.tiangongkaiwu.naili_mai.page1": "Of wheat there are several kinds. Common wheat is called lai, and is chief among the wheats; barley is called mou or kuang; the mixed wheats are called que or qiao.",
   "gui.tiangongkaiwu.hanmo_slot_canye": "Fragment",
   "gui.tiangongkaiwu.hanmo_slot_ink": "Ink",
-  "gui.tiangongkaiwu.hanmo_slot_paper": "Paper"
+  "gui.tiangongkaiwu.hanmo_slot_paper": "Paper",
+  "gui.tiangongkaiwu.hanmo_sentence": "Sentence %s of %s"
 }

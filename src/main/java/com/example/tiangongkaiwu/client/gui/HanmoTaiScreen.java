@@ -217,7 +217,9 @@ public class HanmoTaiScreen extends AbstractContainerScreen<HanmoTaiMenu> {
     /** 题面：右上角"第 N 句"小标 + 文言居中换行显示。 */
     private void drawSentence(GuiGraphics guiGraphics, int px, int py, int pw, int ph) {
         int n = this.sentenceIndex + 1;
-        guiGraphics.drawString(this.font, Component.literal("第 " + n + " 句 / 共 3 句"),
+        int total = this.activePuzzle.sentences().size();
+        guiGraphics.drawString(this.font,
+                Component.translatable("gui.tiangongkaiwu.hanmo_sentence", n, total),
                 px + 8, py + 3, TEXT_DARK, false);
         String wenyan = this.activePuzzle.sentences().get(this.sentenceIndex).wenyan();
         drawCenteredWrapped(guiGraphics, wenyan, px + 4, py + 17, pw - 8, 13, TEXT_DARK);

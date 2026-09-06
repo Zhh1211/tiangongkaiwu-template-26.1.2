@@ -3,6 +3,8 @@
     "block.tiangongkaiwu.rice_crop": "水稻",
     "block.tiangongkaiwu.hanmo_tai": "翰墨台",
     "item.tiangongkaiwu.can_ye": "《天工》残页",
+    "item.tiangongkaiwu.can_ye.tooltip1": "一张泛黄的古纸，上面写着看不懂的文字。",
+    "item.tiangongkaiwu.can_ye.tooltip2": "或许翰墨台能帮你解读它。",
     "item.tiangongkaiwu.songyan_mo": "松烟墨",
     "item.tiangongkaiwu.xuan_zhi": "宣纸",
     "book.tiangongkaiwu.naili.name": "《天工开物·乃粒》",
@@ -26,5 +28,6 @@
     "tiangongkaiwu.configuration.magicNumber": "魔法数字",
     "gui.tiangongkaiwu.hanmo_slot_canye": "残页",
     "gui.tiangongkaiwu.hanmo_slot_ink": "墨",
-    "gui.tiangongkaiwu.hanmo_slot_paper": "纸"
+    "gui.tiangongkaiwu.hanmo_slot_paper": "纸",
+    "gui.tiangongkaiwu.hanmo_sentence": "第 %s 句 / 共 %s 句"
 }
