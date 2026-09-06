@@ -17,6 +17,13 @@
     "entry.tiangongkaiwu.naili_mai.name": "麦",
     "entry.tiangongkaiwu.naili_mai.page1": "凡麦有数种。小麦曰来，麦之长也；大麦曰牟、曰穬；杂麦曰雀、曰荞。",
     "itemGroup.tiangongkaiwu": "天工开物",
+    "tiangongkaiwu.configuration.title": "天工开物配置",
+    "tiangongkaiwu.configuration.section.tiangongkaiwu.common.toml": "天工开物配置",
+    "tiangongkaiwu.configuration.section.tiangongkaiwu.common.toml.title": "天工开物配置",
+    "tiangongkaiwu.configuration.items": "物品列表",
+    "tiangongkaiwu.configuration.logDirtBlock": "记录放置泥土方块",
+    "tiangongkaiwu.configuration.magicNumberIntroduction": "魔法数字说明",
+    "tiangongkaiwu.configuration.magicNumber": "魔法数字",
     "gui.tiangongkaiwu.hanmo_slot_canye": "残页",
     "gui.tiangongkaiwu.hanmo_slot_ink": "墨",
     "gui.tiangongkaiwu.hanmo_slot_paper": "纸"
