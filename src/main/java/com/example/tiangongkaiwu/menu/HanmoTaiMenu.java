@@ -56,16 +56,17 @@ public class HanmoTaiMenu extends AbstractContainerMenu {
         this.addSlot(new MaterialSlot(this.container, SLOT_INK, INPUT_X, INPUT_Y + INPUT_GAP, HanmoTaiMenu::isInk));
         this.addSlot(new MaterialSlot(this.container, SLOT_PAPER, INPUT_X, INPUT_Y + INPUT_GAP * 2, HanmoTaiMenu::isPaper));
 
-        // 玩家背包 3x9（索引 3..29）：画布 256×224，背包区置于下半部（左对齐输入槽）
+        // 玩家背包 3x9（索引 3..29）：画布 288×224，背包区置于下半部且水平居中
+        int invX = (288 - 9 * 18) / 2;   // 63，9 列 162px 宽居中
         for (int row = 0; row < 3; row++) {
             for (int col = 0; col < 9; col++) {
-                this.addSlot(new Slot(playerInventory, col + row * 9 + 9, 16 + col * 18, 142 + row * 18));
+                this.addSlot(new Slot(playerInventory, col + row * 9 + 9, invX + col * 18, 142 + row * 18));
             }
         }
 
         // 快捷栏（索引 30..38）
         for (int i = 0; i < 9; i++) {
-            this.addSlot(new Slot(playerInventory, i, 16 + i * 18, 200));
+            this.addSlot(new Slot(playerInventory, i, invX + i * 18, 200));
         }
     }
 
