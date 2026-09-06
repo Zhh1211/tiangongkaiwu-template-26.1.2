@@ -26,14 +26,20 @@ import java.util.List;
  *     正确顺序对应词块的文本宽度计算（玩家可看出每个空该填多长的词）
  *   - 底部：玩家背包 3×9 + 快捷栏（水平居中，由父类按 Menu 槽坐标渲染）
  *
- * 出题流程（显示层，拖放/判定在后续任务）：放入残页 → 从客户端题库随机抽一题，
- * 显示第一句文言与乱序词块；词块与格子数量都由当前句词块数决定；
- * 取出残页即清空状态。
+ * 玩法（#21 拖放 + 判定层）：
+ *   - 出题：放入残页 → 客户端随机抽一题，逐句显示；取出残页清空。
+ *   - 拿起：左键点击候选词块 chip，词块随鼠标浮动（原 chip 位置留空）。
+ *   - 落格：把词块拖/放到某个空格上；词块与格子的“字数”必须一致
+ *     （格宽已反映答案长度，防止玩家拿长词试塞短格），不一致则拒绝并闪红。
+ *   - 换词/取回：拖到已填格会把旧词退回候选区；无拖拽时左键点已填格=取回。
+ *   - 判定：所有格填满即自动判定。全对 → 本句成功（金色停留片刻）进下一句；
+ *     三句全对 → 通篇译毕（completed，产物结算留给 #22）。有错 → 本句尝试次数+1，
+ *     词块逐个“抖动飞回”候选区，候选重新打乱。
+ *   - 落空/拖回候选区 = 取消拿起。
  *
- * 宽度策略：不按"假设 2 字/固定 32px"硬编码，一律用 this.font.width(text)
- * 实测文本宽度 + CELL_PAD 内边距动态决定 chip/格子宽，任意语言/词长自适应。
- * 排布为逐行贪心（放不下换行），每行水平居中；每个 chip/格子的矩形会存进
- * chipBoxes/cellBoxes（相对 GUI 左上角），供绘制与后续拖放命中测试复用。
+ * 宽度策略：一律用 this.font.width(text) 实测宽度 + CELL_PAD 内边距动态决定
+ * chip/格子宽；排布逐行贪心、每行居中。chip/cell 矩形相对 GUI 左上角存放于
+ * chipBoxes/cellBoxes，绘制与鼠标命中（减去 leftPos/topPos）共用。
  */
 public class HanmoTaiScreen extends AbstractContainerScreen<HanmoTaiMenu> {
 
@@ -52,11 +58,17 @@ public class HanmoTaiScreen extends AbstractContainerScreen<HanmoTaiMenu> {
     private static final int ANS_OFF     = 0xFFD3C49F; // 答题纸（未放，暗淡）
     private static final int CELL_EDGE   = 0xFF7A6239; // 纸上格子边
     private static final int CELL_IN     = 0xFFCDB27E; // 纸上格子底
+    private static final int CELL_DONE   = 0xFFE0CD9C; // 已填词块的格子底
+    private static final int BANK_EMPTY  = 0xFFBFA775; // 被拿起词块留下的空位底（浅）
+    private static final int GOLD_EDGE   = 0xFFC9A227; // 判定正确时的金色描边
+    private static final int RED_EDGE    = 0xFFB03020; // 长度不符闪红描边
+    private static final int RED_IN      = 0xFFD8A08A; // 长度不符闪红底
     private static final int INK_BODY    = 0xFF17130F; // 墨水瓶身（近黑）
     private static final int INK_HILITE  = 0xFF6E635A; // 瓶身高光
     private static final int INK_HOLD    = 0xFF3C2E1E; // 墨瓶空台（未放墨）
     private static final int TEXT_DARK   = 0xFF3B2C1A; // 深色文字（桌面/纸面上）
     private static final int CHIP_TEXT   = 0xFF241A0E; // 词块文字（近黑）
+    private static final int FLOAT_EDGE  = 0xFFC9A227; // 随鼠标浮动词块的描边（金，醒目）
 
     // ============ 功能区布局（相对 GUI 左上角，坐标可调） ============
     // 残页纸（题面，左中上）
@@ -78,16 +90,48 @@ public class HanmoTaiScreen extends AbstractContainerScreen<HanmoTaiMenu> {
     // 玩家背包标题 x（背包 9 列居中于 288 画布 → x=63）
     private static final int INV_LABEL_X = 63, INV_LABEL_Y = 134;
 
-    /** 当前抽中的题（显示层本地随机）；null = 未出题。 */
+    /** 判定正确后的金色停留时长（毫秒），随后自动翻下一句。 */
+    private static final int SUCCESS_HOLD_MS = 500;
+    /** 长度不符/失败的闪红时长（毫秒）。 */
+    private static final int FLASH_MS = 450;
+    /** 词块抖动飞回动画时长（毫秒）。 */
+    private static final int FLYBACK_MS = 550;
+
+    // ============ 出题状态 ============
+    /** 当前抽中的题；null = 未出题。 */
     private Puzzle activePuzzle;
-    /** 当前显示第几句（0 起）；逐句切换由后续判定逻辑驱动，显示层固定第 0 句。 */
+    /** 当前显示第几句（0 起）。 */
     private int sentenceIndex;
-    /** 当前句打乱后的候选词块（数量 = 词块数）。null/空 = 未出题。 */
+    /** 当前句已尝试次数（每次填满判错 +1，翻句清零；将来结算经验用）。 */
+    private int sentenceAttempts;
+    /** 全篇累计失败次数（将来结算经验用）。 */
+    private int puzzleWrongTotal;
+    /** 三句是否全部译完。 */
+    private boolean completed;
+    /** 判定正确后的金色停留截止时刻（System.currentTimeMillis）；归零时由渲染帧翻下一句。 */
+    private long successHoldUntilMs;
+
+    // ============ 词块/格子（下标对齐当前句 tokens） ============
+    /** 当前句候选词块（乱序）；null = 未出题/已译毕。 */
     private List<String> currentTokens;
-    /** 候选词块 chip 矩形（相对 GUI 左上），下标对齐 currentTokens；绘制与拖放命中共用。 */
+    /** 每个答题格的已填词块；下标 i ↔ 正确顺序 tokens 第 i 个；null = 空。 */
+    private String[] cellFill;
+    /** 候选 chip 矩形（相对 GUI 左上）；绘制与拖放命中共用。 */
     private final List<int[]> chipBoxes = new ArrayList<>();
-    /** 答题格矩形（相对 GUI 左上），下标 i 对应正确顺序 tokens 第 i 个；同上。 */
+    /** 答题格矩形（相对 GUI 左上）；绘制与拖放命中共用。 */
     private final List<int[]> cellBoxes = new ArrayList<>();
+
+    // ============ 拖放/动画状态 ============
+    /** 拿起中的词块文本；null = 未拿起。 */
+    private String picked;
+    /** 拿起词块在 currentTokens 中的下标（移除用）；-1 = 未拿起。 */
+    private int pickedIndex = -1;
+    /** 抖动飞回候选区的动画（判定失败）。 */
+    private final List<FlyBack> flyBacks = new ArrayList<>();
+    /** 闪红格（长度不符）：{格下标, 过期时刻 ms}。 */
+    private final List<long[]> cellFlashes = new ArrayList<>();
+    /** 最近一次鼠标屏幕坐标（渲染时更新，供浮动词块跟随）。 */
+    private int lastMouseX, lastMouseY;
 
     public HanmoTaiScreen(HanmoTaiMenu menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title);
@@ -95,16 +139,461 @@ public class HanmoTaiScreen extends AbstractContainerScreen<HanmoTaiMenu> {
         this.imageHeight = GUI_H;
     }
 
-    /**
-     * 1.21.1 的 AbstractContainerScreen.render() 已不再自动调用 renderTooltip
-     * （只设置 hoveredSlot 与画槽位高亮），需子类在渲染末尾补一次，
-     * 否则鼠标悬停物品无提示框。
-     */
+    // ============================================================
+    // 生命周期
+    // ============================================================
+
+    /** 每渲染帧推进：金色停留→翻句、闪红/飞回动画按墙钟过期清理。 */
+    private void updateTimedState() {
+        long now = System.currentTimeMillis();
+        if (!this.completed && this.activePuzzle != null && this.successHoldUntilMs != 0 && now >= this.successHoldUntilMs) {
+            this.successHoldUntilMs = 0;
+            advanceSentence();
+        }
+        this.cellFlashes.removeIf(f -> now >= f[1]);
+        this.flyBacks.removeIf(fb -> now >= fb.beginMs + fb.durationMs);
+    }
+
     @Override
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+        this.updateTimedState();
+        this.lastMouseX = mouseX;
+        this.lastMouseY = mouseY;
+        // 1.21.1 的 AbstractContainerScreen.render() 已不再自动调用 renderTooltip
+        // （只设置 hoveredSlot 与画槽位高亮），需子类在渲染末尾补一次。
         super.render(guiGraphics, mouseX, mouseY, partialTick);
         this.renderTooltip(guiGraphics, mouseX, mouseY);
     }
+
+    // ============================================================
+    // 鼠标交互（词块区/答题格；其余交给父类处理背包槽点击）
+    // ============================================================
+
+    /** 左键：无拖拽时点候选 chip = 拿起；点已填格 = 取回候选区。 */
+    @Override
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        if (button == 0 && isInteractive()) {
+            int rx = (int) mouseX - this.leftPos;
+            int ry = (int) mouseY - this.topPos;
+            rebuildBankLayout();
+            rebuildCellLayout();
+            if (this.picked == null) {
+                // 拿起候选词块
+                int k = hitChip(rx, ry);
+                if (k >= 0) {
+                    this.picked = this.currentTokens.get(k);
+                    this.pickedIndex = k;
+                    return true;
+                }
+                // 点已填格 → 取回候选（放回并重新打乱）
+                int ci = hitFilledCell(rx, ry);
+                if (ci >= 0) {
+                    returnCellToBank(ci);
+                    return true;
+                }
+            }
+            // picked != null 时本轮不换拿，交给 mouseReleased 落子/取消
+        }
+        return super.mouseClicked(mouseX, mouseY, button);
+    }
+
+    /** 左键松开：把拿起中的词块落下（空格/换格），或取消。 */
+    @Override
+    public boolean mouseReleased(double mouseX, double mouseY, int button) {
+        if (button == 0 && this.picked != null) {
+            if (isInteractive()) {
+                int rx = (int) mouseX - this.leftPos;
+                int ry = (int) mouseY - this.topPos;
+                rebuildCellLayout();
+                int cellIdx = hitAnyCell(rx, ry);
+                if (cellIdx >= 0) {
+                    dropPickedOnto(cellIdx);
+                } else {
+                    // 落在非格区域（含拖回候选区）= 取消，词块回到原 chip 空位
+                    this.picked = null;
+                    this.pickedIndex = -1;
+                }
+            } else {
+                // 拿起途中材料被取走/已译毕等 → 取消拿起，避免词块悬浮卡住
+                this.picked = null;
+                this.pickedIndex = -1;
+            }
+            return true;
+        }
+        return super.mouseReleased(mouseX, mouseY, button);
+    }
+
+    /** 词块区/格区可交互的前提：已出题、未译毕、不在金色停留中、且答题纸上放了纸。 */
+    private boolean isInteractive() {
+        return this.activePuzzle != null && !this.completed && !successHoldActive()
+                && this.currentTokens != null && hasPaperInSlot();
+    }
+
+    /** 答题纸槽是否放了纸（原版纸或宣纸）。 */
+    private boolean hasPaperInSlot() {
+        return !this.menu.slots.get(HanmoTaiMenu.SLOT_PAPER).getItem().isEmpty();
+    }
+
+    /** 金色停留（判定正确后翻句前的短暂反馈）是否仍在进行。 */
+    private boolean successHoldActive() {
+        return this.successHoldUntilMs > System.currentTimeMillis();
+    }
+
+    /** 点击候选 chip：返回其在 currentTokens 的下标，无则 -1。 */
+    private int hitChip(int rx, int ry) {
+        for (int i = 0; i < this.chipBoxes.size(); i++) {
+            int[] b = this.chipBoxes.get(i);
+            if (rx >= b[0] && rx < b[0] + b[2] && ry >= b[1] && ry < b[1] + b[3]) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    /** 命中任意答题格（空或已填）返回其下标，无则 -1。 */
+    private int hitAnyCell(int rx, int ry) {
+        for (int i = 0; i < this.cellBoxes.size(); i++) {
+            int[] b = this.cellBoxes.get(i);
+            if (rx >= b[0] && rx < b[0] + b[2] && ry >= b[1] && ry < b[1] + b[3]) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    /** 命中“已填词”的格返回其下标，无则 -1。 */
+    private int hitFilledCell(int rx, int ry) {
+        int i = hitAnyCell(rx, ry);
+        return (i >= 0 && this.cellFill != null && this.cellFill[i] != null) ? i : -1;
+    }
+
+    /** 把格 i 的词块退回候选区（放回并打乱）。 */
+    private void returnCellToBank(int i) {
+        if (this.cellFill == null || i < 0 || i >= this.cellFill.length || this.cellFill[i] == null) {
+            return;
+        }
+        this.currentTokens.add(this.cellFill[i]);
+        this.cellFill[i] = null;
+        shuffleTokens();
+    }
+
+    /**
+     * 把拿起中的词块落到格 i：若格内已有别的词先退回；然后按“字数”硬校验
+     * （词块字数 == 该格答案字数，配合等长格子防作弊），不符则拒绝并闪红格。
+     */
+    private void dropPickedOnto(int i) {
+        if (this.cellFill == null || i < 0 || i >= this.cellFill.length) {
+            this.picked = null;
+            this.pickedIndex = -1;
+            return;
+        }
+        String tok = this.picked;
+        int pk = this.pickedIndex;
+        String expected = answerTokens().get(i);
+        String old = this.cellFill[i];
+
+        // 先把格内旧词（若不同）退回候选
+        if (old != null && !old.equals(tok)) {
+            this.cellFill[i] = null;
+            this.currentTokens.add(old);
+        }
+        boolean lenOk = tok.length() == expected.length();
+        if (lenOk) {
+            // 放置成功
+            this.cellFill[i] = tok;
+            this.currentTokens.remove(pk);
+            this.picked = null;
+            this.pickedIndex = -1;
+            if (old != null && !old.equals(tok)) {
+                shuffleTokens(); // 有换入旧词，重排候选
+            }
+            maybeJudge();
+        } else {
+            // 长度不符：词块回原位（取消拿起），该格闪红
+            this.picked = null;
+            this.pickedIndex = -1;
+            if (old != null && !old.equals(tok)) {
+                shuffleTokens();
+            }
+            flashCell(i);
+        }
+    }
+
+    /** 格子全填满时自动判定；未填满则无事。 */
+    private void maybeJudge() {
+        if (this.cellFill == null) {
+            return;
+        }
+        for (String t : this.cellFill) {
+            if (t == null) {
+                return;
+            }
+        }
+        List<String> answer = answerTokens();
+        boolean allRight = true;
+        for (int i = 0; i < answer.size(); i++) {
+            if (!answer.get(i).equals(this.cellFill[i])) {
+                allRight = false;
+                break;
+            }
+        }
+        if (allRight) {
+            if (this.sentenceIndex >= this.activePuzzle.sentences().size() - 1) {
+                completePuzzle(); // 末句也对 → 通篇译毕
+            } else {
+                this.successHoldUntilMs = System.currentTimeMillis() + SUCCESS_HOLD_MS; // 金色停留后翻句
+            }
+        } else {
+            failAttempt();
+        }
+    }
+
+    /** 本句判定失败：尝试 +1，词块逐个抖动飞回候选区，候选重打乱。 */
+    private void failAttempt() {
+        this.sentenceAttempts++;
+        this.puzzleWrongTotal++;
+        // 先把候选换成“整句重新打乱”，随后动画目标指向新 chip 位置
+        List<String> all = new ArrayList<>(answerTokens());
+        this.currentTokens = shuffle(all);
+        rebuildBankLayout();
+        // 生成飞回动画：源 = 各格中心，终点 = 该词块在新候选区 chip 的中心
+        if (this.cellFill != null) {
+            for (int i = 0; i < this.cellFill.length; i++) {
+                String t = this.cellFill[i];
+                if (t == null) {
+                    continue;
+                }
+                int[] cb = i < this.cellBoxes.size() ? this.cellBoxes.get(i) : null;
+                int idx = this.currentTokens.indexOf(t);
+                int[] chip = (idx >= 0 && idx < this.chipBoxes.size()) ? this.chipBoxes.get(idx) : null;
+                if (cb != null && chip != null) {
+                    this.flyBacks.add(new FlyBack(t,
+                            cb[0] + cb[2] / 2f, cb[1] + cb[3] / 2f,
+                            chip[0] + chip[2] / 2f, chip[1] + chip[3] / 2f,
+                            System.currentTimeMillis(), FLYBACK_MS, (float) Math.random() * 100));
+                }
+            }
+            java.util.Arrays.fill(this.cellFill, null);
+        }
+        this.picked = null;
+        this.pickedIndex = -1;
+        this.cellFlashes.clear(); // 旧的闪红一并清掉
+    }
+
+    /** 三句全对：置完成态，清掉一切可交互元素（产物结算在 #22）。 */
+    private void completePuzzle() {
+        this.completed = true;
+        this.currentTokens = null;
+        this.cellFill = null;
+        this.picked = null;
+        this.pickedIndex = -1;
+        this.successHoldUntilMs = 0;
+        this.chipBoxes.clear();
+        this.cellBoxes.clear();
+        this.flyBacks.clear();
+        this.cellFlashes.clear();
+    }
+
+    /** 本句通过：翻到下一句并初始化其词块/格子。 */
+    private void advanceSentence() {
+        this.sentenceIndex++;
+        this.sentenceAttempts = 0;
+        this.successHoldUntilMs = 0;
+        this.cellFlashes.clear();
+        this.flyBacks.clear();
+        List<String> next = this.activePuzzle.sentences().get(this.sentenceIndex).tokens();
+        this.cellFill = new String[next.size()];
+        this.currentTokens = shuffle(next);
+        this.chipBoxes.clear();
+        this.cellBoxes.clear();
+    }
+
+    // ============================================================
+    // 出题状态
+    // ============================================================
+
+    /** 放入残页且未出题 → 抽题；取出残页 → 清空出题状态。每帧调用，仅状态变化时实际动作。 */
+    private void updatePuzzleState(boolean hasCanYe) {
+        if (hasCanYe && this.activePuzzle == null) {
+            Puzzle puzzle = PuzzleRegistry.random(RandomSource.create());
+            if (puzzle != null && !puzzle.sentences().isEmpty()) {
+                initPuzzle(puzzle);
+            }
+        } else if (!hasCanYe && this.activePuzzle != null) {
+            clearPuzzle();
+        }
+    }
+
+    private void initPuzzle(Puzzle puzzle) {
+        this.activePuzzle = puzzle;
+        this.sentenceIndex = 0;
+        this.sentenceAttempts = 0;
+        this.puzzleWrongTotal = 0;
+        this.completed = false;
+        this.successHoldUntilMs = 0;
+        this.picked = null;
+        this.pickedIndex = -1;
+        this.flyBacks.clear();
+        this.cellFlashes.clear();
+        List<String> first = puzzle.sentences().get(0).tokens();
+        this.cellFill = new String[first.size()];
+        this.currentTokens = shuffle(first);
+        this.chipBoxes.clear();
+        this.cellBoxes.clear();
+    }
+
+    private void clearPuzzle() {
+        this.activePuzzle = null;
+        this.sentenceIndex = 0;
+        this.sentenceAttempts = 0;
+        this.puzzleWrongTotal = 0;
+        this.completed = false;
+        this.successHoldUntilMs = 0;
+        this.currentTokens = null;
+        this.cellFill = null;
+        this.picked = null;
+        this.pickedIndex = -1;
+        this.chipBoxes.clear();
+        this.cellBoxes.clear();
+        this.flyBacks.clear();
+        this.cellFlashes.clear();
+    }
+
+    /** 当前句的正确词块列表（答案顺序）。 */
+    private List<String> answerTokens() {
+        return this.activePuzzle.sentences().get(this.sentenceIndex).tokens();
+    }
+
+    /** 打乱词块顺序，作为候选区显示用（答题格数量仍按原词块数）。 */
+    private static List<String> shuffle(List<String> tokens) {
+        List<String> list = new ArrayList<>(tokens);
+        Collections.shuffle(list);
+        return list;
+    }
+
+    /** 候选列表重打乱（交换/取回/失败重排时调用）。 */
+    private void shuffleTokens() {
+        this.currentTokens = shuffle(this.currentTokens);
+        this.picked = null;
+        this.pickedIndex = -1;
+        rebuildBankLayout();
+    }
+
+    private void flashCell(int i) {
+        long end = System.currentTimeMillis() + FLASH_MS;
+        for (long[] f : this.cellFlashes) {
+            if (f[0] == i) {
+                f[1] = end;
+                return;
+            }
+        }
+        this.cellFlashes.add(new long[] { i, end });
+    }
+
+    private boolean isFlashing(int i) {
+        long now = System.currentTimeMillis();
+        for (long[] f : this.cellFlashes) {
+            if (f[0] == i && now < f[1]) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // ============================================================
+    // 布局缓存（与绘制解耦，保证鼠标事件时 box 与当前句一致）
+    // ============================================================
+
+    /** 重算候选 chip 矩形 → chipBoxes（当前Tokens 为 null 时清空）。 */
+    private void rebuildBankLayout() {
+        this.chipBoxes.clear();
+        if (this.currentTokens == null || this.currentTokens.isEmpty()) {
+            return;
+        }
+        int maxW = BANK_W - 8;
+        List<List<Integer>> rows = new ArrayList<>();
+        List<Integer> cur = new ArrayList<>();
+        int curW = 0;
+        for (int i = 0; i < this.currentTokens.size(); i++) {
+            int w = chipWidth(this.currentTokens.get(i));
+            if (!cur.isEmpty() && curW + BANK_GAP_X + w > maxW) {
+                rows.add(cur);
+                cur = new ArrayList<>();
+                curW = 0;
+            }
+            if (!cur.isEmpty()) {
+                curW += BANK_GAP_X;
+            }
+            cur.add(i);
+            curW += w;
+        }
+        if (!cur.isEmpty()) {
+            rows.add(cur);
+        }
+        int y = BANK_Y;
+        for (List<Integer> row : rows) {
+            int rowW = 0;
+            for (int i : row) {
+                rowW += chipWidth(this.currentTokens.get(i));
+            }
+            rowW += BANK_GAP_X * (row.size() - 1);
+            int cx = BANK_X + (BANK_W - rowW) / 2;
+            for (int i : row) {
+                int w = chipWidth(this.currentTokens.get(i));
+                this.chipBoxes.add(new int[] { cx, y, w, CHIP_H });
+                cx += w + BANK_GAP_X;
+            }
+            y += CHIP_H + BANK_GAP_Y;
+        }
+    }
+
+    /** 重算答题格矩形 → cellBoxes（未出题/无格时清空）。 */
+    private void rebuildCellLayout() {
+        this.cellBoxes.clear();
+        if (this.activePuzzle == null || this.completed) {
+            return;
+        }
+        int maxW = ANS_W - 16;
+        List<List<Integer>> rows = new ArrayList<>();
+        List<Integer> cur = new ArrayList<>();
+        int curW = 0;
+        for (int i = 0; i < answerTokens().size(); i++) {
+            int w = chipWidth(answerTokens().get(i));
+            if (!cur.isEmpty() && curW + CELL_GAP_X + w > maxW) {
+                rows.add(cur);
+                cur = new ArrayList<>();
+                curW = 0;
+            }
+            if (!cur.isEmpty()) {
+                curW += CELL_GAP_X;
+            }
+            cur.add(i);
+            curW += w;
+        }
+        if (!cur.isEmpty()) {
+            rows.add(cur);
+        }
+        int usedH = rows.size() * ANS_CELL_H + Math.max(0, rows.size() - 1) * CELL_GAP_Y;
+        int y = ANS_Y + Math.max(6, (ANS_H - usedH) / 2);
+        for (List<Integer> row : rows) {
+            int rowW = 0;
+            for (int i : row) {
+                rowW += chipWidth(answerTokens().get(i));
+            }
+            rowW += CELL_GAP_X * (row.size() - 1);
+            int cx = ANS_X + (ANS_W - rowW) / 2;
+            for (int i : row) {
+                int w = chipWidth(answerTokens().get(i));
+                this.cellBoxes.add(new int[] { cx, y, w, ANS_CELL_H });
+                cx += w + CELL_GAP_X;
+            }
+            y += ANS_CELL_H + CELL_GAP_Y;
+        }
+    }
+
+    // ============================================================
+    // 渲染
+    // ============================================================
 
     @Override
     protected void renderBg(GuiGraphics guiGraphics, float partialTick, int mouseX, int mouseY) {
@@ -133,24 +622,18 @@ public class HanmoTaiScreen extends AbstractContainerScreen<HanmoTaiMenu> {
         // ---------- 答题纸区：放纸点亮；出题后画格子（宽按正确词块文本） ----------
         drawPaper(guiGraphics, x + ANS_X, y + ANS_Y, ANS_W, ANS_H,
                 hasPaper ? ANS_ON : ANS_OFF, hasPaper);
-        if (hasPaper && this.activePuzzle != null) {
-            List<String> answer = this.activePuzzle.sentences().get(this.sentenceIndex).tokens();
-            drawCells(guiGraphics, x, y, ANS_X, ANS_Y, ANS_W, ANS_H, ANS_CELL_H, answer);
+        if (hasPaper && this.activePuzzle != null && !this.completed) {
+            drawCells(guiGraphics, x, y);
         }
 
         // ---------- 墨水瓶（右上角）：放入墨后点亮为墨瓶 ----------
         if (hasInk) {
             int bx = x + INK_X, by = y + INK_Y;
-            // 瓶身
             guiGraphics.fill(bx + 3, by + 6, bx + INK_W - 3, by + INK_H, INK_BODY);
-            // 瓶肩高光（竖条）
             guiGraphics.fill(bx + 5, by + 8, bx + 7, by + INK_H - 2, INK_HILITE);
-            // 瓶颈
             guiGraphics.fill(bx + 7, by + 3, bx + INK_W - 7, by + 8, INK_BODY);
-            // 瓶盖/瓶口
             guiGraphics.fill(bx + 6, by, bx + INK_W - 6, by + 3, WOOD_EDGE);
         } else {
-            // 空台：淡色小座，提示墨瓶将出现于此
             guiGraphics.fill(x + INK_X + 5, y + INK_Y + 24, x + INK_X + INK_W - 5, y + INK_Y + INK_H, INK_HOLD);
         }
 
@@ -166,56 +649,33 @@ public class HanmoTaiScreen extends AbstractContainerScreen<HanmoTaiMenu> {
             guiGraphics.fill(sx, sy, sx + 18, sy + 18, SLOT_BORDER);
             guiGraphics.fill(sx + 1, sy + 1, sx + 17, sy + 17, SLOT_IN);
         }
+
+        // ---------- 叠加层：飞回动画 > 浮动词块（置顶） ----------
+        for (FlyBack fb : this.flyBacks) {
+            paintFlyBack(guiGraphics, x, y, fb);
+        }
+        if (this.picked != null) {
+            paintFloatingChip(guiGraphics);
+        }
     }
 
     @Override
     protected void renderLabels(GuiGraphics guiGraphics, int mouseX, int mouseY) {
-        // 标题（方块名）
         guiGraphics.drawString(this.font, this.title, 8, 6, TEXT_DARK, false);
-        // 输入槽标签（残页/墨/纸）
         drawSlotLabel(guiGraphics, HanmoTaiMenu.SLOT_CAN_YE, "gui.tiangongkaiwu.hanmo_slot_canye");
         drawSlotLabel(guiGraphics, HanmoTaiMenu.SLOT_INK, "gui.tiangongkaiwu.hanmo_slot_ink");
         drawSlotLabel(guiGraphics, HanmoTaiMenu.SLOT_PAPER, "gui.tiangongkaiwu.hanmo_slot_paper");
-        // 玩家背包标题
         guiGraphics.drawString(this.font, Component.translatable("container.inventory"),
                 INV_LABEL_X, INV_LABEL_Y, TEXT_DARK, false);
     }
 
-    // ============================================================
-    // 出题状态（显示层）
-    // ============================================================
-
-    /** 放入残页且未出题 → 抽题；取出残页 → 清空出题状态。每帧调用，仅状态变化时实际动作。 */
-    private void updatePuzzleState(boolean hasCanYe) {
-        if (hasCanYe && this.activePuzzle == null) {
-            Puzzle puzzle = PuzzleRegistry.random(RandomSource.create());
-            if (puzzle != null && !puzzle.sentences().isEmpty()) {
-                this.activePuzzle = puzzle;
-                this.sentenceIndex = 0;
-                this.currentTokens = shuffle(puzzle.sentences().get(0).tokens());
-            }
-        } else if (!hasCanYe && this.activePuzzle != null) {
-            this.activePuzzle = null;
-            this.sentenceIndex = 0;
-            this.currentTokens = null;
-            this.chipBoxes.clear();
-            this.cellBoxes.clear();
-        }
-    }
-
-    /** 打乱词块顺序，作为候选区显示用（答题格数量仍按原词块数）。 */
-    private static List<String> shuffle(List<String> tokens) {
-        List<String> list = new ArrayList<>(tokens);
-        Collections.shuffle(list);
-        return list;
-    }
-
-    // ============================================================
-    // 绘制
-    // ============================================================
-
-    /** 题面：右上角"第 N 句"小标 + 文言居中换行显示。 */
+    /** 题面：第 N 句小标 + 文言居中；译毕时改为完成语。 */
     private void drawSentence(GuiGraphics guiGraphics, int px, int py, int pw, int ph) {
+        if (this.completed) {
+            drawCenteredWrapped(guiGraphics, Component.translatable("gui.tiangongkaiwu.hanmo_done").getString(),
+                    px + 4, py + 14, pw - 8, 13, TEXT_DARK);
+            return;
+        }
         int n = this.sentenceIndex + 1;
         int total = this.activePuzzle.sentences().size();
         guiGraphics.drawString(this.font,
@@ -230,61 +690,89 @@ public class HanmoTaiScreen extends AbstractContainerScreen<HanmoTaiMenu> {
         return this.font.width(token) + CELL_PAD * 2;
     }
 
-    /** 词块 chip 候选区：按词块文本宽度逐行贪心排放，每行居中；矩形存入 chipBoxes。 */
+    /** 候选词块区绘制（布局已由 rebuildBankLayout 缓存到 chipBoxes）。 */
     private void drawTokenBank(GuiGraphics guiGraphics, int ox, int oy) {
-        this.chipBoxes.clear();
+        rebuildBankLayout();
         List<String> tokens = this.currentTokens;
-        int maxW = BANK_W - 8; // 区内左右各 4px 内边
-        // 贪心分行：每行记录 token 下标，行内宽度累计
-        List<List<Integer>> rows = new ArrayList<>();
-        List<Integer> cur = new ArrayList<>();
-        int curW = 0;
-        for (int i = 0; i < tokens.size(); i++) {
-            int w = chipWidth(tokens.get(i));
-            int addW = cur.isEmpty() ? 0 : BANK_GAP_X;
-            if (!cur.isEmpty() && curW + addW + w > maxW) {
-                rows.add(cur);
-                cur = new ArrayList<>();
-                curW = 0;
+        for (int i = 0; i < this.chipBoxes.size(); i++) {
+            int[] b = this.chipBoxes.get(i);
+            String token = tokens.get(i);
+            boolean vacated = (i == this.pickedIndex);
+            // chip 底 + 边框（被拿起的 chip 留浅色空位框）
+            int edge = vacated ? GOLD_EDGE : CELL_EDGE;
+            int inner = vacated ? BANK_EMPTY : CELL_IN;
+            guiGraphics.fill(ox + b[0], oy + b[1], ox + b[0] + b[2], oy + b[1] + b[3], edge);
+            guiGraphics.fill(ox + b[0] + 1, oy + b[1] + 1, ox + b[0] + b[2] - 1, oy + b[1] + b[3] - 1, inner);
+            if (!vacated) {
+                drawTokenCentered(guiGraphics, token, ox + b[0], oy + b[1], b[2], b[3], CHIP_TEXT);
             }
-            if (!cur.isEmpty()) {
-                curW += BANK_GAP_X;
-            }
-            cur.add(i);
-            curW += w;
-        }
-        if (!cur.isEmpty()) {
-            rows.add(cur);
-        }
-        int y = BANK_Y;
-        for (List<Integer> row : rows) {
-            int rowW = 0;
-            for (int i : row) {
-                rowW += chipWidth(tokens.get(i));
-            }
-            rowW += BANK_GAP_X * (row.size() - 1);
-            int startX = BANK_X + (BANK_W - rowW) / 2; // 行内水平居中
-            int cx = startX;
-            for (int i : row) {
-                String token = tokens.get(i);
-                int w = chipWidth(token);
-                // chip 底 + 边框
-                guiGraphics.fill(ox + cx, oy + y, ox + cx + w, oy + y + CHIP_H, CELL_EDGE);
-                guiGraphics.fill(ox + cx + 1, oy + y + 1, ox + cx + w - 1, oy + y + CHIP_H - 1, CELL_IN);
-                // 词块文字居中
-                int tx = cx + (w - this.font.width(token)) / 2;
-                int ty = y + (CHIP_H - this.font.lineHeight) / 2;
-                guiGraphics.drawString(this.font, token, ox + tx, oy + ty, CHIP_TEXT, false);
-                this.chipBoxes.add(new int[] { cx, y, w, CHIP_H });
-                cx += w + BANK_GAP_X;
-            }
-            y += CHIP_H + BANK_GAP_Y;
         }
     }
 
-    // ============================================================
-    // 通用小工具
-    // ============================================================
+    /** 答题格绘制（布局已由 rebuildCellLayout 缓存到 cellBoxes）。 */
+    private void drawCells(GuiGraphics guiGraphics, int ox, int oy) {
+        rebuildCellLayout();
+        List<String> answer = answerTokens();
+        for (int i = 0; i < this.cellBoxes.size(); i++) {
+            int[] b = this.cellBoxes.get(i);
+            boolean filled = this.cellFill != null && this.cellFill[i] != null;
+            boolean gold = successHoldActive();
+            int edge = CELL_EDGE;
+            int inner = CELL_IN;
+            if (isFlashing(i)) {
+                edge = RED_EDGE;
+                inner = RED_IN;
+            } else if (gold) {
+                edge = GOLD_EDGE;
+            } else if (filled) {
+                inner = CELL_DONE;
+            }
+            guiGraphics.fill(ox + b[0], oy + b[1], ox + b[0] + b[2], oy + b[1] + b[3], edge);
+            guiGraphics.fill(ox + b[0] + 1, oy + b[1] + 1, ox + b[0] + b[2] - 1, oy + b[1] + b[3] - 1, inner);
+            if (filled) {
+                drawTokenCentered(guiGraphics, this.cellFill[i], ox + b[0], oy + b[1], b[2], b[3], CHIP_TEXT);
+            }
+        }
+    }
+
+    /** 画一次飞回动画（块 + 文字，外层可触达 font）。 */
+    private void paintFlyBack(GuiGraphics guiGraphics, int ox, int oy, FlyBack fb) {
+        long now = System.currentTimeMillis();
+        long elapsed = now - fb.beginMs;
+        float p = Math.min(1f, (float) elapsed / fb.durationMs); // 0→1
+        float remain = 1f - p;                                   // 1→0
+        // 抖动：幅度随剩余时间衰减
+        float jx = (float) Math.sin(fb.seed + elapsed * 0.09f) * 2.5f * remain;
+        float jy = (float) Math.cos(fb.seed * 1.3f + elapsed * 0.11f) * 1.2f * remain;
+        // 缓出位移
+        float e = 1f - (1f - p) * (1f - p) * (1f - p);
+        float px = fb.sx + (fb.tx - fb.sx) * e + jx;
+        float py = fb.sy + (fb.ty - fb.sy) * e + jy;
+        int w = chipWidth(fb.token);
+        int bx = ox + (int) (px - w / 2f);
+        int by = oy + (int) (py - CHIP_H / 2f);
+        guiGraphics.fill(bx, by, bx + w, by + CHIP_H, CELL_EDGE);
+        guiGraphics.fill(bx + 1, by + 1, bx + w - 1, by + CHIP_H - 1, CELL_DONE);
+        drawTokenCentered(guiGraphics, fb.token, bx, by, w, CHIP_H, CHIP_TEXT);
+    }
+
+    /** 随鼠标浮动的词块（屏幕坐标居中于光标）。 */
+    private void paintFloatingChip(GuiGraphics guiGraphics) {
+        String token = this.picked;
+        int w = chipWidth(token);
+        int h = CHIP_H;
+        int fx = this.lastMouseX - w / 2;
+        int fy = this.lastMouseY - h / 2;
+        guiGraphics.fill(fx, fy, fx + w, fy + h, FLOAT_EDGE);
+        guiGraphics.fill(fx + 1, fy + 1, fx + w - 1, fy + h - 1, CELL_IN);
+        drawTokenCentered(guiGraphics, token, fx, fy, w, h, CHIP_TEXT);
+    }
+
+    private void drawTokenCentered(GuiGraphics guiGraphics, String text, int bx, int by, int w, int h, int color) {
+        int tx = bx + (w - this.font.width(text)) / 2;
+        int ty = by + (h - this.font.lineHeight) / 2;
+        guiGraphics.drawString(this.font, text, tx, ty, color, false);
+    }
 
     /** 在指定输入槽右侧画小标签（槽的 y 从 Menu 读取）。 */
     private void drawSlotLabel(GuiGraphics guiGraphics, int slotIndex, String langKey) {
@@ -300,67 +788,11 @@ public class HanmoTaiScreen extends AbstractContainerScreen<HanmoTaiMenu> {
         guiGraphics.fill(px + 2, py + ph, px + pw + 2, py + ph + 2, 0x40000000);
         guiGraphics.fill(px + pw, py + 2, px + pw + 2, py + ph, 0x40000000);
         if (lit) {
-            // 点亮时左上角画一点高光，模拟纸的折痕/质感
             guiGraphics.fill(px + 2, py + 2, px + 10, py + 5, 0x30FFFFFF);
         }
     }
 
-    /**
-     * 在答题纸内画格子：格数 = 词块数，每格宽 = font.width(对应词块) + 内边距，
-     * 即玩家能看出每个空位应填多长的词。逐行贪心换行、每行水平居中、整体垂直居中。
-     * 矩形存入 cellBoxes（下标 i 对应 tokens 第 i 个）。
-     *
-     * 注：词块 ≤ 2 行容量由纸高（58px，2 行 18px+4px 间距）决定；若未来题库出现
-     * 超长词块使行数超过 2，需扩大 ANS 区或引入滚动，暂不做。
-     */
-    private void drawCells(GuiGraphics guiGraphics, int ox, int oy,
-                           int areaX, int areaY, int areaW, int areaH,
-                           int cellH, List<String> tokens) {
-        this.cellBoxes.clear();
-        int maxW = areaW - 16; // 纸内左右各 8px
-        // 贪心分行
-        List<List<Integer>> rows = new ArrayList<>();
-        List<Integer> cur = new ArrayList<>();
-        int curW = 0;
-        for (int i = 0; i < tokens.size(); i++) {
-            int w = chipWidth(tokens.get(i));
-            if (!cur.isEmpty() && curW + CELL_GAP_X + w > maxW) {
-                rows.add(cur);
-                cur = new ArrayList<>();
-                curW = 0;
-            }
-            if (!cur.isEmpty()) {
-                curW += CELL_GAP_X;
-            }
-            cur.add(i);
-            curW += w;
-        }
-        if (!cur.isEmpty()) {
-            rows.add(cur);
-        }
-        int usedH = rows.size() * cellH + Math.max(0, rows.size() - 1) * CELL_GAP_Y;
-        int startY = areaY + Math.max(6, (areaH - usedH) / 2); // 垂直居中，至少离纸顶 6px
-        int y = startY;
-        for (List<Integer> row : rows) {
-            int rowW = 0;
-            for (int i : row) {
-                rowW += chipWidth(tokens.get(i));
-            }
-            rowW += CELL_GAP_X * (row.size() - 1);
-            int startX = areaX + (areaW - rowW) / 2; // 行内水平居中
-            int cx = startX;
-            for (int i : row) {
-                int w = chipWidth(tokens.get(i));
-                guiGraphics.fill(ox + cx, oy + y, ox + cx + w, oy + y + cellH, CELL_EDGE);
-                guiGraphics.fill(ox + cx + 1, oy + y + 1, ox + cx + w - 1, oy + y + cellH - 1, CELL_IN);
-                this.cellBoxes.add(new int[] { cx, y, w, cellH });
-                cx += w + CELL_GAP_X;
-            }
-            y += cellH + CELL_GAP_Y;
-        }
-    }
-
-    /** 文言换行绘制（按实际字宽拆行），每行居中。 */
+    /** 通用换行绘制（按实际字宽拆行），每行居中。 */
     private void drawCenteredWrapped(GuiGraphics guiGraphics, String text, int x, int y,
                                      int maxW, int lineH, int color) {
         StringBuilder line = new StringBuilder();
@@ -386,5 +818,30 @@ public class HanmoTaiScreen extends AbstractContainerScreen<HanmoTaiMenu> {
                                   int maxW, int color) {
         int tx = x + (maxW - this.font.width(text)) / 2;
         guiGraphics.drawString(this.font, text, tx, y, color, false);
+    }
+
+    // ============================================================
+    // 动画：词块从格子“抖动飞回”候选区
+    // ============================================================
+
+    /** 一次飞回动画：起点 = 格中心，终点 = 候选 chip 中心；前半段抖动渐弱、后半段缓入落位。 */
+    private static final class FlyBack {
+        final String token;
+        final float sx, sy;
+        final float tx, ty;
+        final long beginMs;
+        final long durationMs;
+        final float seed;
+
+        FlyBack(String token, float sx, float sy, float tx, float ty, long beginMs, long durationMs, float seed) {
+            this.token = token;
+            this.sx = sx;
+            this.sy = sy;
+            this.tx = tx;
+            this.ty = ty;
+            this.beginMs = beginMs;
+            this.durationMs = durationMs;
+            this.seed = seed;
+        }
     }
 }

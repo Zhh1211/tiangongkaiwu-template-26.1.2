@@ -29,5 +29,6 @@
   "gui.tiangongkaiwu.hanmo_slot_canye": "Fragment",
   "gui.tiangongkaiwu.hanmo_slot_ink": "Ink",
   "gui.tiangongkaiwu.hanmo_slot_paper": "Paper",
-  "gui.tiangongkaiwu.hanmo_sentence": "Sentence %s of %s"
+  "gui.tiangongkaiwu.hanmo_sentence": "Sentence %s of %s",
+  "gui.tiangongkaiwu.hanmo_done": "Translation complete!"
 }
