@@ -26,6 +26,7 @@ import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.common.extensions.IMenuTypeExtension;
+import net.neoforged.neoforge.event.AddReloadListenerEvent;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import net.neoforged.neoforge.registries.DeferredBlock;
@@ -35,6 +36,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 
 import com.example.tiangongkaiwu.block.RiceCropBlock;
 import com.example.tiangongkaiwu.block.HanmoTaiBlock;
+import com.example.tiangongkaiwu.hanmo.PuzzleLoader;
 import com.example.tiangongkaiwu.item.CanYeItem;
 import com.example.tiangongkaiwu.menu.HanmoTaiMenu;
 
@@ -111,6 +113,20 @@ public class TiangongKaiwu {
     );
 
     // ============================================================
+    // 翰墨台耗材：松烟墨、宣纸
+    // 注：槽位同时接受原版墨囊(ink_sac)与纸(paper)，见 HanmoTaiMenu 的材料白名单
+    // ============================================================
+    public static final DeferredItem<Item> SONGYAN_MO = ITEMS.registerSimpleItem(
+        "songyan_mo",
+        new Item.Properties()
+    );
+
+    public static final DeferredItem<Item> XUAN_ZHI = ITEMS.registerSimpleItem(
+        "xuan_zhi",
+        new Item.Properties()
+    );
+
+    // ============================================================
     // 创造模式标签页：天工开物
     // ============================================================
     public static final DeferredHolder<CreativeModeTab, CreativeModeTab> TIANGONG_TAB = CREATIVE_MODE_TABS
@@ -121,6 +137,8 @@ public class TiangongKaiwu {
                     .displayItems((parameters, output) -> {
                         output.accept(RICE_SEED);
                         output.accept(CAN_YE);
+                        output.accept(SONGYAN_MO);
+                        output.accept(XUAN_ZHI);
                         output.accept(HANMO_TAI_ITEM);
                     }).build());
 
@@ -164,5 +182,14 @@ public class TiangongKaiwu {
     @SubscribeEvent
     public void onServerStarting(ServerStartingEvent event) {
         LOGGER.info("HELLO from server starting");
+    }
+
+    /**
+     * 注册翰墨台题库的数据包加载器。
+     * 题库位于 data/ 下，只有服务端会加载；客户端改由自定义网络包逐题下发。
+     */
+    @SubscribeEvent
+    public void onAddReloadListeners(AddReloadListenerEvent event) {
+        event.addListener(new PuzzleLoader());
     }
 }

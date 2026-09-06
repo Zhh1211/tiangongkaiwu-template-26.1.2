@@ -3,6 +3,8 @@
     "block.tiangongkaiwu.rice_crop": "水稻",
     "block.tiangongkaiwu.hanmo_tai": "翰墨台",
     "item.tiangongkaiwu.can_ye": "《天工》残页",
+    "item.tiangongkaiwu.songyan_mo": "松烟墨",
+    "item.tiangongkaiwu.xuan_zhi": "宣纸",
     "book.tiangongkaiwu.naili.name": "《天工开物·乃粒》",
     "book.tiangongkaiwu.naili.tooltip": "以翰墨台译残页，可续此卷未竟之文。",
     "book.tiangongkaiwu.naili.description": "乃粒第一。五谷者，斯民之司命也。卷分总论、稻、麦三篇，俾观者知稼穑所自。",
