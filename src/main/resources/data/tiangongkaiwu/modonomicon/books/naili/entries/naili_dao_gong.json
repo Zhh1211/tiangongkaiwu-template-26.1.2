@@ -1,0 +1,30 @@
+{
+  "category": "naili_juan",
+  "name": "entry.tiangongkaiwu.naili_dao_gong.name",
+  "icon": {"item": "minecraft:wooden_hoe"},
+  "x": -2,
+  "y": 3,
+  "parents": [
+    {
+      "entry": "naili_juan/naili_do"
+    }
+  ],
+  "condition": {
+    "type": "modonomicon:advancement",
+    "advancement_id": "tiangongkaiwu:unlock/naili_dao_gong"
+  },
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "text": "entry.tiangongkaiwu.naili_dao_gong.page1"
+    },
+    {
+      "type": "modonomicon:text",
+      "text": "entry.tiangongkaiwu.naili_dao_gong.page2"
+    },
+    {
+      "type": "modonomicon:text",
+      "text": "entry.tiangongkaiwu.naili_dao_gong.page3"
+    }
+  ]
+}

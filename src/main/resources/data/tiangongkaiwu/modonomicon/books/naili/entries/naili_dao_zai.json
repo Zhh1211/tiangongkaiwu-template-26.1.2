@@ -1,0 +1,30 @@
+{
+  "category": "naili_juan",
+  "name": "entry.tiangongkaiwu.naili_dao_zai.name",
+  "icon": {"item": "minecraft:dead_bush"},
+  "x": 0,
+  "y": 3,
+  "parents": [
+    {
+      "entry": "naili_juan/naili_do"
+    }
+  ],
+  "condition": {
+    "type": "modonomicon:advancement",
+    "advancement_id": "tiangongkaiwu:unlock/naili_dao_zai"
+  },
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "text": "entry.tiangongkaiwu.naili_dao_zai.page1"
+    },
+    {
+      "type": "modonomicon:text",
+      "text": "entry.tiangongkaiwu.naili_dao_zai.page2"
+    },
+    {
+      "type": "modonomicon:text",
+      "text": "entry.tiangongkaiwu.naili_dao_zai.page3"
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "display": {
+    "icon": {
+      "count": 1,
+      "id": "minecraft:dead_bush"
+    },
+    "title": {
+      "text": "Internal unlock: Naili Dao Zai"
+    },
+    "description": {
+      "text": "Background marker granting the matching Tiangong book entry. Never shown to the player."
+    },
+    "frame": "task",
+    "show_toast": false,
+    "announce_to_chat": false,
+    "hidden": true
+  },
+  "criteria": {
+    "unlock": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}
