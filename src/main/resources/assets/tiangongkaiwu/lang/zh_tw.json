@@ -1,0 +1,17 @@
+{
+    "item.tiangongkaiwu.rice_seed": "水稻種子",
+    "block.tiangongkaiwu.rice_crop": "水稻",
+    "block.tiangongkaiwu.hanmo_tai": "翰墨臺",
+    "item.tiangongkaiwu.can_ye": "《天工》殘頁",
+    "book.tiangongkaiwu.naili.name": "《天工開物·乃粒》",
+    "book.tiangongkaiwu.naili.tooltip": "以翰墨臺譯殘頁，可續此卷未竟之文。",
+    "book.tiangongkaiwu.naili.description": "乃粒第一。五穀者，斯民之司命也。卷分總論、稻、麥三篇，俾觀者知稼穡所自。",
+    "category.tiangongkaiwu.naili_juan.name": "乃粒卷",
+    "category.tiangongkaiwu.naili_juan.description": "五穀者，民之司命也。",
+    "entry.tiangongkaiwu.naili_zonglun.name": "總論",
+    "entry.tiangongkaiwu.naili_zonglun.page1": "宋子曰：上古神農氏若存若亡，然味其徽號，兩言至今存矣。生人不能久生，而五穀生之；五穀不能自生，而生人生之。",
+    "entry.tiangongkaiwu.naili_do.name": "稻",
+    "entry.tiangongkaiwu.naili_do.page1": "凡稻種最多。不黏者禾曰秥，米曰粳；黏者禾曰稌，米曰糯。",
+    "entry.tiangongkaiwu.naili_mai.name": "麥",
+    "entry.tiangongkaiwu.naili_mai.page1": "凡麥有數種。小麥曰來，麥之長也；大麥曰牟、曰穬；雜麥曰雀、曰蕎。"
+}

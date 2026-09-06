@@ -1,6 +1,7 @@
 {
   "parent": "minecraft:block/cross",
+  "render_type": "minecraft:cutout",
   "textures": {
-    "crop": "tiangongkaiwu:block/rice_crop_stage5"
+    "cross": "tiangongkaiwu:block/rice_crop_stage5"
   }
 }

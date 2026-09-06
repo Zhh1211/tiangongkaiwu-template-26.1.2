@@ -1,0 +1,13 @@
+{
+  "category": "naili_juan",
+  "name": "entry.tiangongkaiwu.naili_zonglun.name",
+  "icon": {"item": "tiangongkaiwu:rice_seed"},
+  "x": 0,
+  "y": 0,
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "text": "entry.tiangongkaiwu.naili_zonglun.page1"
+    }
+  ]
+}

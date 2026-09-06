@@ -1,0 +1,18 @@
+{
+  "category": "naili_juan",
+  "name": "entry.tiangongkaiwu.naili_mai.name",
+  "icon": {"item": "minecraft:wheat"},
+  "x": 2,
+  "y": 2,
+  "parents": [
+    {
+      "entry": "naili_juan/naili_zonglun"
+    }
+  ],
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "text": "entry.tiangongkaiwu.naili_mai.page1"
+    }
+  ]
+}

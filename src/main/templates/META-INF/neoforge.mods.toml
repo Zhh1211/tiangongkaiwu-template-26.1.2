@@ -4,6 +4,12 @@
 # Note that there are a couple of TOML lists in this file.
 # Find more information on toml format here:  https://github.com/toml-lang/toml
 
+# The mod loader. NeoForge 21.1.249 的 FML 加载器要求此字段，缺失会导致 "Missing ModLoader" 崩溃。
+# 注意：MDG 1.0.24 不会自动注入，必须手写。
+modLoader="javafml"
+# The loader version range. FML 4.x 对应 NeoForge 21.1.x。
+loaderVersion="[4,)"
+
 # The license for you mod. This is mandatory metadata and allows for easier comprehension of your redistributive properties.
 # Review your options at https://choosealicense.com/. All rights reserved is the default copyright stance, and is thus the default here.
 license="${mod_license}"
@@ -79,6 +85,14 @@ Example mod description.
     type="required"
     # This version range declares a minimum of the current minecraft version up to but not including the next major version
     versionRange="${minecraft_version_range}"
+    ordering="NONE"
+    side="BOTH"
+
+# 教程书依赖：Modonomicon（1.21.1 系列，实际最新 release = 1.120.4）
+[[dependencies.${mod_id}]]
+    modId="modonomicon"
+    type="required"
+    versionRange="[1.120.4,)"
     ordering="NONE"
     side="BOTH"
 

@@ -28,6 +28,12 @@ sourceSets.main.resources {
 
 repositories {
     // Add here additional repositories if required by some of the dependencies below.
+    // Modonomicon 官方公开只读源：dl.cloudsmith.io/public（无需鉴权）。
+    // 注意：旧地址 maven.cloudsmith.io/klikli-dev/mods/ 需鉴权会返回 401，勿用。
+    maven {
+        url = "https://dl.cloudsmith.io/public/klikli-dev/mods/maven/"
+        content { includeGroup "com.klikli_dev" }
+    }
 }
 
 base {
@@ -49,6 +55,10 @@ neoForge {
     runs {
         client {
             client()
+
+            // 显式限制客户端 JVM 堆上限。默认不设时 JVM 取物理内存 1/4（4GB 机器≈1GB），对 1.21.1 偏低。
+            // 当前机器 4GB 内存且 WorkBuddy 常驻约 1.3GB，设 1536M 留足余量；升级到 8GB 后可调高（如 -Xmx4G）。
+            jvmArguments = ['-Xmx1536M']
 
             // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
             systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
@@ -134,6 +144,11 @@ dependencies {
     // For more info:
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
+
+    // 教程书：Modonomicon（乃粒篇等《天工开物》内容手册）
+    // version 取自 Cloudsmith maven-metadata：1.21.1 最新 release = 1.120.4（用户规划文档正确，此前误用 1.120.1）
+    // transitive=false 为官方推荐写法，避免拉入 JEI/Patchouli 等可选集成依赖
+    implementation("com.klikli_dev:modonomicon-1.21.1-neoforge:1.120.4") { transitive = false }
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.

@@ -6,7 +6,6 @@ import com.mojang.logging.LogUtils;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
@@ -26,6 +25,7 @@ import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.common.extensions.IMenuTypeExtension;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import net.neoforged.neoforge.registries.DeferredBlock;
@@ -36,6 +36,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import com.example.tiangongkaiwu.block.RiceCropBlock;
 import com.example.tiangongkaiwu.block.HanmoTaiBlock;
 import com.example.tiangongkaiwu.item.CanYeItem;
+import com.example.tiangongkaiwu.menu.HanmoTaiMenu;
 
 @Mod(TiangongKaiwu.MODID)
 public class TiangongKaiwu {
@@ -52,16 +53,13 @@ public class TiangongKaiwu {
     public static final DeferredRegister<MenuType<?>> MENUS =
             DeferredRegister.create(Registries.MENU, MODID);
 
-    // ============================================================
-    // 示例内容（后续可删除）
-    // ============================================================
-    public static final DeferredBlock<Block> EXAMPLE_BLOCK = BLOCKS.registerSimpleBlock("example_block",
-            BlockBehaviour.Properties.of().mapColor(MapColor.STONE));
-    public static final DeferredItem<BlockItem> EXAMPLE_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("example_block",
-            EXAMPLE_BLOCK);
-    public static final DeferredItem<Item> EXAMPLE_ITEM = ITEMS.registerSimpleItem("example_item",
-            new Item.Properties().food(new FoodProperties.Builder()
-                    .alwaysEdible().nutrition(1).saturationModifier(2f).build()));
+    // 翰墨台菜单类型：必须在 mod 构造期（注册窗口打开前）完成注册，
+    // 否则 HanmoTaiMenu 类懒加载到 RegisterMenuScreensEvent 才触发 <clinit>，
+    // 会因「RegisterEvent 已触发」而抛 IllegalStateException 导致客户端崩溃。
+    public static final DeferredHolder<MenuType<?>, MenuType<HanmoTaiMenu>> HANMO_TAI_MENU =
+            MENUS.register("hanmo_tai_menu",
+                    () -> IMenuTypeExtension.create((windowId, playerInventory, extraData) ->
+                            new HanmoTaiMenu(windowId, playerInventory)));
 
     // ============================================================
     // 水稻作物
@@ -99,6 +97,11 @@ public class TiangongKaiwu {
         )
     );
 
+    public static final DeferredItem<BlockItem> HANMO_TAI_ITEM = ITEMS.registerSimpleBlockItem(
+        "hanmo_tai",
+        HANMO_TAI
+    );
+
     public static final DeferredItem<CanYeItem> CAN_YE = ITEMS.register(
         "can_ye",
         () -> new CanYeItem(
@@ -108,17 +111,17 @@ public class TiangongKaiwu {
     );
 
     // ============================================================
-    // 创造模式标签页（示例）
+    // 创造模式标签页：天工开物
     // ============================================================
-    public static final DeferredHolder<CreativeModeTab, CreativeModeTab> EXAMPLE_TAB = CREATIVE_MODE_TABS
-            .register("example_tab", () -> CreativeModeTab.builder()
+    public static final DeferredHolder<CreativeModeTab, CreativeModeTab> TIANGONG_TAB = CREATIVE_MODE_TABS
+            .register("tiangongkaiwu", () -> CreativeModeTab.builder()
                     .title(Component.translatable("itemGroup.tiangongkaiwu"))
                     .withTabsBefore(CreativeModeTabs.COMBAT)
-                    .icon(() -> EXAMPLE_ITEM.get().getDefaultInstance())
+                    .icon(() -> CAN_YE.get().getDefaultInstance())
                     .displayItems((parameters, output) -> {
-                        output.accept(EXAMPLE_ITEM.get());
                         output.accept(RICE_SEED);
                         output.accept(CAN_YE);
+                        output.accept(HANMO_TAI_ITEM);
                     }).build());
 
     // ============================================================
@@ -152,10 +155,6 @@ public class TiangongKaiwu {
     }
 
     private void addCreative(BuildCreativeModeTabContentsEvent event) {
-        if (event.getTabKey() == CreativeModeTabs.BUILDING_BLOCKS) {
-            event.accept(EXAMPLE_BLOCK_ITEM);
-        }
-
         if (event.getTabKey() == CreativeModeTabs.INGREDIENTS) {
             event.accept(RICE_SEED);
             event.accept(CAN_YE);

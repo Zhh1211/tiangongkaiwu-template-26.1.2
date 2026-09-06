@@ -38,3 +38,15 @@ run/
 **/src/generated/**/.cache/
 repo/
 !**/src/**/repo/
+
+### 本地构建日志 ###
+*.log
+
+### 命令行误重定向产生的空文件（0 字节垃圾）###
+40%
+Check
+Compilation
+Task
+
+### WorkBuddy 项目数据（不入库）###
+.workbuddy/
