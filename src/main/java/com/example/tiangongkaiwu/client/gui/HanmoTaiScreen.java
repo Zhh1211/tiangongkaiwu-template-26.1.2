@@ -21,13 +21,19 @@ import java.util.List;
  *   - 左上：三个材料槽纵列（残页/墨/纸），槽坐标由 HanmoTaiMenu 决定（x=16, y=18/46/74）
  *   - 左中上：残页纸（题面）—— 放入残页后点亮并抽题，显示文言句子
  *   - 右上：墨水瓶 —— 放入墨后出现
- *   - 右列：词块候选区 —— 出题后按本句词块数显示，两列排布，词块乱序
- *   - 左中下：答题纸 —— 放入纸后点亮，格子数 = 本句词块数
+ *   - 右列：词块候选区 —— 出题后按本句词块数显示，chip 宽度按词块文本自动计算
+ *   - 左中下：答题纸 —— 放入纸后点亮，格子数 = 本句词块数，格子宽度按
+ *     正确顺序对应词块的文本宽度计算（玩家可看出每个空该填多长的词）
  *   - 底部：玩家背包 3×9 + 快捷栏（水平居中，由父类按 Menu 槽坐标渲染）
  *
  * 出题流程（显示层，拖放/判定在后续任务）：放入残页 → 从客户端题库随机抽一题，
  * 显示第一句文言与乱序词块；词块与格子数量都由当前句词块数决定；
  * 取出残页即清空状态。
+ *
+ * 宽度策略：不按"假设 2 字/固定 32px"硬编码，一律用 this.font.width(text)
+ * 实测文本宽度 + CELL_PAD 内边距动态决定 chip/格子宽，任意语言/词长自适应。
+ * 排布为逐行贪心（放不下换行），每行水平居中；每个 chip/格子的矩形会存进
+ * chipBoxes/cellBoxes（相对 GUI 左上角），供绘制与后续拖放命中测试复用。
  */
 public class HanmoTaiScreen extends AbstractContainerScreen<HanmoTaiMenu> {
 
@@ -59,11 +65,14 @@ public class HanmoTaiScreen extends AbstractContainerScreen<HanmoTaiMenu> {
     private static final int ANS_X = 44, ANS_Y = 66, ANS_W = 160, ANS_H = 58;
     // 墨水瓶（右上角，紧贴右侧列顶部）
     private static final int INK_X = 214, INK_Y = 14, INK_W = 28, INK_H = 34;
-    // 词块候选区（右侧列，墨水瓶下方）：两列，chips 32×16
-    private static final int BANK_X = 212, BANK_Y = 60, BANK_W = 72;
-    private static final int CHIP_W = 32, CHIP_H = 16, CHIP_GAP_X = 4, CHIP_GAP_Y = 2;
-    // 答题纸格子：32×18（放 2 字词块），纸内 4 列
-    private static final int ANS_CELL_W = 32, ANS_CELL_H = 18;
+    // 词块候选区（右侧列，墨水瓶下方）
+    private static final int BANK_X = 212, BANK_Y = 58, BANK_W = 72;
+    // 词块 chip / 答题格尺寸与间距（宽度按文本动态，这里只有固定向与间距）
+    private static final int CHIP_H = 16;
+    private static final int ANS_CELL_H = 18;
+    private static final int CELL_PAD = 6;      // 文字与 chip/格边框的单侧内边距（左右各 PAD）
+    private static final int BANK_GAP_X = 4, BANK_GAP_Y = 2;   // chip 横向/纵向间距
+    private static final int CELL_GAP_X = 4, CELL_GAP_Y = 4;   // 答题格横向/纵向间距
     // 输入槽右侧的小标签起始 x（槽在 Menu 中 x=16）
     private static final int SLOT_LABEL_X = 40;
     // 玩家背包标题 x（背包 9 列居中于 288 画布 → x=63）
@@ -75,6 +84,10 @@ public class HanmoTaiScreen extends AbstractContainerScreen<HanmoTaiMenu> {
     private int sentenceIndex;
     /** 当前句打乱后的候选词块（数量 = 词块数）。null/空 = 未出题。 */
     private List<String> currentTokens;
+    /** 候选词块 chip 矩形（相对 GUI 左上），下标对齐 currentTokens；绘制与拖放命中共用。 */
+    private final List<int[]> chipBoxes = new ArrayList<>();
+    /** 答题格矩形（相对 GUI 左上），下标 i 对应正确顺序 tokens 第 i 个；同上。 */
+    private final List<int[]> cellBoxes = new ArrayList<>();
 
     public HanmoTaiScreen(HanmoTaiMenu menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title);
@@ -117,12 +130,12 @@ public class HanmoTaiScreen extends AbstractContainerScreen<HanmoTaiMenu> {
             drawSentence(guiGraphics, x + FRAG_X, y + FRAG_Y, FRAG_W, FRAG_H);
         }
 
-        // ---------- 答题纸区：放纸点亮；出题后画等量格子 ----------
+        // ---------- 答题纸区：放纸点亮；出题后画格子（宽按正确词块文本） ----------
         drawPaper(guiGraphics, x + ANS_X, y + ANS_Y, ANS_W, ANS_H,
                 hasPaper ? ANS_ON : ANS_OFF, hasPaper);
-        if (hasPaper && this.currentTokens != null && !this.currentTokens.isEmpty()) {
-            drawCells(guiGraphics, x, y, ANS_X, ANS_Y, ANS_W, ANS_H,
-                    ANS_CELL_W, ANS_CELL_H, this.currentTokens.size());
+        if (hasPaper && this.activePuzzle != null) {
+            List<String> answer = this.activePuzzle.sentences().get(this.sentenceIndex).tokens();
+            drawCells(guiGraphics, x, y, ANS_X, ANS_Y, ANS_W, ANS_H, ANS_CELL_H, answer);
         }
 
         // ---------- 墨水瓶（右上角）：放入墨后点亮为墨瓶 ----------
@@ -185,6 +198,8 @@ public class HanmoTaiScreen extends AbstractContainerScreen<HanmoTaiMenu> {
             this.activePuzzle = null;
             this.sentenceIndex = 0;
             this.currentTokens = null;
+            this.chipBoxes.clear();
+            this.cellBoxes.clear();
         }
     }
 
@@ -208,29 +223,60 @@ public class HanmoTaiScreen extends AbstractContainerScreen<HanmoTaiMenu> {
         drawCenteredWrapped(guiGraphics, wenyan, px + 4, py + 17, pw - 8, 13, TEXT_DARK);
     }
 
-    /** 词块候选区：按 currentTokens 顺序（已乱序）两列排 chips，chip 内画词块文字。 */
+    /** 词块文本 → chip/格子宽：实测字宽 + 左右内边距。多语言/任意词长自适应。 */
+    private int chipWidth(String token) {
+        return this.font.width(token) + CELL_PAD * 2;
+    }
+
+    /** 词块 chip 候选区：按词块文本宽度逐行贪心排放，每行居中；矩形存入 chipBoxes。 */
     private void drawTokenBank(GuiGraphics guiGraphics, int ox, int oy) {
-        int n = this.currentTokens.size();
-        int rows = (n + 1) / 2;
-        // 垂直居中候选区（区内高度约 BANK_Y 到 GUI 底部背包上方）
-        int areaTop = BANK_Y;
-        int usedH = rows * CHIP_H + Math.max(0, rows - 1) * CHIP_GAP_Y;
-        int startY = areaTop + Math.max(0, (72 - usedH) / 2);
-        int idx = 0;
-        for (int r = 0; r < rows && idx < n; r++) {
-            for (int c = 0; c < 2 && idx < n; c++) {
-                int cx = ox + BANK_X + c * (CHIP_W + CHIP_GAP_X);
-                int cy = oy + startY + r * (CHIP_H + CHIP_GAP_Y);
-                // chip 底 + 边框
-                guiGraphics.fill(cx, cy, cx + CHIP_W, cy + CHIP_H, CELL_EDGE);
-                guiGraphics.fill(cx + 1, cy + 1, cx + CHIP_W - 1, cy + CHIP_H - 1, CELL_IN);
-                // 词块文字（两字以内，居中）
-                String token = this.currentTokens.get(idx);
-                int tx = cx + (CHIP_W - this.font.width(token)) / 2;
-                int ty = cy + (CHIP_H - 9) / 2;
-                guiGraphics.drawString(this.font, token, tx, ty, CHIP_TEXT, false);
-                idx++;
+        this.chipBoxes.clear();
+        List<String> tokens = this.currentTokens;
+        int maxW = BANK_W - 8; // 区内左右各 4px 内边
+        // 贪心分行：每行记录 token 下标，行内宽度累计
+        List<List<Integer>> rows = new ArrayList<>();
+        List<Integer> cur = new ArrayList<>();
+        int curW = 0;
+        for (int i = 0; i < tokens.size(); i++) {
+            int w = chipWidth(tokens.get(i));
+            int addW = cur.isEmpty() ? 0 : BANK_GAP_X;
+            if (!cur.isEmpty() && curW + addW + w > maxW) {
+                rows.add(cur);
+                cur = new ArrayList<>();
+                curW = 0;
             }
+            if (!cur.isEmpty()) {
+                curW += BANK_GAP_X;
+            }
+            cur.add(i);
+            curW += w;
+        }
+        if (!cur.isEmpty()) {
+            rows.add(cur);
+        }
+        int y = BANK_Y;
+        for (List<Integer> row : rows) {
+            int rowW = 0;
+            for (int i : row) {
+                rowW += chipWidth(tokens.get(i));
+            }
+            rowW += BANK_GAP_X * (row.size() - 1);
+            int startX = BANK_X + (BANK_W - rowW) / 2; // 行内水平居中
+            int cx = startX;
+            for (int i : row) {
+                String token = tokens.get(i);
+                int w = chipWidth(token);
+                // chip 底 + 边框
+                guiGraphics.fill(ox + cx, oy + y, ox + cx + w, oy + y + CHIP_H, CELL_EDGE);
+                guiGraphics.fill(ox + cx + 1, oy + y + 1, ox + cx + w - 1, oy + y + CHIP_H - 1, CELL_IN);
+                // 词块文字居中
+                int tx = cx + (w - this.font.width(token)) / 2;
+                int ty = y + (CHIP_H - this.font.lineHeight) / 2;
+                guiGraphics.drawString(this.font, token, ox + tx, oy + ty, CHIP_TEXT, false);
+                this.chipBoxes.add(new int[] { cx, y, w, CHIP_H });
+                cx += w + BANK_GAP_X;
+            }
+            y += CHIP_H + BANK_GAP_Y;
         }
     }
 
@@ -257,32 +303,58 @@ public class HanmoTaiScreen extends AbstractContainerScreen<HanmoTaiMenu> {
         }
     }
 
-    /** 在纸面内部画等距格子：共 count 个（= 当前句词块数），自动分行并整体居中。 */
+    /**
+     * 在答题纸内画格子：格数 = 词块数，每格宽 = font.width(对应词块) + 内边距，
+     * 即玩家能看出每个空位应填多长的词。逐行贪心换行、每行水平居中、整体垂直居中。
+     * 矩形存入 cellBoxes（下标 i 对应 tokens 第 i 个）。
+     *
+     * 注：词块 ≤ 2 行容量由纸高（58px，2 行 18px+4px 间距）决定；若未来题库出现
+     * 超长词块使行数超过 2，需扩大 ANS 区或引入滚动，暂不做。
+     */
     private void drawCells(GuiGraphics guiGraphics, int ox, int oy,
                            int areaX, int areaY, int areaW, int areaH,
-                           int cellW, int cellH, int count) {
-        int gapX = 4, gapY = 4;
-        int innerW = areaW - 16;
-        int cols = Math.max(1, (innerW + gapX) / (cellW + gapX)); // 每行最多几格（由纸宽决定）
-        cols = Math.min(cols, count);
-        int rows = Math.max(1, (count + cols - 1) / cols);
-        int usedW = cols * cellW + (cols - 1) * gapX;
-        int usedH = rows * cellH + (rows - 1) * gapY;
-        int startX = areaX + (areaW - usedW) / 2;                              // 水平居中
-        int startY = areaY + Math.max(0, (areaH - usedH) / 2);                 // 垂直居中
-        int drawn = 0;
-        outer:
-        for (int r = 0; r < rows; r++) {
-            for (int c = 0; c < cols; c++) {
-                if (drawn >= count) {
-                    break outer;
-                }
-                int cx = startX + c * (cellW + gapX);
-                int cy = startY + r * (cellH + gapY);
-                guiGraphics.fill(ox + cx, oy + cy, ox + cx + cellW, oy + cy + cellH, CELL_EDGE);
-                guiGraphics.fill(ox + cx + 1, oy + cy + 1, ox + cx + cellW - 1, oy + cy + cellH - 1, CELL_IN);
-                drawn++;
+                           int cellH, List<String> tokens) {
+        this.cellBoxes.clear();
+        int maxW = areaW - 16; // 纸内左右各 8px
+        // 贪心分行
+        List<List<Integer>> rows = new ArrayList<>();
+        List<Integer> cur = new ArrayList<>();
+        int curW = 0;
+        for (int i = 0; i < tokens.size(); i++) {
+            int w = chipWidth(tokens.get(i));
+            if (!cur.isEmpty() && curW + CELL_GAP_X + w > maxW) {
+                rows.add(cur);
+                cur = new ArrayList<>();
+                curW = 0;
             }
+            if (!cur.isEmpty()) {
+                curW += CELL_GAP_X;
+            }
+            cur.add(i);
+            curW += w;
+        }
+        if (!cur.isEmpty()) {
+            rows.add(cur);
+        }
+        int usedH = rows.size() * cellH + Math.max(0, rows.size() - 1) * CELL_GAP_Y;
+        int startY = areaY + Math.max(6, (areaH - usedH) / 2); // 垂直居中，至少离纸顶 6px
+        int y = startY;
+        for (List<Integer> row : rows) {
+            int rowW = 0;
+            for (int i : row) {
+                rowW += chipWidth(tokens.get(i));
+            }
+            rowW += CELL_GAP_X * (row.size() - 1);
+            int startX = areaX + (areaW - rowW) / 2; // 行内水平居中
+            int cx = startX;
+            for (int i : row) {
+                int w = chipWidth(tokens.get(i));
+                guiGraphics.fill(ox + cx, oy + y, ox + cx + w, oy + y + cellH, CELL_EDGE);
+                guiGraphics.fill(ox + cx + 1, oy + y + 1, ox + cx + w - 1, oy + y + cellH - 1, CELL_IN);
+                this.cellBoxes.add(new int[] { cx, y, w, cellH });
+                cx += w + CELL_GAP_X;
+            }
+            y += cellH + CELL_GAP_Y;
         }
     }
 
