@@ -5,6 +5,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import com.mojang.logging.LogUtils;
 
+import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
@@ -48,8 +49,12 @@ import com.example.tiangongkaiwu.block.entity.HanmoTaiBlockEntity;
 import com.example.tiangongkaiwu.hanmo.Puzzle;
 import com.example.tiangongkaiwu.hanmo.PuzzleLoader;
 import com.example.tiangongkaiwu.hanmo.PuzzleRegistry;
+import com.example.tiangongkaiwu.hanmo.PuzzleSettlement;
+import com.example.tiangongkaiwu.hanmo.network.PuzzleDonePayload;
 import com.example.tiangongkaiwu.hanmo.network.PuzzleSyncPayload;
+import com.example.tiangongkaiwu.hanmo.network.SettlementResultPayload;
 import com.example.tiangongkaiwu.item.CanYeItem;
+import com.example.tiangongkaiwu.item.ResidualData;
 import com.example.tiangongkaiwu.menu.HanmoTaiMenu;
 
 @Mod(TiangongKaiwu.MODID)
@@ -64,6 +69,15 @@ public class TiangongKaiwu {
             .create(Registries.BLOCK_ENTITY_TYPE, MODID);
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS = DeferredRegister
             .create(Registries.CREATIVE_MODE_TAB, MODID);
+
+    // ========== 物品数据组件：残页状态（目标条目/是否已译/成绩经验） ==========
+    public static final DeferredRegister<DataComponentType<?>> DATA_COMPONENTS =
+            DeferredRegister.create(Registries.DATA_COMPONENT_TYPE, MODID);
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<ResidualData>> RESIDUAL =
+            DATA_COMPONENTS.register("residual", () -> DataComponentType.<ResidualData>builder()
+                    .persistent(ResidualData.CODEC)
+                    .networkSynchronized(ResidualData.STREAM_CODEC)
+                    .build());
 
     // ========== 新增：菜单注册器 ==========
     public static final DeferredRegister<MenuType<?>> MENUS =
@@ -173,6 +187,7 @@ public class TiangongKaiwu {
         BLOCK_ENTITY_TYPES.register(modEventBus);
         CREATIVE_MODE_TABS.register(modEventBus);
         MENUS.register(modEventBus);   // ← 新增注册
+        DATA_COMPONENTS.register(modEventBus);
 
         NeoForge.EVENT_BUS.register(this);
 
@@ -226,6 +241,33 @@ public class TiangongKaiwu {
                 (payload, context) -> {
                     PuzzleRegistry.replaceAll(payload.puzzles());
                     LOGGER.info("[天工开物] 客户端收到题库，共 {} 道", payload.puzzles().size());
+                });
+
+        // 客户端三句全对 → 服务端誊录结算（服务端权威：校验材料/残页/条目一致 → 消耗 → 翻转残页烙经验）
+        event.registrar("1").playToServer(
+                PuzzleDonePayload.TYPE,
+                PuzzleDonePayload.STREAM_CODEC,
+                (payload, context) -> {
+                    if (context.player() instanceof ServerPlayer serverPlayer) {
+                        PuzzleSettlement.handle(serverPlayer, payload);
+                    }
+                });
+
+        // 结算结果回执：失败时在客户端弹原因（成功无需提示，屏幕已显示"通篇译毕"）
+        event.registrar("1").playToClient(
+                SettlementResultPayload.TYPE,
+                SettlementResultPayload.STREAM_CODEC,
+                (payload, context) -> {
+                    if (payload.ok()) {
+                        return;
+                    }
+                    String key = payload.reasonKey();
+                    if (key == null || key.isBlank()) {
+                        return;
+                    }
+                    if (context.player() instanceof net.minecraft.client.player.LocalPlayer clientPlayer) {
+                        clientPlayer.sendSystemMessage(net.minecraft.network.chat.Component.translatable(key));
+                    }
                 });
     }
 

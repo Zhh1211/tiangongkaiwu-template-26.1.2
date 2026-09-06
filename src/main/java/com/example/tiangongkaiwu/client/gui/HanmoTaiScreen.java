@@ -1,7 +1,10 @@
 package com.example.tiangongkaiwu.client.gui;
 
+import com.example.tiangongkaiwu.TiangongKaiwu;
 import com.example.tiangongkaiwu.hanmo.Puzzle;
 import com.example.tiangongkaiwu.hanmo.PuzzleRegistry;
+import com.example.tiangongkaiwu.hanmo.network.PuzzleDonePayload;
+import com.example.tiangongkaiwu.item.ResidualData;
 import com.example.tiangongkaiwu.menu.HanmoTaiMenu;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -9,6 +12,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -111,6 +116,8 @@ public class HanmoTaiScreen extends AbstractContainerScreen<HanmoTaiMenu> {
     private boolean completed;
     /** 判定正确后的金色停留截止时刻（System.currentTimeMillis）；归零时由渲染帧翻下一句。 */
     private long successHoldUntilMs;
+    /** 放入残页但无法出题时的提示（空页/该条目暂无题/已译）；取出残页清空。 */
+    private Component noQuestionHint;
 
     // ============ 词块/格子（下标对齐当前句 tokens） ============
     /** 当前句候选词块（乱序）；null = 未出题/已译毕。 */
@@ -224,10 +231,15 @@ public class HanmoTaiScreen extends AbstractContainerScreen<HanmoTaiMenu> {
         return super.mouseReleased(mouseX, mouseY, button);
     }
 
-    /** 词块区/格区可交互的前提：已出题、未译毕、不在金色停留中、且答题纸上放了纸。 */
+    /** 词块区/格区可交互的前提：已出题、未译毕、不在金色停留中、残页/纸/墨三样齐（译毕要消耗它们）。 */
     private boolean isInteractive() {
         return this.activePuzzle != null && !this.completed && !successHoldActive()
-                && this.currentTokens != null && hasPaperInSlot();
+                && this.currentTokens != null && hasPaperInSlot() && hasInkInSlot();
+    }
+
+    /** 墨槽是否放了墨（原版墨囊或松烟墨）。 */
+    private boolean hasInkInSlot() {
+        return !this.menu.slots.get(HanmoTaiMenu.SLOT_INK).getItem().isEmpty();
     }
 
     /** 答题纸槽是否放了纸（原版纸或宣纸）。 */
@@ -381,9 +393,16 @@ public class HanmoTaiScreen extends AbstractContainerScreen<HanmoTaiMenu> {
         this.cellFlashes.clear(); // 旧的闪红一并清掉
     }
 
-    /** 三句全对：置完成态，清掉一切可交互元素（产物结算在 #22）。 */
+    /**
+     * 三句全对：置完成态、清掉一切可交互元素，并通知服务端誊录结算
+     * （服务端校验后消耗墨/纸、把残页翻转为已译并烙上经验，见 PuzzleSettlement）。
+     */
     private void completePuzzle() {
         this.completed = true;
+        // 先取题目信息上报；activePuzzle 保留以便完成语持续显示
+        if (this.activePuzzle != null) {
+            PacketDistributor.sendToServer(new PuzzleDonePayload(this.activePuzzle.id(), this.puzzleWrongTotal));
+        }
         this.currentTokens = null;
         this.cellFill = null;
         this.picked = null;
@@ -413,15 +432,33 @@ public class HanmoTaiScreen extends AbstractContainerScreen<HanmoTaiMenu> {
     // 出题状态
     // ============================================================
 
-    /** 放入残页且未出题 → 抽题；取出残页 → 清空出题状态。每帧调用，仅状态变化时实际动作。 */
+    /**
+     * 放入残页且未出题 → 按其组件目标条目筛题池抽题（不再全库乱抽）；
+     * 空页/该条目暂无题/已译残页 → 设提示不抽题；取出残页 → 清空。
+     * 每帧调用，仅状态变化时实际动作。
+     */
     private void updatePuzzleState(boolean hasCanYe) {
-        if (hasCanYe && this.activePuzzle == null) {
-            Puzzle puzzle = PuzzleRegistry.random(RandomSource.create());
-            if (puzzle != null && !puzzle.sentences().isEmpty()) {
-                initPuzzle(puzzle);
+        if (hasCanYe) {
+            ItemStack frag = this.menu.slots.get(HanmoTaiMenu.SLOT_CAN_YE).getItem();
+            if (this.activePuzzle == null) {
+                ResidualData data = frag.get(TiangongKaiwu.RESIDUAL.get());
+                if (data == null || data.entry().isBlank()) {
+                    this.noQuestionHint = Component.translatable("item.tiangongkaiwu.can_ye.use.untargeted");
+                } else if (data.translated()) {
+                    this.noQuestionHint = Component.translatable("item.tiangongkaiwu.can_ye.status.done_hint");
+                } else {
+                    List<Puzzle> pool = PuzzleRegistry.byEntry(data.entry());
+                    if (pool.isEmpty()) {
+                        this.noQuestionHint = Component.translatable("gui.tiangongkaiwu.hanmo_no_question");
+                    } else {
+                        this.noQuestionHint = null;
+                        initPuzzle(pool.get(RandomSource.create().nextInt(pool.size())));
+                    }
+                }
             }
-        } else if (!hasCanYe && this.activePuzzle != null) {
+        } else if (this.activePuzzle != null || this.noQuestionHint != null) {
             clearPuzzle();
+            this.noQuestionHint = null;
         }
     }
 
@@ -618,6 +655,10 @@ public class HanmoTaiScreen extends AbstractContainerScreen<HanmoTaiMenu> {
                 hasCanYe ? FRAG_ON : FRAG_OFF, hasCanYe);
         if (hasCanYe && this.activePuzzle != null) {
             drawSentence(guiGraphics, x + FRAG_X, y + FRAG_Y, FRAG_W, FRAG_H);
+        } else if (hasCanYe && this.noQuestionHint != null) {
+            // 放了残页但抽不了题：残页纸上显示原因（空页/该条目暂无题/已译）
+            drawCenteredWrapped(guiGraphics, this.noQuestionHint.getString(),
+                    x + FRAG_X + 4, y + FRAG_Y + 14, FRAG_W - 8, 13, NOTE_COLOR);
         }
 
         // ---------- 答题纸区：放纸点亮；出题后画格子（宽按正确词块文本） ----------

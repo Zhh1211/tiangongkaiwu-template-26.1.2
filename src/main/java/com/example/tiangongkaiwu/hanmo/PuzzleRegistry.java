@@ -37,6 +37,20 @@ public final class PuzzleRegistry {
         return Optional.ofNullable(BY_ID.get(id));
     }
 
+    /** 该条目名下可用的题（题库 JSON 的 entry 与残页组件 entry 匹配）；残页抽题池。 */
+    public static synchronized List<Puzzle> byEntry(String entry) {
+        if (entry == null) {
+            return List.of();
+        }
+        List<Puzzle> out = new ArrayList<>();
+        for (Puzzle puzzle : ALL) {
+            if (entry.equals(puzzle.entry())) {
+                out.add(puzzle);
+            }
+        }
+        return List.copyOf(out);
+    }
+
     public static synchronized List<Puzzle> all() {
         return List.copyOf(ALL);
     }
