@@ -7,6 +7,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.Slot;
 
+import java.util.List;
+
 /**
  * 翰墨台译书界面（色块版，256×224）。
  *
@@ -61,6 +63,24 @@ public class HanmoTaiScreen extends AbstractContainerScreen<HanmoTaiMenu> {
         this.imageHeight = GUI_H;
     }
 
+    /**
+     * 当前句的词块（正确顺序）。null 或空 = 尚未出题（未放残页 / 还没抽到题）。
+     * 出题逻辑（#21）就绪后填充；候选词块区与答题格都只在该值非空时显示，
+     * 数量 = 本句词块数，避免出现与题目无关的固定空框。
+     */
+    private List<String> currentTokens;
+
+    /**
+     * 1.21.1 的 AbstractContainerScreen.render() 已不再自动调用 renderTooltip
+     * （只设置 hoveredSlot 与画槽位高亮），需子类在渲染末尾补一次，
+     * 否则鼠标悬停物品无提示框。
+     */
+    @Override
+    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+        super.render(guiGraphics, mouseX, mouseY, partialTick);
+        this.renderTooltip(guiGraphics, mouseX, mouseY);
+    }
+
     @Override
     protected void renderBg(GuiGraphics guiGraphics, float partialTick, int mouseX, int mouseY) {
         int x = this.leftPos;
@@ -82,12 +102,13 @@ public class HanmoTaiScreen extends AbstractContainerScreen<HanmoTaiMenu> {
             // 后续：在此区域中央显示第 N 句文言题目
         }
 
-        // ---------- 答题纸区：放入纸后点亮 ----------
+        // ---------- 答题纸区：放入纸后点亮；格子仅在出题后显示，数量 = 本句词块数 ----------
         drawPaper(guiGraphics, x + ANS_X, y + ANS_Y, ANS_W, ANS_H,
                 hasPaper ? ANS_ON : ANS_OFF, hasPaper);
-        if (hasPaper) {
-            // 纸内画示意格子 4×2（真实列数/位置待接入题目后动态调整）
-            drawCells(guiGraphics, x, y, ANS_X, ANS_Y, ANS_W, ANS_H, ANS_CELL_W, ANS_CELL_H);
+        if (hasPaper && this.currentTokens != null && !this.currentTokens.isEmpty()) {
+            // 格子数 = 词块数（逐句作答，每格放一个词块）
+            drawCells(guiGraphics, x, y, ANS_X, ANS_Y, ANS_W, ANS_H,
+                    ANS_CELL_W, ANS_CELL_H, this.currentTokens.size());
         }
 
         // ---------- 墨水瓶（右上角）：放入墨后点亮为墨瓶 ----------
@@ -106,14 +127,17 @@ public class HanmoTaiScreen extends AbstractContainerScreen<HanmoTaiMenu> {
             guiGraphics.fill(x + INK_X + 4, y + INK_Y + 24, x + INK_X + INK_W - 4, y + INK_Y + INK_H, INK_HOLD);
         }
 
-        // ---------- 词块候选区（右侧中部，两列 × 4 行）：有残页后点亮 ----------
-        for (int row = 0; row < 4; row++) {
-            for (int col = 0; col < 2; col++) {
-                int cx = x + BANK_X + col * (BANK_CELL_W + 4);
-                int cy = y + BANK_Y + row * (BANK_CELL_H + 3);
-                guiGraphics.fill(cx, cy, cx + BANK_CELL_W, cy + BANK_CELL_H,
-                        hasCanYe ? CELL_IN : FRAG_OFF);
+        // ---------- 词块候选区（右侧中部）：仅在出题（有句子）后显示，数量 = 本句词块数 ----------
+        if (hasCanYe && this.currentTokens != null && !this.currentTokens.isEmpty()) {
+            int rows = (this.currentTokens.size() + 1) / 2;   // 两列排布
+            for (int row = 0; row < rows; row++) {
+                for (int col = 0; col < 2; col++) {
+                    int cx = x + BANK_X + col * (BANK_CELL_W + 4);
+                    int cy = y + BANK_Y + row * (BANK_CELL_H + 3);
+                    guiGraphics.fill(cx, cy, cx + BANK_CELL_W, cy + BANK_CELL_H, CELL_IN);
+                }
             }
+            // 后续：在每个框内绘制打乱顺序的词块文字（#21）
         }
 
         // ---------- 所有槽（输入三槽 + 玩家背包）画槽底 ----------
@@ -157,22 +181,29 @@ public class HanmoTaiScreen extends AbstractContainerScreen<HanmoTaiMenu> {
         }
     }
 
-    /** 在纸面内部画等距格子（示意占位）。 */
+    /** 在纸面内部画等距格子：共 count 个（= 当前句词块数），按纸内面积自动分行居中。 */
     private void drawCells(GuiGraphics guiGraphics, int ox, int oy,
                            int areaX, int areaY, int areaW, int areaH,
-                           int cellW, int cellH) {
+                           int cellW, int cellH, int count) {
         int innerW = areaW - 16;
-        int cols = Math.max(1, innerW / (cellW + 3));
-        int rows = Math.max(1, (areaH - 14) / (cellH + 3));
+        int cols = Math.max(1, innerW / (cellW + 3));      // 每行最多几格（由纸宽决定）
+        cols = Math.min(cols, count);
+        int rows = Math.max(1, (count + cols - 1) / cols); // 需要几行
         int usedW = cols * cellW + (cols - 1) * 3;
-        int startX = areaX + (areaW - usedW) / 2;   // 水平居中
-        int startY = areaY + 5;                      // 纸内顶部往下一点
+        int startX = areaX + (areaW - usedW) / 2;          // 水平居中
+        int startY = areaY + 5;                            // 纸内顶部往下一点
+        int drawn = 0;
+        outer:
         for (int r = 0; r < rows; r++) {
             for (int c = 0; c < cols; c++) {
+                if (drawn >= count) {
+                    break outer;
+                }
                 int cx = startX + c * (cellW + 3);
                 int cy = startY + r * (cellH + 3);
                 guiGraphics.fill(ox + cx, oy + cy, ox + cx + cellW, oy + cy + cellH, CELL_EDGE);
                 guiGraphics.fill(ox + cx + 1, oy + cy + 1, ox + cx + cellW - 1, oy + cy + cellH - 1, CELL_IN);
+                drawn++;
             }
         }
     }
