@@ -11,7 +11,7 @@ public record CanYeData(
     String original,               // 文言文原文
     String translation,            // 正确译文（白话文）
     List<String> chunks,           // 词块列表（玩家需要拼装的词语）
-    String unlockRecipe            // 解锁的配方ID，如 "tiangongkaiwu:rice_seed"
+    String unlockRecipe            // 解锁的配方ID（占位字段；目前未使用，门控走锁源头方案）
 ) {
     // 无额外方法，record 自动生成构造器、getter、equals、hashCode
 }

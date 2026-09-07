@@ -11,6 +11,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
@@ -43,7 +44,9 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
-import com.example.tiangongkaiwu.block.RiceCropBlock;
+import com.example.tiangongkaiwu.block.RicePanicleBlock;
+import com.example.tiangongkaiwu.block.RiceStalkBlock;
+import com.example.tiangongkaiwu.block.RiceStalkBlockDry;
 import com.example.tiangongkaiwu.block.HanmoTaiBlock;
 import com.example.tiangongkaiwu.block.entity.HanmoTaiBlockEntity;
 import com.example.tiangongkaiwu.hanmo.Puzzle;
@@ -55,6 +58,7 @@ import com.example.tiangongkaiwu.hanmo.network.PuzzleSyncPayload;
 import com.example.tiangongkaiwu.hanmo.network.SettlementResultPayload;
 import com.example.tiangongkaiwu.item.CanYeItem;
 import com.example.tiangongkaiwu.item.ResidualData;
+import com.example.tiangongkaiwu.item.RiceGrainItem;
 import com.example.tiangongkaiwu.menu.HanmoTaiMenu;
 
 @Mod(TiangongKaiwu.MODID)
@@ -92,11 +96,13 @@ public class TiangongKaiwu {
                             new HanmoTaiMenu(windowId, playerInventory)));
 
     // ============================================================
-    // 水稻作物
+    // 水稻作物（v0.3 重做：水培两段式 — 浸水稻秆 + 成熟稻穗 + 枯秆）
+    // 详见 docs/乃粒稻作玩法设计.md
     // ============================================================
-    public static final DeferredBlock<Block> RICE_CROP = BLOCKS.register(
-        "rice_crop",
-        () -> new RiceCropBlock(
+    /** 下部浸水稻秆（AGE 0–7，成熟后自动在正上方抽穗）。 */
+    public static final DeferredBlock<RiceStalkBlock> RICE_STALK = BLOCKS.register(
+        "rice_stalk",
+        () -> new RiceStalkBlock(
             BlockBehaviour.Properties.of()
                 .mapColor(MapColor.PLANT)
                 .noCollission()
@@ -106,11 +112,46 @@ public class TiangongKaiwu {
         )
     );
 
-    public static final DeferredItem<BlockItem> RICE_SEED = ITEMS.register(
-        "rice_seed",
-        () -> new BlockItem(
-            RICE_CROP.get(),
+    /** 上部稻穗（仅成熟期出现；打穗掉稻谷 2–3 + 秆再生）。 */
+    public static final DeferredBlock<RicePanicleBlock> RICE_PANICLE = BLOCKS.register(
+        "rice_panicle",
+        () -> new RicePanicleBlock(
+            BlockBehaviour.Properties.of()
+                .mapColor(MapColor.PLANT)
+                .noCollission()
+                .instabreak()
+                .sound(SoundType.CROP)
+        )
+    );
+
+    /** 枯秆（演示版稻灾：空桶取水即转入此态，数段后自毁；倒水救活为浸水稻秆 AGE 0）。 */
+    public static final DeferredBlock<RiceStalkBlockDry> RICE_STALK_DRY = BLOCKS.register(
+        "rice_stalk_dry",
+        () -> new RiceStalkBlockDry(
+            BlockBehaviour.Properties.of()
+                .mapColor(MapColor.PLANT)
+                .noCollission()
+                .randomTicks()
+                .instabreak()
+                .sound(SoundType.CROP)
+        )
+    );
+
+    /** 稻谷：种子 + 脱粒原料（单一物品，不造单独种子物品）。*/
+    public static final DeferredItem<RiceGrainItem> RICE_GRAIN = ITEMS.register(
+        "rice_grain",
+        () -> new RiceGrainItem(new Item.Properties())
+    );
+
+    /** 米：脱粒产物，可食（小恢复主食档：饱食 3 / 饱和度 0.4）。*/
+    public static final DeferredItem<Item> RICE = ITEMS.register(
+        "rice",
+        () -> new Item(
             new Item.Properties()
+                .food(new FoodProperties.Builder()
+                    .nutrition(3)
+                    .saturationModifier(0.4f)
+                    .build())
         )
     );
 
@@ -169,7 +210,8 @@ public class TiangongKaiwu {
                     .withTabsBefore(CreativeModeTabs.COMBAT)
                     .icon(() -> CAN_YE.get().getDefaultInstance())
                     .displayItems((parameters, output) -> {
-                        output.accept(RICE_SEED);
+                        output.accept(RICE_GRAIN);
+                        output.accept(RICE);
                         output.accept(CAN_YE);
                         output.accept(SONGYAN_MO);
                         output.accept(XUAN_ZHI);
@@ -211,7 +253,8 @@ public class TiangongKaiwu {
 
     private void addCreative(BuildCreativeModeTabContentsEvent event) {
         if (event.getTabKey() == CreativeModeTabs.INGREDIENTS) {
-            event.accept(RICE_SEED);
+            event.accept(RICE_GRAIN);
+            event.accept(RICE);
             event.accept(CAN_YE);
         }
     }

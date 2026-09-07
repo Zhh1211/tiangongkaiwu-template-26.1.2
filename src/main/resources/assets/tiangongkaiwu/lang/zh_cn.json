@@ -1,6 +1,6 @@
 {
-    "item.tiangongkaiwu.rice_seed": "水稻种子",
-    "block.tiangongkaiwu.rice_crop": "水稻",
+    "item.tiangongkaiwu.rice_grain": "稻谷",
+    "item.tiangongkaiwu.rice": "米",
     "block.tiangongkaiwu.hanmo_tai": "翰墨台",
     "item.tiangongkaiwu.can_ye": "《天工》残页",
     "item.tiangongkaiwu.can_ye.tooltip1": "一张泛黄的古纸，上面写着看不懂的文字。",

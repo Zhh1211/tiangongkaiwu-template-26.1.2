@@ -1,7 +1,7 @@
 {
   "name": "category.tiangongkaiwu.naili_juan.name",
   "description": "category.tiangongkaiwu.naili_juan.description",
-  "icon": {"item": "tiangongkaiwu:rice_seed"},
+  "icon": {"item": "tiangongkaiwu:rice_grain"},
   "display_mode": "node",
   "sort_number": -1
 }

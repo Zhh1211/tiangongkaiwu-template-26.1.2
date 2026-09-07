@@ -1,7 +1,7 @@
 {
   "category": "naili_juan",
   "name": "entry.tiangongkaiwu.naili_do.name",
-  "icon": {"item": "tiangongkaiwu:rice_seed"},
+  "icon": {"item": "tiangongkaiwu:rice_grain"},
   "x": -2,
   "y": 2,
   "parents": [

@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "group": "tiangongkaiwu:rice",
+  "ingredients": [
+    {
+      "item": "tiangongkaiwu:rice_grain"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "tiangongkaiwu:rice"
+  }
+}

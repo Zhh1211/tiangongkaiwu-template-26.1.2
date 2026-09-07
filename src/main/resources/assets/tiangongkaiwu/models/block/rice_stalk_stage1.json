@@ -2,6 +2,6 @@
   "parent": "minecraft:block/cross",
   "render_type": "minecraft:cutout",
   "textures": {
-    "cross": "tiangongkaiwu:block/rice_crop_stage6"
+    "cross": "tiangongkaiwu:block/rice_stalk_stage1"
   }
 }

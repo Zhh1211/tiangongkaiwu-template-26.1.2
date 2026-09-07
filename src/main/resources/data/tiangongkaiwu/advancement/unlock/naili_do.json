@@ -2,7 +2,7 @@
   "display": {
     "icon": {
       "count": 1,
-      "id": "tiangongkaiwu:rice_seed"
+      "id": "tiangongkaiwu:rice_grain"
     },
     "title": {
       "text": "Internal unlock: Naili Dao"
@@ -14,6 +14,9 @@
     "show_toast": false,
     "announce_to_chat": false,
     "hidden": true
+  },
+  "rewards": {
+    "loot": ["tiangongkaiwu:reward/unlock_naili_do"]
   },
   "criteria": {
     "unlock": {
