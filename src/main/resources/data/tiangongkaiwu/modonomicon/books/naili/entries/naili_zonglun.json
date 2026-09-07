@@ -8,6 +8,14 @@
     {
       "type": "modonomicon:text",
       "text": "entry.tiangongkaiwu.naili_zonglun.page1"
+    },
+    {
+      "type": "modonomicon:text",
+      "text": "entry.tiangongkaiwu.naili_zonglun.page2"
+    },
+    {
+      "type": "modonomicon:text",
+      "text": "entry.tiangongkaiwu.naili_zonglun.page3"
     }
   ]
 }
