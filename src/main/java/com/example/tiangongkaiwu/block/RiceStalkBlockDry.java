@@ -15,6 +15,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
@@ -22,22 +23,25 @@ import net.minecraft.world.level.material.Fluids;
 /**
  * 枯秆方块：演示版稻灾的状态——{@link RiceStalkBlock} 被玩家用空桶舀水后转入此态。
  *
- * - 不生长、不抽穗（仅含"是否含水"属性；默认 waterlogged=false 表现为干燥秆）。
+ * - 不生长、不抽穗；仅保留原秆的 AGE（断水时的生长阶段），复活时原样还回。
  * - 随机 tick 约 25% 自毁（无掉落），体现"旬日失水则死期至"。
- * - 玩家手持水桶右键 → {@link #placeLiquid} 把它复活为年轻的 {@link RiceStalkBlock}（AGE 0，含水）。
+ * - 玩家手持水桶右键 → {@link #placeLiquid} 复活为同 AGE 的浸水稻秆。
  */
 public class RiceStalkBlockDry extends Block implements SimpleWaterloggedBlock {
 
+    public static final IntegerProperty AGE = BlockStateProperties.AGE_7;
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
     public RiceStalkBlockDry(Properties properties) {
         super(properties);
-        this.registerDefaultState(this.stateDefinition.any().setValue(WATERLOGGED, false));
+        this.registerDefaultState(this.stateDefinition.any()
+                .setValue(AGE, 0)
+                .setValue(WATERLOGGED, false));
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(WATERLOGGED);
+        builder.add(AGE, WATERLOGGED);
     }
 
     @Override
@@ -50,11 +54,12 @@ public class RiceStalkBlockDry extends Block implements SimpleWaterloggedBlock {
         return fluid == Fluids.WATER;
     }
 
-    /** 水桶倒在枯秆上：复活为幼龄浸水稻秆（AGE 0）。返回 boolean 表示是否成功占位。 */
+    /** 水桶倒在枯秆上：复活为同 AGE 的浸水稻秆（把断水前的生长阶段还回去）。返回 boolean 表示是否成功占位。 */
     @Override
     public boolean placeLiquid(LevelAccessor level, BlockPos pos, BlockState state, FluidState fluid) {
         if (fluid.getType() == Fluids.WATER) {
-            BlockState newState = TiangongKaiwu.RICE_STALK.get().defaultBlockState();
+            BlockState newState = TiangongKaiwu.RICE_STALK.get().defaultBlockState()
+                    .setValue(RiceStalkBlock.AGE, state.getValue(AGE));
             return level.setBlock(pos, newState, 3);
         }
         return false;

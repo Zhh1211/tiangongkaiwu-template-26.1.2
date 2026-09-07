@@ -98,9 +98,13 @@ public class RiceStalkBlock extends Block implements SimpleWaterloggedBlock, Bon
         }
 
         // age == 7：尝试在正上方抽穗（上方需为空气；多次 tick 重试）
-        BlockPos above = pos.above();
-        if (level.getBlockState(above).isAir()) {
-            level.setBlock(above, TiangongKaiwu.RICE_PANICLE.get().defaultBlockState(), 2);
+        trySpawnPanicle(level, pos);
+    }
+
+    /** 秆成熟后尝试在正上方长出稻穗（仅当上方为空）。 */
+    private static void trySpawnPanicle(ServerLevel level, BlockPos pos) {
+        if (level.getBlockState(pos.above()).isAir()) {
+            level.setBlock(pos.above(), TiangongKaiwu.RICE_PANICLE.get().defaultBlockState(), 2);
         }
     }
 
@@ -121,6 +125,10 @@ public class RiceStalkBlock extends Block implements SimpleWaterloggedBlock, Bon
         if (age >= MAX_AGE) return;
         int newAge = Math.min(MAX_AGE, age + 1 + random.nextInt(2));
         level.setBlock(pos, state.setValue(AGE, newAge), 2);
+        // 骨粉催到顶（AGE 7）时立刻尝试抽穗，否则玩家要干等下一次随机 tick
+        if (newAge == MAX_AGE) {
+            trySpawnPanicle(level, pos);
+        }
     }
 
     // ====== 主动舀水：空桶右键 → 转枯秆 + 给玩家水桶（演示版稻灾入口） ======
@@ -131,8 +139,10 @@ public class RiceStalkBlock extends Block implements SimpleWaterloggedBlock, Bon
             if (level.isClientSide) {
                 return ItemInteractionResult.sidedSuccess(true);
             }
-            // 转枯秆
-            level.setBlock(pos, TiangongKaiwu.RICE_STALK_DRY.get().defaultBlockState(), 3);
+            // 转枯秆：把当前 AGE 一并带走，复活时可原样还回
+            level.setBlock(pos,
+                    TiangongKaiwu.RICE_STALK_DRY.get().defaultBlockState()
+                            .setValue(RiceStalkBlockDry.AGE, state.getValue(AGE)), 3);
             // 给玩家水桶
             if (player != null && !player.getAbilities().instabuild) {
                 ItemStack waterBucket = new ItemStack(Items.WATER_BUCKET);
