@@ -3,7 +3,7 @@
   "name": "entry.tiangongkaiwu.naili_dao_gong.name",
   "icon": {"item": "minecraft:wooden_hoe"},
   "x": -2,
-  "y": 3,
+  "y": 4,
   "parents": [
     {
       "entry": "naili_juan/naili_do"
