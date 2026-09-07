@@ -1,0 +1,30 @@
+{
+  "category": "naili_juan",
+  "name": "entry.tiangongkaiwu.naili_shuji.name",
+  "icon": {"item": "minecraft:hay_block"},
+  "x": -2,
+  "y": -2,
+  "parents": [
+    {
+      "entry": "naili_juan/naili_zonglun"
+    }
+  ],
+  "condition": {
+    "type": "modonomicon:advancement",
+    "advancement_id": "tiangongkaiwu:unlock/naili_shuji"
+  },
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "text": "entry.tiangongkaiwu.naili_shuji.page1"
+    },
+    {
+      "type": "modonomicon:text",
+      "text": "entry.tiangongkaiwu.naili_shuji.page2"
+    },
+    {
+      "type": "modonomicon:text",
+      "text": "entry.tiangongkaiwu.naili_shuji.page3"
+    }
+  ]
+}

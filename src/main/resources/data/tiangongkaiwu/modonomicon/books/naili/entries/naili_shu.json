@@ -1,0 +1,30 @@
+{
+  "category": "naili_juan",
+  "name": "entry.tiangongkaiwu.naili_shu.name",
+  "icon": {"item": "minecraft:beetroot"},
+  "x": 2,
+  "y": -2,
+  "parents": [
+    {
+      "entry": "naili_juan/naili_zonglun"
+    }
+  ],
+  "condition": {
+    "type": "modonomicon:advancement",
+    "advancement_id": "tiangongkaiwu:unlock/naili_shu"
+  },
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "text": "entry.tiangongkaiwu.naili_shu.page1"
+    },
+    {
+      "type": "modonomicon:text",
+      "text": "entry.tiangongkaiwu.naili_shu.page2"
+    },
+    {
+      "type": "modonomicon:text",
+      "text": "entry.tiangongkaiwu.naili_shu.page3"
+    }
+  ]
+}

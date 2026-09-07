@@ -1,0 +1,30 @@
+{
+  "category": "naili_juan",
+  "name": "entry.tiangongkaiwu.naili_ma.name",
+  "icon": {"item": "minecraft:string"},
+  "x": 0,
+  "y": -2,
+  "parents": [
+    {
+      "entry": "naili_juan/naili_zonglun"
+    }
+  ],
+  "condition": {
+    "type": "modonomicon:advancement",
+    "advancement_id": "tiangongkaiwu:unlock/naili_ma"
+  },
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "text": "entry.tiangongkaiwu.naili_ma.page1"
+    },
+    {
+      "type": "modonomicon:text",
+      "text": "entry.tiangongkaiwu.naili_ma.page2"
+    },
+    {
+      "type": "modonomicon:text",
+      "text": "entry.tiangongkaiwu.naili_ma.page3"
+    }
+  ]
+}
