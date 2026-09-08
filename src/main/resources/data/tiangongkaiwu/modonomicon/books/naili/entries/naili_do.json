@@ -1,12 +1,15 @@
 {
   "category": "naili_juan",
   "name": "entry.tiangongkaiwu.naili_do.name",
-  "icon": {"item": "tiangongkaiwu:rice_grain"},
+  "icon": {
+    "item": "tiangongkaiwu:rice_grain"
+  },
   "x": -2,
   "y": 2,
   "parents": [
     {
-      "entry": "naili_juan/naili_zonglun"
+      "entry": "naili_juan/naili_zonglun",
+      "line_enabled": true
     }
   ],
   "condition": {

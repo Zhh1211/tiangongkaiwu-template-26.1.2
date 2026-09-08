@@ -1,12 +1,15 @@
 {
   "category": "naili_juan",
   "name": "entry.tiangongkaiwu.naili_shu.name",
-  "icon": {"item": "minecraft:beetroot"},
+  "icon": {
+    "item": "minecraft:beetroot"
+  },
   "x": 2,
   "y": -2,
   "parents": [
     {
-      "entry": "naili_juan/naili_zonglun"
+      "entry": "naili_juan/naili_zonglun",
+      "line_enabled": true
     }
   ],
   "condition": {

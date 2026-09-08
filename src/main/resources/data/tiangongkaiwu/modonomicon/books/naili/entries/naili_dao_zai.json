@@ -1,12 +1,15 @@
 {
   "category": "naili_juan",
   "name": "entry.tiangongkaiwu.naili_dao_zai.name",
-  "icon": {"item": "minecraft:dead_bush"},
+  "icon": {
+    "item": "minecraft:dead_bush"
+  },
   "x": 0,
   "y": 4,
   "parents": [
     {
-      "entry": "naili_juan/naili_do"
+      "entry": "naili_juan/naili_do",
+      "line_enabled": true
     }
   ],
   "condition": {

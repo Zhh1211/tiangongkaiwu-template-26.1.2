@@ -1,12 +1,15 @@
 {
   "category": "naili_juan",
   "name": "entry.tiangongkaiwu.naili_mai.name",
-  "icon": {"item": "minecraft:wheat"},
+  "icon": {
+    "item": "minecraft:wheat"
+  },
   "x": 2,
   "y": 2,
   "parents": [
     {
-      "entry": "naili_juan/naili_zonglun"
+      "entry": "naili_juan/naili_zonglun",
+      "line_enabled": true
     }
   ],
   "condition": {
