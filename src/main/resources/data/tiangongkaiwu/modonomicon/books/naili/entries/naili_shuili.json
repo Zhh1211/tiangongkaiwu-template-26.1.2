@@ -2,7 +2,7 @@
   "category": "naili_juan",
   "name": "entry.tiangongkaiwu.naili_shuili.name",
   "icon": {
-    "item": "minecraft:bucket"
+    "item": "tiangongkaiwu:tong_che"
   },
   "x": -4,
   "y": 10,
@@ -19,7 +19,15 @@
   "pages": [
     {
       "type": "modonomicon:text",
+      "text": "凡稻防旱借水，独甚五谷。厥土沙、泥、硗、腻，随方不一。有三日即干者，有半月后干者。天泽不降，则人力挽水以济。"
+    },
+    {
+      "type": "modonomicon:text",
       "text": "entry.tiangongkaiwu.naili_shuili.page1"
+    },
+    {
+      "type": "modonomicon:text",
+      "text": "凡河滨有制筒车者，堰陂障流，绕于车下，激轮使转，挽水入筒，一一倾于梘内，流入亩中。昼夜不息，百亩无忧（不用水时，栓木碍止，使轮不转动）。其湖池不流水，或以牛力转盘，或聚数人踏转。车身长者二丈，短者半之。其内用龙骨拴串板，关水逆流而上。大抵一人竟日之力，灌田五亩，而牛则倍之。"
     },
     {
       "type": "modonomicon:text",
@@ -27,7 +35,116 @@
     },
     {
       "type": "modonomicon:text",
+      "text": "其浅池、小浍不载长车者，则数尺之车，一人两手疾转，竟日之功可灌二亩而已。扬郡以风帆数扇，俟风转车，风息则止。此车为救潦，欲去泽水以便栽种。盖去水非取水也，不适济旱。用桔槔、辘轳，功劳又甚细已。"
+    },
+    {
+      "type": "modonomicon:text",
       "text": "entry.tiangongkaiwu.naili_shuili.page3"
+    },
+    {
+      "type": "modonomicon:spotlight",
+      "item": {
+        "item": "tiangongkaiwu:tong_che"
+      },
+      "title": "entry.tiangongkaiwu.naili_shuili.spot_tong_che.title",
+      "text": "entry.tiangongkaiwu.naili_shuili.spot_tong_che.text",
+      "anchor": "tong_che"
+    },
+    {
+      "type": "modonomicon:spotlight",
+      "item": {
+        "item": "tiangongkaiwu:jian"
+      },
+      "title": "entry.tiangongkaiwu.naili_shuili.spot_jian.title",
+      "text": "entry.tiangongkaiwu.naili_shuili.spot_jian.text",
+      "anchor": "jian"
+    },
+    {
+      "type": "modonomicon:spotlight",
+      "item": {
+        "item": "tiangongkaiwu:shaft"
+      },
+      "title": "entry.tiangongkaiwu.naili_shuili.spot_shaft.title",
+      "text": "entry.tiangongkaiwu.naili_shuili.spot_shaft.text",
+      "anchor": "shaft"
+    },
+    {
+      "type": "modonomicon:spotlight",
+      "item": {
+        "item": "tiangongkaiwu:niu_che"
+      },
+      "title": "entry.tiangongkaiwu.naili_shuili.spot_niu_che.title",
+      "text": "entry.tiangongkaiwu.naili_shuili.spot_niu_che.text",
+      "anchor": "niu_che"
+    },
+    {
+      "type": "modonomicon:spotlight",
+      "item": {
+        "item": "tiangongkaiwu:ta_che"
+      },
+      "title": "entry.tiangongkaiwu.naili_shuili.spot_ta_che.title",
+      "text": "entry.tiangongkaiwu.naili_shuili.spot_ta_che.text",
+      "anchor": "ta_che"
+    },
+    {
+      "type": "modonomicon:spotlight",
+      "item": {
+        "item": "tiangongkaiwu:ba_che"
+      },
+      "title": "entry.tiangongkaiwu.naili_shuili.spot_ba_che.title",
+      "text": "entry.tiangongkaiwu.naili_shuili.spot_ba_che.text",
+      "anchor": "ba_che"
+    },
+    {
+      "type": "modonomicon:spotlight",
+      "item": {
+        "item": "tiangongkaiwu:jie_gao"
+      },
+      "title": "entry.tiangongkaiwu.naili_shuili.spot_jie_gao.title",
+      "text": "entry.tiangongkaiwu.naili_shuili.spot_jie_gao.text",
+      "anchor": "jie_gao"
+    },
+    {
+      "type": "modonomicon:spotlight",
+      "item": {
+        "item": "tiangongkaiwu:lu_lu"
+      },
+      "title": "entry.tiangongkaiwu.naili_shuili.spot_lu_lu.title",
+      "text": "entry.tiangongkaiwu.naili_shuili.spot_lu_lu.text",
+      "anchor": "lu_lu"
+    },
+    {
+      "type": "modonomicon:spotlight",
+      "item": {
+        "item": "tiangongkaiwu:feng_fan_che"
+      },
+      "title": "entry.tiangongkaiwu.naili_shuili.spot_feng_fan_che.title",
+      "text": "entry.tiangongkaiwu.naili_shuili.spot_feng_fan_che.text",
+      "anchor": "feng_fan_che"
+    },
+    {
+      "type": "modonomicon:empty"
+    },
+    {
+      "type": "modonomicon:crafting_recipe",
+      "recipe_id_1": "tiangongkaiwu:tong_che",
+      "title1": "entry.tiangongkaiwu.naili_shuili.craft_tong_che",
+      "anchor": "craft_tong_che"
+    },
+    {
+      "type": "modonomicon:crafting_recipe",
+      "recipe_id_1": "tiangongkaiwu:shaft",
+      "title1": "entry.tiangongkaiwu.naili_shuili.craft_shaft",
+      "anchor": "craft_shaft"
+    },
+    {
+      "type": "modonomicon:crafting_recipe",
+      "recipe_id_1": "tiangongkaiwu:jian",
+      "title1": "entry.tiangongkaiwu.naili_shuili.craft_jian",
+      "anchor": "craft_jian"
+    },
+    {
+      "type": "modonomicon:empty"
     }
   ]
 }
