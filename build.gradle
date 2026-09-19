@@ -132,9 +132,9 @@ dependencies {
     // JEI：**可选集成**——mod 本身不依赖它，只是给"碓"的加工配方加一个 JEI 页面。
     // compileOnly 两个 API 供编译插件；localRuntime 让开发客户端能实测（不会发布成依赖）。
     // 若开发客户端内存吃紧（本机 4GB），把 localRuntime 那行注释掉即可，编译不受影响。
-    compileOnly "mezz.jei:jei-${mc_version}-common-api:${jei_version}"
-    compileOnly "mezz.jei:jei-${mc_version}-neoforge-api:${jei_version}"
-    localRuntime "mezz.jei:jei-${mc_version}-neoforge:${jei_version}"
+    compileOnly "mezz.jei:jei-${minecraft_version}-common-api:${jei_version}"
+    compileOnly "mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}"
+    localRuntime "mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}"
 
     // Example mod dependency using a mod jar from ./libs with a flat dir repository
     // This maps to ./libs/coolmod-${mc_version}-${coolmod_version}.jar
