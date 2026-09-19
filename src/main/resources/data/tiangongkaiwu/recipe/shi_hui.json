@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "group": "tiangongkaiwu:shi_hui",
+  "ingredient": {
+    "item": "minecraft:calcite"
+  },
+  "result": {
+    "id": "tiangongkaiwu:shi_hui",
+    "count": 1
+  },
+  "experience": 0.15,
+  "cookingtime": 200
+}

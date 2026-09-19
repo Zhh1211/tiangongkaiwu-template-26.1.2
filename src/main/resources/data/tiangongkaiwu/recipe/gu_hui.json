@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "group": "tiangongkaiwu:gu_hui",
+  "ingredient": {
+    "item": "minecraft:bone"
+  },
+  "result": {
+    "id": "tiangongkaiwu:gu_hui",
+    "count": 1
+  },
+  "experience": 0.15,
+  "cookingtime": 200
+}

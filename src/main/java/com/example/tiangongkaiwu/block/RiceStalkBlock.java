@@ -2,12 +2,15 @@ package com.example.tiangongkaiwu.block;
 
 import com.example.tiangongkaiwu.TiangongKaiwu;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.chat.Component;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
@@ -43,7 +46,8 @@ import net.minecraft.world.phys.BlockHitResult;
  * - AGE 0–7 沿用 {@link BlockStateProperties#AGE_7}；满 7 且上方空气 → 自动在正上方放置 {@link RicePanicleBlock}。
  * - 打秆（age==7）掉 1 粒稻谷保本；age<7 无掉落。
  * - 打上部稻穗（{@link RicePanicleBlock}）→ 由 panicle 把下方秆 AGE 重置为 3，秆可视地"缩回半截"再长穗。
- * - 玩家手持骨粉可以催熟（v1 暂不弱化，留给 #34 引入粪肥后处理）。
+ * - 玩家手持骨粉可以催熟，但**已弱化**（书里没提骨粉）。稻宜那套「对症肥料」才是正途：
+ *   粪肥通用（人畜穢遺）；骨灰／石灰只宜**冷浆土**（黏土田）；烧土（潜行 + 薪柴）只宜**坚紧土**（砂砾／粗泥田）。
  *
  * 设计依据见 docs/乃粒稻作玩法设计.md（水利 A 批）与 docs/天工开物·乃粒原文.md「水利」节。
  */
@@ -130,6 +134,17 @@ public class RiceStalkBlock extends Block implements SimpleWaterloggedBlock, Bon
                 || b == Blocks.RED_SAND
                 || b == Blocks.GRAVEL
                 || b == Blocks.CLAY;
+    }
+
+    /** 土性之一：**冷浆土**（书「土性帶冷漿者，宜骨灰蘸秧根……石灰淹苗足」）。黏土保水最强、地温最低。 */
+    public static boolean isColdSlurrySoil(BlockState below) {
+        return below.getBlock() == Blocks.CLAY;
+    }
+
+    /** 土性之一：**坚紧土**（书「土脈堅緊者，宜耕壟，疊塊壓薪而燒之」）。砂砾/粗泥质地板结瘠薄。 */
+    public static boolean isTightSoil(BlockState below) {
+        Block b = below.getBlock();
+        return b == Blocks.GRAVEL || b == Blocks.COARSE_DIRT;
     }
 
     // ====== 随机 tick：先结算田水，再生长 ======
@@ -245,7 +260,11 @@ public class RiceStalkBlock extends Block implements SimpleWaterloggedBlock, Bon
         return state.setValue(MOISTURE, clamped).setValue(WATERLOGGED, clamped >= WATER_VISIBLE_MIN);
     }
 
-    // ====== 骨粉催熟（v1 暂接受；#34 引入粪肥后弱化/无效化） ======
+    // ====== 催熟（骨粉已弱化；主力是稻宜那套「对症肥料」） ======
+
+    /** 骨粉利用率：**已弱化**——书里没提骨粉，只有「凡禽獸骨」烧成的骨灰才算对症的药。 */
+    private static final float BONEMEAL_CHANCE = 0.35f;
+
     @Override
     public boolean isValidBonemealTarget(LevelReader level, BlockPos pos, BlockState state) {
         return state.getValue(AGE) < MAX_AGE && state.getValue(WATERLOGGED);
@@ -253,27 +272,58 @@ public class RiceStalkBlock extends Block implements SimpleWaterloggedBlock, Bon
 
     @Override
     public boolean isBonemealSuccess(Level level, RandomSource random, BlockPos pos, BlockState state) {
-        return random.nextFloat() < 0.8F;
+        return random.nextFloat() < BONEMEAL_CHANCE;
     }
 
     @Override
     public void performBonemeal(ServerLevel level, RandomSource random, BlockPos pos, BlockState state) {
+        boost(level, pos, state, 1);
+    }
+
+    /** 推进 AGE 若干档；到顶则立刻抽穗（否则玩家要干等下一次随机 tick）。 */
+    private static boolean boost(ServerLevel level, BlockPos pos, BlockState state, int steps) {
         int age = state.getValue(AGE);
         if (age >= MAX_AGE) {
-            return;
+            trySpawnPanicle(level, pos);
+            return false;
         }
-        int newAge = Math.min(MAX_AGE, age + 1 + random.nextInt(2));
+        int newAge = Math.min(MAX_AGE, age + steps);
         level.setBlock(pos, state.setValue(AGE, newAge), 2);
-        // 骨粉催到顶（AGE 7）时立刻尝试抽穗，否则玩家要干等下一次随机 tick
         if (newAge == MAX_AGE) {
             trySpawnPanicle(level, pos);
         }
+        return true;
     }
 
     // ====== 主动舀水：空桶右键 → 取走一格水（不是立刻枯死） ======
     @Override
     protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos,
                                              Player player, InteractionHand hand, BlockHitResult hit) {
+        // ====== 稻宜·粪田：对症施肥（书：土性不同改土法不同，用错「不宜也」） ======
+        if (!stack.isEmpty() && !level.isClientSide) {
+            BlockState soil = level.getBlockState(pos.below());
+            boolean logs = stack.is(ItemTags.LOGS) && player != null && player.isShiftKeyDown();
+            String used = null;
+            if (stack.is(TiangongKaiwu.FEN_FEI.get())) {
+                used = "block.tiangongkaiwu.fen_fei.used";            // 人畜穢遺，普天之所同也
+            } else if (logs) {
+                if (!isTightSoil(soil)) {
+                    return refuse(level, pos, player, "block.tiangongkaiwu.shao_tu.wrong");
+                }
+                used = "block.tiangongkaiwu.shao_tu.used";            // 坚紧土：耕壟壓薪而燒之
+            } else if (stack.is(TiangongKaiwu.GU_HUI.get()) || stack.is(TiangongKaiwu.SHI_HUI.get())) {
+                if (!isColdSlurrySoil(soil)) {
+                    return refuse(level, pos, player, "block.tiangongkaiwu.hui.wrong");
+                }
+                used = stack.is(TiangongKaiwu.GU_HUI.get())
+                        ? "block.tiangongkaiwu.gu_hui.used"           // 冷浆土：骨灰蘸秧根
+                        : "block.tiangongkaiwu.shi_hui.used";         // 冷浆土：石灰淹苗足
+            }
+            if (used != null) {
+                return fertilize(stack, state, level, pos, player, used);
+            }
+        }
+
         if (stack.is(Items.BUCKET) && state.getValue(WATERLOGGED)) {
             if (level.isClientSide) {
                 return ItemInteractionResult.sidedSuccess(true);
@@ -314,4 +364,46 @@ public class RiceStalkBlock extends Block implements SimpleWaterloggedBlock, Bon
             popResource(level, pos, new ItemStack(TiangongKaiwu.RICE_GRAIN.get(), 1));
         }
     }
+
+    // ====== 稻宜·粪田：对症施肥（书「勤農糞田，多方以助之」） ======
+
+    /** 施一次肥：推进 2~3 档（必成，比骨粉强）。田里没水、或已经熟透时不消耗，只提醒。 */
+    private static ItemInteractionResult fertilize(ItemStack stack, BlockState state, Level level, BlockPos pos,
+                                                   Player player, String messageKey) {
+        if (!state.getValue(WATERLOGGED)) {
+            if (player != null) {
+                player.displayClientMessage(Component.translatable("block.tiangongkaiwu.fertilize.dry"), true);
+            }
+            return ItemInteractionResult.sidedSuccess(false);
+        }
+        if (state.getValue(AGE) >= MAX_AGE) {
+            trySpawnPanicle((ServerLevel) level, pos);
+            if (player != null) {
+                player.displayClientMessage(Component.translatable("block.tiangongkaiwu.fertilize.ripe"), true);
+            }
+            return ItemInteractionResult.sidedSuccess(false);
+        }
+        ServerLevel server = (ServerLevel) level;
+        boost(server, pos, state, 2 + server.getRandom().nextInt(2));
+        if (player == null || !player.getAbilities().instabuild) {
+            stack.shrink(1);
+        }
+        if (player != null) {
+            player.displayClientMessage(Component.translatable(messageKey), true);
+        }
+        server.sendParticles(ParticleTypes.HAPPY_VILLAGER,
+                pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, 6, 0.3D, 0.3D, 0.3D, 0.0D);
+        level.playSound(null, pos, SoundEvents.BONE_MEAL_USE, SoundSource.BLOCKS, 0.6F, 1.2F);
+        return ItemInteractionResult.sidedSuccess(false);
+    }
+
+    /** 用错土性：书里的「不宜也」——不消耗，只提醒（并挡下"手里拿着柴想放方块"的误伤）。 */
+    private static ItemInteractionResult refuse(Level level, BlockPos pos, Player player, String messageKey) {
+        if (player != null) {
+            player.displayClientMessage(Component.translatable(messageKey), true);
+        }
+        level.playSound(null, pos, SoundEvents.LEVER_CLICK, SoundSource.BLOCKS, 0.4F, 0.7F);
+        return ItemInteractionResult.sidedSuccess(false);
+    }
 }
+

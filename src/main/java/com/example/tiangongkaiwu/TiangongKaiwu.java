@@ -65,6 +65,8 @@ import com.example.tiangongkaiwu.hanmo.network.PuzzleDonePayload;
 import com.example.tiangongkaiwu.hanmo.network.PuzzleSyncPayload;
 import com.example.tiangongkaiwu.hanmo.network.SettlementResultPayload;
 import com.example.tiangongkaiwu.item.CanYeItem;
+import com.example.tiangongkaiwu.item.FertilizerItem;
+import com.example.tiangongkaiwu.item.RiceBranItem;
 import com.example.tiangongkaiwu.item.ResidualData;
 import com.example.tiangongkaiwu.item.RiceGrainItem;
 import com.example.tiangongkaiwu.menu.HanmoTaiMenu;
@@ -190,10 +192,32 @@ public class TiangongKaiwu {
         )
     );
 
-    /** 细糠：舂米的副产物，皮膜成粉（书：以供犬豕之豢）。 */
-    public static final DeferredItem<Item> RICE_BRAN = ITEMS.register(
+    /** 细糠：舂米的副产物，皮膜成粉（书：以供犬豕之豢）。手持右键猪/犬即可喂，豕还粪。 */
+    public static final DeferredItem<RiceBranItem> RICE_BRAN = ITEMS.register(
         "rice_bran",
-        () -> new Item(new Item.Properties())
+        () -> new RiceBranItem(new Item.Properties())
+    );
+
+    // ============================================================
+    // 稻宜·粪田（对症肥料）：书「土性不同改土法不同，用错不宜也」
+    // 生效判定在 RiceStalkBlock.useItemOn —— 只有它知道田底下铺的是什么土
+    // ============================================================
+    /** 粪肥：人畜穢遺，普天之所同也——通用催熟。来源：细糠喂猪，豕还粪。 */
+    public static final DeferredItem<FertilizerItem> FEN_FEI = ITEMS.register(
+        "fen_fei",
+        () -> new FertilizerItem(new Item.Properties(), "fen_fei")
+    );
+
+    /** 骨灰：凡禽獸骨烧成，只宜冷浆土（书：土性帶冷漿者，宜骨灰蘸秧根）。 */
+    public static final DeferredItem<FertilizerItem> GU_HUI = ITEMS.register(
+        "gu_hui",
+        () -> new FertilizerItem(new Item.Properties(), "gu_hui")
+    );
+
+    /** 石灰：只宜冷浆土（书：石灰淹苗足，向陽暖土不宜也）。 */
+    public static final DeferredItem<FertilizerItem> SHI_HUI = ITEMS.register(
+        "shi_hui",
+        () -> new FertilizerItem(new Item.Properties(), "shi_hui")
     );
 
     // ============================================================
@@ -371,6 +395,9 @@ public class TiangongKaiwu {
                         output.accept(RICE);
                         output.accept(BROWN_RICE);
                         output.accept(RICE_BRAN);
+                        output.accept(FEN_FEI);
+                        output.accept(GU_HUI);
+                        output.accept(SHI_HUI);
                         output.accept(CAN_YE);
                         output.accept(SONGYAN_MO);
                         output.accept(XUAN_ZHI);
