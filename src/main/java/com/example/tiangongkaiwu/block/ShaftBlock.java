@@ -18,10 +18,12 @@ import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 
 /**
- * 传动轴：把动力源（筒车／将来的牛车、踏车）的"劲"送到加工机器（将来：舂米臼、磨、砻）。
+ * 传动轴：把动力源（筒车／牛车／踏车／拔车）的"劲"送到加工机器（将来：舂米臼、磨、砻）。
+ * 动力源种类统一由 {@link WaterDevices} 认，这里不必逐个认识。
  *
  * <p>传播规则（水利 B 批定的动力模型）：本格的动力 = 邻格动力里最大的那个 − 1。
- * 也就是**每过一格衰减 1 点**，所以动力有射程：筒车 12 点能送 12 格远，牛车 24 点送 24 格。
+ * 也就是**每过一格衰减 1 点**，所以动力有射程：筒车 12 点送 12 格，牛车 10 点送 10 格，
+ * 踏车 5 点、拔车 2 点（数值取自书里灌田效率刻度）。
  * 好处是纯局部规则——不需要方块实体、不需要网络统计，性能稳、不会互相打架。
  *
  * <p>power &gt; 0 时换"有劲"贴图，一眼看出哪一段通了、哪一段是断的。
@@ -83,10 +85,11 @@ public class ShaftBlock extends Block {
             int neighborPower;
             if (neighbor.getBlock() instanceof ShaftBlock) {
                 neighborPower = neighbor.getValue(POWER);
-            } else if (neighbor.getBlock() instanceof TongCheBlock) {
-                neighborPower = TongCheBlock.emittedPower(neighbor);
             } else {
-                continue;
+                neighborPower = WaterDevices.emittedPower(neighbor);
+                if (neighborPower <= 0) {
+                    continue;
+                }
             }
             int delivered = neighborPower - 1;
             if (delivered > incoming) {

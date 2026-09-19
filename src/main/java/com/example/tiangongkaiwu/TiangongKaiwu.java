@@ -47,6 +47,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import com.example.tiangongkaiwu.block.RicePanicleBlock;
 import com.example.tiangongkaiwu.block.RiceStalkBlock;
 import com.example.tiangongkaiwu.block.RiceStalkBlockDry;
+import com.example.tiangongkaiwu.block.DragonBoneCarBlock;
 import com.example.tiangongkaiwu.block.JianBlock;
 import com.example.tiangongkaiwu.block.ShaftBlock;
 import com.example.tiangongkaiwu.block.TongCheBlock;
@@ -159,7 +160,7 @@ public class TiangongKaiwu {
     );
 
     // ============================================================
-    // 水利装置（B 批）：筒车（动力源 + 提水）／梘（引水槽）／传动轴（动力传动）
+    // 水利装置（B/C 批）：筒车（水力）／牛车／踏车／拔车（龙骨车三驱动）／梘（引水槽）／传动轴（动力传动）
     // 动力模型：动力源 → 传动轴（每格衰减 1 点）→ 加工机器（后续批：舂米臼等）
     // 详见 docs/乃粒稻作玩法设计.md「水利」与 docs/天工开物·乃粒原文.md「水利」节
     // ============================================================
@@ -208,6 +209,52 @@ public class TiangongKaiwu {
             ITEMS.registerSimpleBlockItem("jian", JIAN);
     public static final DeferredItem<BlockItem> SHAFT_ITEM =
             ITEMS.registerSimpleBlockItem("shaft", SHAFT);
+
+    /** 牛车（龙骨车·长车）：近旁有拴绳系住的牛则转，动力 10（书：一人竟日五亩，而牛则倍之）。 */
+    public static final DeferredBlock<DragonBoneCarBlock> NIU_CHE = BLOCKS.register(
+        "niu_che",
+        () -> new DragonBoneCarBlock(
+            BlockBehaviour.Properties.of()
+                .mapColor(MapColor.WOOD)
+                .strength(1.5f)
+                .noOcclusion()
+                .sound(SoundType.WOOD),
+            DragonBoneCarBlock.Kind.NIU
+        )
+    );
+
+    /** 踏车（龙骨车·长车）：有人站在车上踏转则转，动力 5（书：聚数人踏转，一人竟日五亩）。 */
+    public static final DeferredBlock<DragonBoneCarBlock> TA_CHE = BLOCKS.register(
+        "ta_che",
+        () -> new DragonBoneCarBlock(
+            BlockBehaviour.Properties.of()
+                .mapColor(MapColor.WOOD)
+                .strength(1.5f)
+                .noOcclusion()
+                .sound(SoundType.WOOD),
+            DragonBoneCarBlock.Kind.TA
+        )
+    );
+
+    /** 拔车（龙骨车·短车）：有人在车旁手摇则转，动力 2（书：数尺之车，一人两手疾转，二亩而已）。 */
+    public static final DeferredBlock<DragonBoneCarBlock> BA_CHE = BLOCKS.register(
+        "ba_che",
+        () -> new DragonBoneCarBlock(
+            BlockBehaviour.Properties.of()
+                .mapColor(MapColor.WOOD)
+                .strength(1.0f)
+                .noOcclusion()
+                .sound(SoundType.WOOD),
+            DragonBoneCarBlock.Kind.BA
+        )
+    );
+
+    public static final DeferredItem<BlockItem> NIU_CHE_ITEM =
+            ITEMS.registerSimpleBlockItem("niu_che", NIU_CHE);
+    public static final DeferredItem<BlockItem> TA_CHE_ITEM =
+            ITEMS.registerSimpleBlockItem("ta_che", TA_CHE);
+    public static final DeferredItem<BlockItem> BA_CHE_ITEM =
+            ITEMS.registerSimpleBlockItem("ba_che", BA_CHE);
 
     // ============================================================
     // 翰墨台与残页
@@ -273,6 +320,9 @@ public class TiangongKaiwu {
                         output.accept(TONG_CHE_ITEM);
                         output.accept(JIAN_ITEM);
                         output.accept(SHAFT_ITEM);
+                        output.accept(NIU_CHE_ITEM);
+                        output.accept(TA_CHE_ITEM);
+                        output.accept(BA_CHE_ITEM);
                     }).build());
 
     // ============================================================

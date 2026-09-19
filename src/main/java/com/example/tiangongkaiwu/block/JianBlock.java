@@ -24,7 +24,7 @@ import net.minecraft.world.level.block.state.properties.EnumProperty;
  * <p>做法是"抽象输水"——槽里不放假的水方块（原版水自己会流、会漏，反而难用），
  * 只记两件事：① 我这一段有没有水；② 有水时替挨着的稻田补水。
  *
- * <p>判定很朴素：看**上游那一格**（朝向的反面）——那里是带水的梘、是正在转的筒车，
+ * <p>判定很朴素：看**上游那一格**（朝向的反面）——那里是带水的梘、是正在转的车／轮，
  * 或者干脆就是一格水，我这一段就有水。每格只看上游一格，所以不会递归、也不会炸。
  * 好处是能把水**抬过地形、引到远处**，这是挖沟做不到的。
  *
@@ -97,8 +97,8 @@ public class JianBlock extends Block {
         if (up.getBlock() instanceof JianBlock) {
             return up.getValue(WATERED);
         }
-        if (up.getBlock() instanceof TongCheBlock) {
-            return TongCheBlock.isRunning(up);
+        if (WaterDevices.isRunning(up)) {
+            return true;
         }
         return level.getFluidState(upstream).is(FluidTags.WATER);
     }

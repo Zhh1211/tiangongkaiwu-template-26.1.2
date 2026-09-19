@@ -1,0 +1,94 @@
+{
+  "variants": {
+    "part=0,facing=north,active=false": {
+      "model": "tiangongkaiwu:block/car_niu_che_p0_idle"
+    },
+    "part=0,facing=north,active=true": {
+      "model": "tiangongkaiwu:block/car_niu_che_p0_on"
+    },
+    "part=0,facing=east,active=false": {
+      "model": "tiangongkaiwu:block/car_niu_che_p0_idle",
+      "y": 90
+    },
+    "part=0,facing=east,active=true": {
+      "model": "tiangongkaiwu:block/car_niu_che_p0_on",
+      "y": 90
+    },
+    "part=0,facing=south,active=false": {
+      "model": "tiangongkaiwu:block/car_niu_che_p0_idle",
+      "y": 180
+    },
+    "part=0,facing=south,active=true": {
+      "model": "tiangongkaiwu:block/car_niu_che_p0_on",
+      "y": 180
+    },
+    "part=0,facing=west,active=false": {
+      "model": "tiangongkaiwu:block/car_niu_che_p0_idle",
+      "y": 270
+    },
+    "part=0,facing=west,active=true": {
+      "model": "tiangongkaiwu:block/car_niu_che_p0_on",
+      "y": 270
+    },
+    "part=1,facing=north,active=false": {
+      "model": "tiangongkaiwu:block/car_niu_che_p1_idle"
+    },
+    "part=1,facing=north,active=true": {
+      "model": "tiangongkaiwu:block/car_niu_che_p1_on"
+    },
+    "part=1,facing=east,active=false": {
+      "model": "tiangongkaiwu:block/car_niu_che_p1_idle",
+      "y": 90
+    },
+    "part=1,facing=east,active=true": {
+      "model": "tiangongkaiwu:block/car_niu_che_p1_on",
+      "y": 90
+    },
+    "part=1,facing=south,active=false": {
+      "model": "tiangongkaiwu:block/car_niu_che_p1_idle",
+      "y": 180
+    },
+    "part=1,facing=south,active=true": {
+      "model": "tiangongkaiwu:block/car_niu_che_p1_on",
+      "y": 180
+    },
+    "part=1,facing=west,active=false": {
+      "model": "tiangongkaiwu:block/car_niu_che_p1_idle",
+      "y": 270
+    },
+    "part=1,facing=west,active=true": {
+      "model": "tiangongkaiwu:block/car_niu_che_p1_on",
+      "y": 270
+    },
+    "part=2,facing=north,active=false": {
+      "model": "tiangongkaiwu:block/car_niu_che_p2_idle"
+    },
+    "part=2,facing=north,active=true": {
+      "model": "tiangongkaiwu:block/car_niu_che_p2_on"
+    },
+    "part=2,facing=east,active=false": {
+      "model": "tiangongkaiwu:block/car_niu_che_p2_idle",
+      "y": 90
+    },
+    "part=2,facing=east,active=true": {
+      "model": "tiangongkaiwu:block/car_niu_che_p2_on",
+      "y": 90
+    },
+    "part=2,facing=south,active=false": {
+      "model": "tiangongkaiwu:block/car_niu_che_p2_idle",
+      "y": 180
+    },
+    "part=2,facing=south,active=true": {
+      "model": "tiangongkaiwu:block/car_niu_che_p2_on",
+      "y": 180
+    },
+    "part=2,facing=west,active=false": {
+      "model": "tiangongkaiwu:block/car_niu_che_p2_idle",
+      "y": 270
+    },
+    "part=2,facing=west,active=true": {
+      "model": "tiangongkaiwu:block/car_niu_che_p2_on",
+      "y": 270
+    }
+  }
+}

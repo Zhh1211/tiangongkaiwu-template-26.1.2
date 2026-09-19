@@ -86,5 +86,12 @@
     "block.tiangongkaiwu.shaft": "传动轴",
     "block.tiangongkaiwu.tong_che.need_water": "车下须有流水方能转动——可垒堰把水逼到车下",
     "block.tiangongkaiwu.tong_che.plugged": "栓木碍止——筒车停了",
-    "block.tiangongkaiwu.tong_che.unplugged": "拔去木栓——筒车复转"
+    "block.tiangongkaiwu.tong_che.unplugged": "拔去木栓——筒车复转",
+    "block.tiangongkaiwu.niu_che": "牛车",
+    "block.tiangongkaiwu.ta_che": "踏车",
+    "block.tiangongkaiwu.ba_che": "拔车",
+    "block.tiangongkaiwu.car.need_water": "车须临水方能转动（湖池静水即可）",
+    "block.tiangongkaiwu.niu_che.how": "以拴绳系牛，牵到车旁——牛转盘则车自转（书：以牛力转盘）",
+    "block.tiangongkaiwu.ta_che.how": "站上车身踏转即可（书：聚数人踏转）",
+    "block.tiangongkaiwu.ba_che.how": "有人立于车旁摇转即可（书：一人两手疾转）"
 }

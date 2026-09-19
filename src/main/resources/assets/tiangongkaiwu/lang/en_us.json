@@ -86,5 +86,12 @@
     "block.tiangongkaiwu.shaft": "Drive Shaft",
     "block.tiangongkaiwu.tong_che.need_water": "The wheel needs flowing water beneath it — build a weir to guide the current.",
     "block.tiangongkaiwu.tong_che.plugged": "Plugged with a wooden pin — the wheel stops.",
-    "block.tiangongkaiwu.tong_che.unplugged": "Pin removed — the wheel turns again."
+    "block.tiangongkaiwu.tong_che.unplugged": "Pin removed — the wheel turns again.",
+    "block.tiangongkaiwu.niu_che": "Niuche (Ox-Driven Chain Pump)",
+    "block.tiangongkaiwu.ta_che": "Tache (Treadle Chain Pump)",
+    "block.tiangongkaiwu.ba_che": "Bache (Hand Chain Pump)",
+    "block.tiangongkaiwu.car.need_water": "The chain pump must stand beside water (still water will do).",
+    "block.tiangongkaiwu.niu_che.how": "Lead a leashed ox to the pump — it turns while the ox walks the wheel.",
+    "block.tiangongkaiwu.ta_che.how": "Stand on the frame and treadle it.",
+    "block.tiangongkaiwu.ba_che.how": "Stand beside it and crank it by hand."
 }
