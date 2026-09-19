@@ -80,5 +80,11 @@
     "gui.tiangongkaiwu.settle.fail_no_menu": "翰墨台已关闭，未能誊录。",
     "gui.tiangongkaiwu.settle.fail_materials": "材料不齐——誊录需残页、墨与纸皆备。",
     "gui.tiangongkaiwu.settle.fail_state": "残页状态与所译篇目不符，誊录失败。",
-    "gui.tiangongkaiwu.hanmo_note": "注："
+    "gui.tiangongkaiwu.hanmo_note": "注：",
+    "block.tiangongkaiwu.tong_che": "筒车",
+    "block.tiangongkaiwu.jian": "梘（引水槽）",
+    "block.tiangongkaiwu.shaft": "传动轴",
+    "block.tiangongkaiwu.tong_che.need_water": "车下须有流水方能转动——可垒堰把水逼到车下",
+    "block.tiangongkaiwu.tong_che.plugged": "栓木碍止——筒车停了",
+    "block.tiangongkaiwu.tong_che.unplugged": "拔去木栓——筒车复转"
 }

@@ -80,5 +80,11 @@
     "gui.tiangongkaiwu.settle.fail_no_menu": "翰墨臺已關閉，未能謄錄。",
     "gui.tiangongkaiwu.settle.fail_materials": "材料不齊——謄錄需殘頁、墨與紙皆備。",
     "gui.tiangongkaiwu.settle.fail_state": "殘頁狀態與所譯篇目不符，謄錄失敗。",
-    "gui.tiangongkaiwu.hanmo_note": "注："
+    "gui.tiangongkaiwu.hanmo_note": "注：",
+    "block.tiangongkaiwu.tong_che": "筒車",
+    "block.tiangongkaiwu.jian": "梘（引水槽）",
+    "block.tiangongkaiwu.shaft": "傳動軸",
+    "block.tiangongkaiwu.tong_che.need_water": "車下須有流水方能轉動——可壘堰把水逼到車下",
+    "block.tiangongkaiwu.tong_che.plugged": "栓木礙止——筒車停了",
+    "block.tiangongkaiwu.tong_che.unplugged": "拔去木栓——筒車復轉"
 }

@@ -1,0 +1,34 @@
+{
+  "variants": {
+    "facing=south,watered=false": {
+      "model": "tiangongkaiwu:block/jian"
+    },
+    "facing=south,watered=true": {
+      "model": "tiangongkaiwu:block/jian_watered"
+    },
+    "facing=west,watered=false": {
+      "model": "tiangongkaiwu:block/jian",
+      "y": 90
+    },
+    "facing=west,watered=true": {
+      "model": "tiangongkaiwu:block/jian_watered",
+      "y": 90
+    },
+    "facing=north,watered=false": {
+      "model": "tiangongkaiwu:block/jian",
+      "y": 180
+    },
+    "facing=north,watered=true": {
+      "model": "tiangongkaiwu:block/jian_watered",
+      "y": 180
+    },
+    "facing=east,watered=false": {
+      "model": "tiangongkaiwu:block/jian",
+      "y": 270
+    },
+    "facing=east,watered=true": {
+      "model": "tiangongkaiwu:block/jian_watered",
+      "y": 270
+    }
+  }
+}

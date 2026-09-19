@@ -97,7 +97,7 @@ public class RiceStalkBlockDry extends Block implements SimpleWaterloggedBlock {
     }
 
     /** 复活态：同 AGE 的浸水稻秆 + 田水灌满。 */
-    private static BlockState reviveState(BlockState dryState) {
+    public static BlockState reviveState(BlockState dryState) {
         return TiangongKaiwu.RICE_STALK.get().defaultBlockState()
                 .setValue(RiceStalkBlock.AGE, dryState.getValue(AGE))
                 .setValue(RiceStalkBlock.WATERLOGGED, true)

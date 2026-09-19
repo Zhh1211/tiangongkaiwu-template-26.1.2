@@ -47,6 +47,9 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import com.example.tiangongkaiwu.block.RicePanicleBlock;
 import com.example.tiangongkaiwu.block.RiceStalkBlock;
 import com.example.tiangongkaiwu.block.RiceStalkBlockDry;
+import com.example.tiangongkaiwu.block.JianBlock;
+import com.example.tiangongkaiwu.block.ShaftBlock;
+import com.example.tiangongkaiwu.block.TongCheBlock;
 import com.example.tiangongkaiwu.block.HanmoTaiBlock;
 import com.example.tiangongkaiwu.block.entity.HanmoTaiBlockEntity;
 import com.example.tiangongkaiwu.hanmo.Puzzle;
@@ -156,6 +159,57 @@ public class TiangongKaiwu {
     );
 
     // ============================================================
+    // 水利装置（B 批）：筒车（动力源 + 提水）／梘（引水槽）／传动轴（动力传动）
+    // 动力模型：动力源 → 传动轴（每格衰减 1 点）→ 加工机器（后续批：舂米臼等）
+    // 详见 docs/乃粒稻作玩法设计.md「水利」与 docs/天工开物·乃粒原文.md「水利」节
+    // ============================================================
+    /** 筒车：放下即自动展开为 3×3 大轮；立于流水之上激轮自转，输出动力 12，并可给邻接的梘送水。 */
+    public static final DeferredBlock<TongCheBlock> TONG_CHE = BLOCKS.register(
+        "tong_che",
+        () -> new TongCheBlock(
+            BlockBehaviour.Properties.of()
+                .mapColor(MapColor.WOOD)
+                .strength(1.5f)
+                .noOcclusion()
+                .noCollission()
+                .sound(SoundType.WOOD)
+        )
+    );
+
+    /** 梘（引水槽）：把水引到远处的田里；槽里有水时替挨着的稻田补水。 */
+    public static final DeferredBlock<JianBlock> JIAN = BLOCKS.register(
+        "jian",
+        () -> new JianBlock(
+            BlockBehaviour.Properties.of()
+                .mapColor(MapColor.WOOD)
+                .strength(0.8f)
+                .noOcclusion()
+                .noCollission()
+                .sound(SoundType.WOOD)
+        )
+    );
+
+    /** 传动轴：把动力送到加工机器（沿轴网每格衰减 1 点）。 */
+    public static final DeferredBlock<ShaftBlock> SHAFT = BLOCKS.register(
+        "shaft",
+        () -> new ShaftBlock(
+            BlockBehaviour.Properties.of()
+                .mapColor(MapColor.WOOD)
+                .strength(0.8f)
+                .noOcclusion()
+                .noCollission()
+                .sound(SoundType.WOOD)
+        )
+    );
+
+    public static final DeferredItem<BlockItem> TONG_CHE_ITEM =
+            ITEMS.registerSimpleBlockItem("tong_che", TONG_CHE);
+    public static final DeferredItem<BlockItem> JIAN_ITEM =
+            ITEMS.registerSimpleBlockItem("jian", JIAN);
+    public static final DeferredItem<BlockItem> SHAFT_ITEM =
+            ITEMS.registerSimpleBlockItem("shaft", SHAFT);
+
+    // ============================================================
     // 翰墨台与残页
     // ============================================================
     public static final DeferredBlock<HanmoTaiBlock> HANMO_TAI = BLOCKS.register(
@@ -216,6 +270,9 @@ public class TiangongKaiwu {
                         output.accept(SONGYAN_MO);
                         output.accept(XUAN_ZHI);
                         output.accept(HANMO_TAI_ITEM);
+                        output.accept(TONG_CHE_ITEM);
+                        output.accept(JIAN_ITEM);
+                        output.accept(SHAFT_ITEM);
                     }).build());
 
     // ============================================================
