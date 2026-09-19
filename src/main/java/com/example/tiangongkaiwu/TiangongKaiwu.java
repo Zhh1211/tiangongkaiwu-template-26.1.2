@@ -9,6 +9,7 @@ import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.food.FoodProperties;
@@ -16,6 +17,8 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
@@ -48,6 +51,7 @@ import com.example.tiangongkaiwu.block.RicePanicleBlock;
 import com.example.tiangongkaiwu.block.RiceStalkBlock;
 import com.example.tiangongkaiwu.block.RiceStalkBlockDry;
 import com.example.tiangongkaiwu.block.DragonBoneCarBlock;
+import com.example.tiangongkaiwu.block.DuiBlock;
 import com.example.tiangongkaiwu.block.JianBlock;
 import com.example.tiangongkaiwu.block.ShaftBlock;
 import com.example.tiangongkaiwu.block.TongCheBlock;
@@ -64,6 +68,7 @@ import com.example.tiangongkaiwu.item.CanYeItem;
 import com.example.tiangongkaiwu.item.ResidualData;
 import com.example.tiangongkaiwu.item.RiceGrainItem;
 import com.example.tiangongkaiwu.menu.HanmoTaiMenu;
+import com.example.tiangongkaiwu.recipe.PoundingRecipe;
 
 @Mod(TiangongKaiwu.MODID)
 public class TiangongKaiwu {
@@ -77,6 +82,20 @@ public class TiangongKaiwu {
             .create(Registries.BLOCK_ENTITY_TYPE, MODID);
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS = DeferredRegister
             .create(Registries.CREATIVE_MODE_TAB, MODID);
+
+    // ========== 加工配方：碓（舂米）==========
+    // 数据驱动：data/tiangongkaiwu/recipe/*.json，type 写 "tiangongkaiwu:pounding"。
+    // 详见 PoundingRecipe（input / min_power / result+byproduct / coarse 四件）。
+    public static final DeferredRegister<RecipeType<?>> RECIPE_TYPES =
+            DeferredRegister.create(Registries.RECIPE_TYPE, MODID);
+    public static final DeferredRegister<RecipeSerializer<?>> RECIPE_SERIALIZERS =
+            DeferredRegister.create(Registries.RECIPE_SERIALIZER, MODID);
+
+    public static final DeferredHolder<RecipeType<?>, RecipeType<PoundingRecipe>> POUNDING_TYPE =
+            RECIPE_TYPES.register("pounding",
+                    () -> RecipeType.simple(ResourceLocation.fromNamespaceAndPath(MODID, "pounding")));
+    public static final DeferredHolder<RecipeSerializer<?>, PoundingRecipe.Serializer> POUNDING_SERIALIZER =
+            RECIPE_SERIALIZERS.register("pounding", PoundingRecipe.Serializer::new);
 
     // ========== 物品数据组件：残页状态（目标条目/是否已译/成绩经验） ==========
     public static final DeferredRegister<DataComponentType<?>> DATA_COMPONENTS =
@@ -157,6 +176,24 @@ public class TiangongKaiwu {
                     .saturationModifier(0.4f)
                     .build())
         )
+    );
+
+    /** 糙米：动力不足时"舂不透"的产物（书：不及則粗）；丢回碓再舂一次即成白米。 */
+    public static final DeferredItem<Item> BROWN_RICE = ITEMS.register(
+        "brown_rice",
+        () -> new Item(
+            new Item.Properties()
+                .food(new FoodProperties.Builder()
+                    .nutrition(2)
+                    .saturationModifier(0.25f)
+                    .build())
+        )
+    );
+
+    /** 细糠：舂米的副产物，皮膜成粉（书：以供犬豕之豢）。 */
+    public static final DeferredItem<Item> RICE_BRAN = ITEMS.register(
+        "rice_bran",
+        () -> new Item(new Item.Properties())
     );
 
     // ============================================================
@@ -257,6 +294,25 @@ public class TiangongKaiwu {
             ITEMS.registerSimpleBlockItem("ba_che", BA_CHE);
 
     // ============================================================
+    // 粹精·舂米：碓（动力网的第一个"消费端"）
+    // 依据 docs/天工开物·粹精原文.md 攻稻节：水碓主舂，則兼併礱功；不及則粗；細糠以供犬豕
+    // ============================================================
+    /** 碓（舂米）：相邻传动轴有动力即自转；料从上方容器取、产物入下方容器或弹出。一臼一格，可并列多臼。 */
+    public static final DeferredBlock<DuiBlock> DUI = BLOCKS.register(
+        "dui",
+        () -> new DuiBlock(
+            BlockBehaviour.Properties.of()
+                .mapColor(MapColor.STONE)
+                .strength(2.0f)
+                .noOcclusion()
+                .sound(SoundType.STONE)
+        )
+    );
+
+    public static final DeferredItem<BlockItem> DUI_ITEM =
+            ITEMS.registerSimpleBlockItem("dui", DUI);
+
+    // ============================================================
     // 翰墨台与残页
     // ============================================================
     public static final DeferredBlock<HanmoTaiBlock> HANMO_TAI = BLOCKS.register(
@@ -313,6 +369,8 @@ public class TiangongKaiwu {
                     .displayItems((parameters, output) -> {
                         output.accept(RICE_GRAIN);
                         output.accept(RICE);
+                        output.accept(BROWN_RICE);
+                        output.accept(RICE_BRAN);
                         output.accept(CAN_YE);
                         output.accept(SONGYAN_MO);
                         output.accept(XUAN_ZHI);
@@ -323,6 +381,7 @@ public class TiangongKaiwu {
                         output.accept(NIU_CHE_ITEM);
                         output.accept(TA_CHE_ITEM);
                         output.accept(BA_CHE_ITEM);
+                        output.accept(DUI_ITEM);
                     }).build());
 
     // ============================================================
@@ -337,6 +396,8 @@ public class TiangongKaiwu {
         CREATIVE_MODE_TABS.register(modEventBus);
         MENUS.register(modEventBus);   // ← 新增注册
         DATA_COMPONENTS.register(modEventBus);
+        RECIPE_TYPES.register(modEventBus);
+        RECIPE_SERIALIZERS.register(modEventBus);
 
         NeoForge.EVENT_BUS.register(this);
 

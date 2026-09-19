@@ -1,0 +1,19 @@
+{
+  "type": "tiangongkaiwu:pounding",
+  "input": {
+    "item": "tiangongkaiwu:rice_grain"
+  },
+  "result": {
+    "id": "tiangongkaiwu:rice",
+    "count": 1
+  },
+  "coarse": {
+    "id": "tiangongkaiwu:brown_rice",
+    "count": 1
+  },
+  "byproduct": {
+    "id": "tiangongkaiwu:rice_bran",
+    "count": 1
+  },
+  "min_power": 3
+}

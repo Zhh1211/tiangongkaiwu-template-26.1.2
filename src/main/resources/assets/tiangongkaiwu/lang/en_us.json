@@ -93,5 +93,11 @@
     "block.tiangongkaiwu.car.need_water": "The chain pump must stand beside water (still water will do).",
     "block.tiangongkaiwu.niu_che.how": "Lead a leashed ox to the pump — it turns while the ox walks the wheel.",
     "block.tiangongkaiwu.ta_che.how": "Stand on the frame and treadle it.",
-    "block.tiangongkaiwu.ba_che.how": "Stand beside it and crank it by hand."
+    "block.tiangongkaiwu.ba_che.how": "Stand beside it and crank it by hand.",
+    "block.tiangongkaiwu.dui": "Dui (Rice Pounder)",
+    "item.tiangongkaiwu.brown_rice": "Brown Rice",
+    "item.tiangongkaiwu.rice_bran": "Rice Bran",
+    "block.tiangongkaiwu.dui.need_power": "The pounder needs power — run a drive shaft beside it.",
+    "block.tiangongkaiwu.dui.need_container": "Put a container (chest/hopper) above to hold grain; output drops into the container below, or pops out.",
+    "block.tiangongkaiwu.dui.power": "Current power: %s (enough hulls it fine; too little yields only brown rice)"
 }

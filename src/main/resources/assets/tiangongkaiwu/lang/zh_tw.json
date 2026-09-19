@@ -93,5 +93,11 @@
     "block.tiangongkaiwu.car.need_water": "車須臨水方能轉動（湖池靜水即可）",
     "block.tiangongkaiwu.niu_che.how": "以拴繩繫牛，牽到車旁——牛轉盤則車自轉（書：以牛力轉盤）",
     "block.tiangongkaiwu.ta_che.how": "站上車身踏轉即可（書：聚數人踏轉）",
-    "block.tiangongkaiwu.ba_che.how": "有人立於車旁搖轉即可（書：一人兩手疾轉）"
+    "block.tiangongkaiwu.ba_che.how": "有人立於車旁搖轉即可（書：一人兩手疾轉）",
+    "block.tiangongkaiwu.dui": "碓（舂米）",
+    "item.tiangongkaiwu.brown_rice": "糙米",
+    "item.tiangongkaiwu.rice_bran": "細糠",
+    "block.tiangongkaiwu.dui.need_power": "碓須接通動力——在它旁邊接一段傳動軸（動力源→軸→碓）",
+    "block.tiangongkaiwu.dui.need_container": "碓須在上方放容器（箱子／漏斗）盛穀；產物落進下方容器，否則彈出來",
+    "block.tiangongkaiwu.dui.power": "當前動力：%s（動力足則舂得透出白米，不足只出糙米）"
 }
