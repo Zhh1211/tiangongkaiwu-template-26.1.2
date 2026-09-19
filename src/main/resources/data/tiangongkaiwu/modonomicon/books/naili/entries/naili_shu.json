@@ -4,11 +4,11 @@
   "icon": {
     "item": "minecraft:beetroot"
   },
-  "x": 2,
-  "y": -2,
+  "x": 4,
+  "y": 6,
   "parents": [
     {
-      "entry": "naili_juan/naili_zonglun",
+      "entry": "naili_juan/naili_ma",
       "line_enabled": true
     }
   ],

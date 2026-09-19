@@ -4,11 +4,11 @@
   "icon": {
     "item": "minecraft:bucket"
   },
-  "x": 2,
-  "y": 4,
+  "x": -4,
+  "y": 10,
   "parents": [
     {
-      "entry": "naili_juan/naili_do",
+      "entry": "naili_juan/naili_dao_zai",
       "line_enabled": true
     }
   ],

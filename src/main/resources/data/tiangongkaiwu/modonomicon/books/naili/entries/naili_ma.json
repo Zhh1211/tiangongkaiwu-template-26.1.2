@@ -4,11 +4,11 @@
   "icon": {
     "item": "minecraft:string"
   },
-  "x": 0,
-  "y": -2,
+  "x": 4,
+  "y": 4,
   "parents": [
     {
-      "entry": "naili_juan/naili_zonglun",
+      "entry": "naili_juan/naili_shuji",
       "line_enabled": true
     }
   ],

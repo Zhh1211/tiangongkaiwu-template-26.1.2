@@ -4,11 +4,11 @@
   "icon": {
     "item": "minecraft:wooden_hoe"
   },
-  "x": -2,
-  "y": 4,
+  "x": -4,
+  "y": 6,
   "parents": [
     {
-      "entry": "naili_juan/naili_do",
+      "entry": "naili_juan/naili_dao_yi",
       "line_enabled": true
     }
   ],
