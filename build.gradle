@@ -34,6 +34,12 @@ repositories {
         url = "https://dl.cloudsmith.io/public/klikli-dev/mods/maven/"
         content { includeGroup "com.klikli_dev" }
     }
+    // JEI 官方源（BlameJared）。同样用 content 限定，避免拖慢其它依赖解析。
+    maven {
+        name = "BlameJared"
+        url = "https://maven.blamejared.com"
+        content { includeGroup "mezz.jei" }
+    }
 }
 
 base {
@@ -123,12 +129,12 @@ configurations {
 }
 
 dependencies {
-    // Example optional mod dependency with JEI
-    // The JEI API is declared for compile time use, while the full JEI artifact is used at runtime
-    // compileOnly "mezz.jei:jei-${mc_version}-common-api:${jei_version}"
-    // compileOnly "mezz.jei:jei-${mc_version}-neoforge-api:${jei_version}"
-    // We add the full version to localRuntime, not runtimeOnly, so that we do not publish a dependency on it
-    // localRuntime "mezz.jei:jei-${mc_version}-neoforge:${jei_version}"
+    // JEI：**可选集成**——mod 本身不依赖它，只是给"碓"的加工配方加一个 JEI 页面。
+    // compileOnly 两个 API 供编译插件；localRuntime 让开发客户端能实测（不会发布成依赖）。
+    // 若开发客户端内存吃紧（本机 4GB），把 localRuntime 那行注释掉即可，编译不受影响。
+    compileOnly "mezz.jei:jei-${mc_version}-common-api:${jei_version}"
+    compileOnly "mezz.jei:jei-${mc_version}-neoforge-api:${jei_version}"
+    localRuntime "mezz.jei:jei-${mc_version}-neoforge:${jei_version}"
 
     // Example mod dependency using a mod jar from ./libs with a flat dir repository
     // This maps to ./libs/coolmod-${mc_version}-${coolmod_version}.jar

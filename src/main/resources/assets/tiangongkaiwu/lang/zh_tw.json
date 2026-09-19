@@ -99,5 +99,12 @@
     "item.tiangongkaiwu.rice_bran": "細糠",
     "block.tiangongkaiwu.dui.need_power": "碓須接通動力——在它旁邊接一段傳動軸（動力源→軸→碓）",
     "block.tiangongkaiwu.dui.need_container": "碓須在上方放容器（箱子／漏斗）盛穀；產物落進下方容器，否則彈出來",
-    "block.tiangongkaiwu.dui.power": "當前動力：%s（動力足則舂得透出白米，不足只出糙米）"
+    "block.tiangongkaiwu.dui.power": "當前動力：%s（動力足則舂得透出白米，不足只出糙米）",
+    "jei.tiangongkaiwu.category.pounding": "碓（舂米）",
+    "jei.tiangongkaiwu.pounding.input": "送進碓的料（取自上方的容器）",
+    "jei.tiangongkaiwu.pounding.result": "動力 ≥ %s：舂得透，出白米",
+    "jei.tiangongkaiwu.pounding.byproduct": "舂下的皮膜，成了細糠",
+    "jei.tiangongkaiwu.pounding.coarse": "動力不足（＜ %s）：舂不透，只出糙米",
+    "jei.tiangongkaiwu.pounding.power": "需動力 ≥ %s",
+    "jei.tiangongkaiwu.pounding.coarse_label": "不足時"
 }

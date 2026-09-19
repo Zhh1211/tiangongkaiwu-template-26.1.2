@@ -99,5 +99,12 @@
     "item.tiangongkaiwu.rice_bran": "Rice Bran",
     "block.tiangongkaiwu.dui.need_power": "The pounder needs power — run a drive shaft beside it.",
     "block.tiangongkaiwu.dui.need_container": "Put a container (chest/hopper) above to hold grain; output drops into the container below, or pops out.",
-    "block.tiangongkaiwu.dui.power": "Current power: %s (enough hulls it fine; too little yields only brown rice)"
+    "block.tiangongkaiwu.dui.power": "Current power: %s (enough hulls it fine; too little yields only brown rice)",
+    "jei.tiangongkaiwu.category.pounding": "Dui (Rice Pounder)",
+    "jei.tiangongkaiwu.pounding.input": "Grain fed into the pounder (taken from the container above)",
+    "jei.tiangongkaiwu.pounding.result": "Power ≥ %s: pounded through — yields white rice",
+    "jei.tiangongkaiwu.pounding.byproduct": "The membrane pounded off becomes rice bran",
+    "jei.tiangongkaiwu.pounding.coarse": "Not enough power (< %s): under-pounded — brown rice only",
+    "jei.tiangongkaiwu.pounding.power": "Needs power ≥ %s",
+    "jei.tiangongkaiwu.pounding.coarse_label": "too little"
 }
