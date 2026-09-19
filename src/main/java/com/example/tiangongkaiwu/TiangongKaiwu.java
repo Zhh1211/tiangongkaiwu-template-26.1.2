@@ -52,9 +52,11 @@ import com.example.tiangongkaiwu.block.RiceStalkBlock;
 import com.example.tiangongkaiwu.block.RiceStalkBlockDry;
 import com.example.tiangongkaiwu.block.DragonBoneCarBlock;
 import com.example.tiangongkaiwu.block.DuiBlock;
+import com.example.tiangongkaiwu.block.FengFanBlock;
 import com.example.tiangongkaiwu.block.JianBlock;
 import com.example.tiangongkaiwu.block.ShaftBlock;
 import com.example.tiangongkaiwu.block.TongCheBlock;
+import com.example.tiangongkaiwu.block.WellLiftBlock;
 import com.example.tiangongkaiwu.block.HanmoTaiBlock;
 import com.example.tiangongkaiwu.block.entity.HanmoTaiBlockEntity;
 import com.example.tiangongkaiwu.hanmo.Puzzle;
@@ -337,6 +339,56 @@ public class TiangongKaiwu {
             ITEMS.registerSimpleBlockItem("dui", DUI);
 
     // ============================================================
+    // 水利收尾：井具（桔槔／辘轳）+ 风帆车（排水）
+    // 书：用桔槔、轆轤，功勞又甚細已 ／ 揚郡以風帆數扇，俟風轉車，風息則止……
+    //     此車為救潦，欲去澤水以便栽種。蓋去水非取水也，不適濟旱
+    // ============================================================
+    /** 桔槔：临水而立，靠配重无人自汲，但"功劳甚细"——全套水利里最慢的一档。 */
+    public static final DeferredBlock<WellLiftBlock> JIE_GAO = BLOCKS.register(
+        "jie_gao",
+        () -> new WellLiftBlock(
+            BlockBehaviour.Properties.of()
+                .mapColor(MapColor.WOOD)
+                .strength(1.0f)
+                .noOcclusion()
+                .sound(SoundType.WOOD),
+            WellLiftBlock.Kind.JIE_GAO
+        )
+    );
+
+    /** 辘轳：井上绞盘，须有人在旁摇；比桔槔快，仍远逊筒车。 */
+    public static final DeferredBlock<WellLiftBlock> LU_LU = BLOCKS.register(
+        "lu_lu",
+        () -> new WellLiftBlock(
+            BlockBehaviour.Properties.of()
+                .mapColor(MapColor.WOOD)
+                .strength(1.0f)
+                .noOcclusion()
+                .sound(SoundType.WOOD),
+            WellLiftBlock.Kind.LU_LU
+        )
+    );
+
+    /** 风帆车：下雨才转，专司**排水**（抽掉半径内的水源，把涝地变干田）；对旱田毫无用处。 */
+    public static final DeferredBlock<FengFanBlock> FENG_FAN_CHE = BLOCKS.register(
+        "feng_fan_che",
+        () -> new FengFanBlock(
+            BlockBehaviour.Properties.of()
+                .mapColor(MapColor.WOOD)
+                .strength(1.5f)
+                .noOcclusion()
+                .sound(SoundType.WOOD)
+        )
+    );
+
+    public static final DeferredItem<BlockItem> JIE_GAO_ITEM =
+            ITEMS.registerSimpleBlockItem("jie_gao", JIE_GAO);
+    public static final DeferredItem<BlockItem> LU_LU_ITEM =
+            ITEMS.registerSimpleBlockItem("lu_lu", LU_LU);
+    public static final DeferredItem<BlockItem> FENG_FAN_CHE_ITEM =
+            ITEMS.registerSimpleBlockItem("feng_fan_che", FENG_FAN_CHE);
+
+    // ============================================================
     // 翰墨台与残页
     // ============================================================
     public static final DeferredBlock<HanmoTaiBlock> HANMO_TAI = BLOCKS.register(
@@ -409,6 +461,9 @@ public class TiangongKaiwu {
                         output.accept(TA_CHE_ITEM);
                         output.accept(BA_CHE_ITEM);
                         output.accept(DUI_ITEM);
+                        output.accept(JIE_GAO_ITEM);
+                        output.accept(LU_LU_ITEM);
+                        output.accept(FENG_FAN_CHE_ITEM);
                     }).build());
 
     // ============================================================

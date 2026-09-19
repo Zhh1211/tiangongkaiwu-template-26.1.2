@@ -125,5 +125,13 @@
     "block.tiangongkaiwu.shao_tu.wrong": "填墳鬆土不宜也——燒土只對砂礫／粗泥田有效（且需潛行+手持柴）",
     "block.tiangongkaiwu.hui.wrong": "向陽暖土不宜也——骨灰／石灰只對冷漿土（黏土田）有效",
     "block.tiangongkaiwu.fertilize.dry": "田裡沒水，肥也白搭——先挑水或引水渠",
-    "block.tiangongkaiwu.fertilize.ripe": "這株已然熟透，不必再費肥"
+    "block.tiangongkaiwu.fertilize.ripe": "這株已然熟透，不必再費肥",
+    "block.tiangongkaiwu.jie_gao": "桔槔",
+    "block.tiangongkaiwu.lu_lu": "轆轤",
+    "block.tiangongkaiwu.feng_fan_che": "風帆車",
+    "block.tiangongkaiwu.well.need_water": "須臨水而立——淺池、小澮即可",
+    "block.tiangongkaiwu.jie_gao.how": "橫桿配重，無人也自汲——可惜功甚細（書：用桔槔、轆轤，功勞又甚細已）",
+    "block.tiangongkaiwu.lu_lu.how": "須有人立於車旁搖之——比桔槔略快，仍遠遜筒車",
+    "block.tiangongkaiwu.feng_fan_che.how": "風息則止——這把車只有下雨才轉。它是去水不是取水，拿去澆旱田沒用（書：不適濟旱）",
+    "block.tiangongkaiwu.feng_fan_che.spinning": "俟風轉車——正在去澤水，水退一格是一格"
 }

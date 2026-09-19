@@ -125,5 +125,13 @@
     "block.tiangongkaiwu.shao_tu.wrong": "Not for loose soft soil — burning only helps gravel/coarse-dirt paddies (sneak + hold firewood).",
     "block.tiangongkaiwu.hui.wrong": "Not for warm sunny soil — bone ash and lime only work on cold-slurry (clay) paddies.",
     "block.tiangongkaiwu.fertilize.dry": "No water in the paddy — fertiliser would be wasted. Fetch water first.",
-    "block.tiangongkaiwu.fertilize.ripe": "This one is already ripe; no need to spend fertiliser."
+    "block.tiangongkaiwu.fertilize.ripe": "This one is already ripe; no need to spend fertiliser.",
+    "block.tiangongkaiwu.jie_gao": "Jiegao (Shadoof)",
+    "block.tiangongkaiwu.lu_lu": "Lulu (Windlass)",
+    "block.tiangongkaiwu.feng_fan_che": "Fengfanche (Sail Wheel)",
+    "block.tiangongkaiwu.well.need_water": "Must stand beside water — a shallow pool or small ditch will do.",
+    "block.tiangongkaiwu.jie_gao.how": "A counterweighted beam lifts water by itself — but the yield is pitiful (book: jiegao and lulu, their toil is very slight indeed).",
+    "block.tiangongkaiwu.lu_lu.how": "Someone must stand beside it to turn the crank — a bit faster than the shadoof, still far behind the water wheel.",
+    "block.tiangongkaiwu.feng_fan_che.how": "The wind dies and it stops — this wheel only turns in rain. It REMOVES water, not draws it; useless for watering dry fields.",
+    "block.tiangongkaiwu.feng_fan_che.spinning": "Waiting on the wind — draining the marsh, one block at a time."
 }
