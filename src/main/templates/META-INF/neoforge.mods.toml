@@ -36,7 +36,9 @@ displayName="${mod_name}" #mandatory
 #displayURL="https://change.me.to.your.mods.homepage.example.invalid/" #optional
 
 # A file name (in the root of the mod JAR) containing a logo for display
-#logoFile="examplemod.png" #optional
+# 模组 logo（游戏内「模组」列表里显示的那个图标）：128×128 篆章式四字。
+# 源图 docs/封面/cover_icon_512.png，由 .workbuddy/scripts/gen_covers.py 生成（改章节进度后重跑即更新）。
+logoFile="assets/tiangongkaiwu/icon.png" #optional
 
 # A text field displayed in the mod UI
 #credits="" #optional
