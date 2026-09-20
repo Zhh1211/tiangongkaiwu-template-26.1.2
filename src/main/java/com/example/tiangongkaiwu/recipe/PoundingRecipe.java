@@ -92,19 +92,22 @@ public class PoundingRecipe implements Recipe<SingleRecipeInput> {
             Codec.INT.optionalFieldOf("min_power", 3).forGetter(PoundingRecipe::minPower)
     ).apply(inst, PoundingRecipe::new));
 
+    // ⚠️ coarse / byproduct 允许为空（如「糙米→米」这条配方没有粗制品），
+    // 必须用 OPTIONAL_STREAM_CODEC —— 普通的 ItemStack.STREAM_CODEC 编码空 stack 会抛
+    // 「Empty ItemStack not allowed」，导致 update_recipes 包发不出去、客户端直接掉线。
     public static final StreamCodec<RegistryFriendlyByteBuf, PoundingRecipe> STREAM_CODEC = StreamCodec.of(
             (buf, recipe) -> {
                 Ingredient.CONTENTS_STREAM_CODEC.encode(buf, recipe.input);
                 ItemStack.STREAM_CODEC.encode(buf, recipe.result);
-                ItemStack.STREAM_CODEC.encode(buf, recipe.coarse);
-                ItemStack.STREAM_CODEC.encode(buf, recipe.byproduct);
+                ItemStack.OPTIONAL_STREAM_CODEC.encode(buf, recipe.coarse);
+                ItemStack.OPTIONAL_STREAM_CODEC.encode(buf, recipe.byproduct);
                 buf.writeVarInt(recipe.minPower);
             },
             buf -> new PoundingRecipe(
                     Ingredient.CONTENTS_STREAM_CODEC.decode(buf),
                     ItemStack.STREAM_CODEC.decode(buf),
-                    ItemStack.STREAM_CODEC.decode(buf),
-                    ItemStack.STREAM_CODEC.decode(buf),
+                    ItemStack.OPTIONAL_STREAM_CODEC.decode(buf),
+                    ItemStack.OPTIONAL_STREAM_CODEC.decode(buf),
                     buf.readVarInt()));
 
     @Override
