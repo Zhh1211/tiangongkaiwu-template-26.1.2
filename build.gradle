@@ -144,6 +144,9 @@ dependencies {
     // Jade（可选集成，同 JEI 的路子：不硬依赖，没装就是没提示）
     // 只编译期需要 API；开发期想看到效果可另开一行 localRuntime
     compileOnly "maven.modrinth:jade:${jade_version}"
+    // 开发环境（runClient）也带上 Jade，否则自己调试时看不到提示。
+    // 机器吃紧就把这行注释掉：不影响编译，只是 runClient 里没有 Jade。
+    localRuntime "maven.modrinth:jade:${jade_version}"
 
     // Example mod dependency using a mod jar from ./libs with a flat dir repository
     // This maps to ./libs/coolmod-${mc_version}-${coolmod_version}.jar
