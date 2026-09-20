@@ -155,5 +155,19 @@
     "entry.tiangongkaiwu.naili_shuili.craft_tong_che": "筒車的造法",
     "entry.tiangongkaiwu.naili_shuili.craft_shaft": "傳動軸的造法",
     "entry.tiangongkaiwu.naili_shuili.craft_jian": "梘的造法",
-    "block.tiangongkaiwu.rice.field_water": "田水：%s / %s"
+    "block.tiangongkaiwu.rice.field_water": "田水：%s / %s",
+    "jade.tiangongkaiwu.field_water": "田水：%s / %s",
+    "jade.tiangongkaiwu.growth": "生長：%s / %s",
+    "jade.tiangongkaiwu.need_water": "⚠ 田水見底，該挑水了",
+    "jade.tiangongkaiwu.parched": "已枯：倒水或等下雨可救",
+    "jade.tiangongkaiwu.running": "運轉中",
+    "jade.tiangongkaiwu.stopped": "停止",
+    "jade.tiangongkaiwu.plugged": "已栓木礙止",
+    "jade.tiangongkaiwu.need_flowing": "車下須有流水方能轉動",
+    "jade.tiangongkaiwu.power": "動力：%s",
+    "jade.tiangongkaiwu.power_max": "動力：%s / %s",
+    "jade.tiangongkaiwu.trough_filled": "槽中有水",
+    "jade.tiangongkaiwu.trough_empty": "槽中無水",
+    "jade.tiangongkaiwu.pounding": "正在舂米",
+    "jade.tiangongkaiwu.idle": "待料（上方放容器投料）"
 }

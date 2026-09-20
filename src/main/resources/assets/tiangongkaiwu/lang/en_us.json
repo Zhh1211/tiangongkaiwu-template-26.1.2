@@ -155,5 +155,19 @@
     "entry.tiangongkaiwu.naili_shuili.craft_tong_che": "Crafting the Water Wheel",
     "entry.tiangongkaiwu.naili_shuili.craft_shaft": "Crafting the Drive Shaft",
     "entry.tiangongkaiwu.naili_shuili.craft_jian": "Crafting the Water Trough",
-    "block.tiangongkaiwu.rice.field_water": "Field water: %s / %s"
+    "block.tiangongkaiwu.rice.field_water": "Field water: %s / %s",
+    "jade.tiangongkaiwu.field_water": "Field water: %s / %s",
+    "jade.tiangongkaiwu.growth": "Growth: %s / %s",
+    "jade.tiangongkaiwu.need_water": "! Water gone - fetch some",
+    "jade.tiangongkaiwu.parched": "Parched - water it, or wait for rain",
+    "jade.tiangongkaiwu.running": "Running",
+    "jade.tiangongkaiwu.stopped": "Stopped",
+    "jade.tiangongkaiwu.plugged": "Plugged with a wooden pin",
+    "jade.tiangongkaiwu.need_flowing": "Needs flowing water beneath",
+    "jade.tiangongkaiwu.power": "Power: %s",
+    "jade.tiangongkaiwu.power_max": "Power: %s / %s",
+    "jade.tiangongkaiwu.trough_filled": "Trough holds water",
+    "jade.tiangongkaiwu.trough_empty": "Trough is empty",
+    "jade.tiangongkaiwu.pounding": "Pounding rice",
+    "jade.tiangongkaiwu.idle": "Idle - put a container above"
 }
