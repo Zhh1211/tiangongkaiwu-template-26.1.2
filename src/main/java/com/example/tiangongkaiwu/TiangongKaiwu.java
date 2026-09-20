@@ -132,7 +132,7 @@ public class TiangongKaiwu {
         () -> new RiceStalkBlock(
             BlockBehaviour.Properties.of()
                 .mapColor(MapColor.PLANT)
-                .noCollission()
+                
                 .randomTicks()
                 .instabreak()
                 .sound(SoundType.CROP)
@@ -145,7 +145,7 @@ public class TiangongKaiwu {
         () -> new RicePanicleBlock(
             BlockBehaviour.Properties.of()
                 .mapColor(MapColor.PLANT)
-                .noCollission()
+                
                 .instabreak()
                 .sound(SoundType.CROP)
         )
@@ -157,7 +157,7 @@ public class TiangongKaiwu {
         () -> new RiceStalkBlockDry(
             BlockBehaviour.Properties.of()
                 .mapColor(MapColor.PLANT)
-                .noCollission()
+                
                 .randomTicks()
                 .instabreak()
                 .sound(SoundType.CROP)
@@ -235,7 +235,7 @@ public class TiangongKaiwu {
                 .mapColor(MapColor.WOOD)
                 .strength(1.5f)
                 .noOcclusion()
-                .noCollission()
+                
                 .sound(SoundType.WOOD)
         )
     );
@@ -248,7 +248,7 @@ public class TiangongKaiwu {
                 .mapColor(MapColor.WOOD)
                 .strength(0.8f)
                 .noOcclusion()
-                .noCollission()
+                
                 .sound(SoundType.WOOD)
         )
     );
@@ -261,7 +261,7 @@ public class TiangongKaiwu {
                 .mapColor(MapColor.WOOD)
                 .strength(0.8f)
                 .noOcclusion()
-                .noCollission()
+                
                 .sound(SoundType.WOOD)
         )
     );

@@ -16,6 +16,9 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 /**
  * 传动轴：把动力源（筒车／牛车／踏车／拔车）的"劲"送到加工机器（将来：舂米臼、磨、砻）。
@@ -123,5 +126,13 @@ public class ShaftBlock extends Block {
                               BlockEntity blockEntity, ItemStack tool) {
         super.playerDestroy(level, player, pos, state, blockEntity, tool);
         popResource(level, pos, new ItemStack(TiangongKaiwu.SHAFT_ITEM.get()));
+    }
+    // ====== 碰撞箱（2026-09-20 补：原先 noCollission 导致玩家能穿过整套装置，
+    // 踏车更是站不上去、永远转不起来）======
+    /** 传动轴（低位碰撞） */
+    @Override
+    public VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos,
+                                       CollisionContext context) {
+        return Block.box(0.0D, 0.0D, 0.0D, 16.0D, 6.0D, 16.0D);
     }
 }

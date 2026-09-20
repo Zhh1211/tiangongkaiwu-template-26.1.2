@@ -154,5 +154,6 @@
     "entry.tiangongkaiwu.naili_shuili.spot_feng_fan_che.text": "揚郡人的排澇車。書：「揚郡以風帆數扇，俟風轉車，風息則止」。只有下雨天才轉；它不去取水，而是**去水**——每約三秒抽掉近旁一格水源，把澇地、湖澤一格一格抽乾，好栽種。書裡特意點明：「去水非取水也，不適濟旱」——拿它去澆旱田，完全沒用。",
     "entry.tiangongkaiwu.naili_shuili.craft_tong_che": "筒車的造法",
     "entry.tiangongkaiwu.naili_shuili.craft_shaft": "傳動軸的造法",
-    "entry.tiangongkaiwu.naili_shuili.craft_jian": "梘的造法"
+    "entry.tiangongkaiwu.naili_shuili.craft_jian": "梘的造法",
+    "block.tiangongkaiwu.rice.field_water": "田水：%s / %s"
 }

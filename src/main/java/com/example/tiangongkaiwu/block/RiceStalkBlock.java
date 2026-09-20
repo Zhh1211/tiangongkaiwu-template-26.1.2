@@ -66,16 +66,19 @@ public class RiceStalkBlock extends Block implements SimpleWaterloggedBlock, Bon
     public static final int WATER_VISIBLE_MIN = 3;
 
     // ====== 蒸发速率：底材定"保水天数"（随机 tick 概率；默认 randomTickSpeed=3 时折算） ======
-    /** 沙 —— 约 3 天（书：三日即乾者）。 */
-    private static final float DRY_SAND = 0.13f;
-    /** 磽＝瘦土（砂砾/粗泥）—— 约 4 天。 */
-    private static final float DRY_LEAN = 0.10f;
-    /** 泥（泥土/草方块/泥巴）—— 约 6–7 天。 */
-    private static final float DRY_MUD = 0.066f;
-    /** 膩＝肥土（黏土）—— 约半月（书：有半月後乾者）。 */
-    private static final float DRY_FAT = 0.026f;
-    /** 兜底 —— 约 8 天。 */
-    private static final float DRY_OTHER = 0.05f;
+    // ⚠️ 节奏说明（2026-09-20 实测反馈后调整）：书里的「三日即乾 / 半月後乾」若按真实 MC 日
+    // 折算，泥土田要一个多小时才掉完水、十几分钟才掉一格，玩家根本观察不到（"种上去不会干"）。
+    // 故整体压缩约 5 倍，**保留相对关系**（沙最快、黏土最慢，约 5 倍差），绝对时长压到可玩尺度。
+    /** 沙 —— 最快（满水约 12 分钟见底）。 */
+    private static final float DRY_SAND = 0.65f;
+    /** 磽＝瘦土（砂砾/粗泥）—— 约 16 分钟。 */
+    private static final float DRY_LEAN = 0.50f;
+    /** 泥（泥土/草方块/泥巴）—— 约 24 分钟。 */
+    private static final float DRY_MUD = 0.33f;
+    /** 膩＝肥土（黏土）—— 最慢，约 1 小时（书：有半月後乾者）。 */
+    private static final float DRY_FAT = 0.13f;
+    /** 兜底 —— 约 32 分钟。 */
+    private static final float DRY_OTHER = 0.25f;
 
     /** 雨天回充概率（书：天澤不降，則人力挽水以濟 —— 下雨不用挑水，放晴才要）。 */
     private static final float RAIN_REFILL = 0.25f;
@@ -350,6 +353,12 @@ public class RiceStalkBlock extends Block implements SimpleWaterloggedBlock, Bon
             }
             level.playSound(player, pos, SoundEvents.BUCKET_FILL, SoundSource.BLOCKS, 1.0F, 1.0F);
             level.gameEvent(player, GameEvent.FLUID_PICKUP, pos);
+            // 舀完给个明确反馈（此前玩家完全不知道舀掉了多少，2026-09-20 反馈）
+            if (player != null) {
+                player.displayClientMessage(Component.translatable(
+                        "block.tiangongkaiwu.rice.field_water",
+                        Math.max(0, left), MAX_MOISTURE), true);
+            }
             return ItemInteractionResult.sidedSuccess(false);
         }
         return super.useItemOn(stack, state, level, pos, player, hand, hit);

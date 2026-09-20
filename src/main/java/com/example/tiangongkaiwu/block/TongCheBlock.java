@@ -27,6 +27,9 @@ import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 /**
  * 筒车（水车）：书里「凡河濱有制筒車者，堰陂障流，繞於車下，激輪使轉，挽水入筒，
@@ -277,7 +280,8 @@ public class TongCheBlock extends Block {
                 level.setBlock(p, Blocks.AIR.defaultBlockState(), 3);
             }
         }
-        popResource(level, core, new ItemStack(TiangongKaiwu.TONG_CHE_ITEM.get()));
+        // 掉在**被挖的那一格**（原先固定掉在车中心 core，挖边缘格时物品"跑"到中间，很怪）
+        popResource(level, pos, new ItemStack(TiangongKaiwu.TONG_CHE_ITEM.get()));
     }
 
     /** 部件成了"无主孤块"（核心不在）→ 自毁，不掉落。 */
@@ -296,5 +300,13 @@ public class TongCheBlock extends Block {
         if (!coreOk) {
             level.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
         }
+    }
+    // ====== 碰撞箱（2026-09-20 补：原先 noCollission 导致玩家能穿过整套装置，
+    // 踏车更是站不上去、永远转不起来）======
+    /** 筒车（整台大轮是实体结构：满格碰撞，可站上去、不能穿过） */
+    @Override
+    public VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos,
+                                       CollisionContext context) {
+        return Block.box(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D);
     }
 }

@@ -17,6 +17,9 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 /**
  * 梘（引水槽）：书里「一一傾於梘內，流入畝中」那根水槽。
@@ -90,17 +93,32 @@ public class JianBlock extends Block {
         level.scheduleTick(pos, this, INTERVAL);
     }
 
-    /** 上游（朝向的反面）那一格有水／是带水的槽／是正在转的筒车 → 我这一段就有水。 */
+    /**
+     * 这一段有没有水：**先看上游一格（朝向的反面），再看四个水平邻格与正下方**。
+     *
+     * <p>原实现只看上游一格，玩家把槽贴着水/筒车放却"接不上"（2026-09-20 实测反馈：
+     * 「放筒车旁边没有水」）——因为朝向得刚好对着水源才算。放宽后贴哪边都行，
+     * 但仍**不看下游**，避免自反馈成环。
+     */
     private static boolean isFed(ServerLevel level, BlockState state, BlockPos pos) {
-        BlockPos upstream = pos.relative(state.getValue(FACING).getOpposite());
-        BlockState up = level.getBlockState(upstream);
-        if (up.getBlock() instanceof JianBlock) {
-            return up.getValue(WATERED);
+        if (fedBy(level, pos.relative(state.getValue(FACING).getOpposite()))) {
+            return true;      // 上游优先
         }
-        if (WaterDevices.isRunning(up)) {
-            return true;
+        for (Direction dir : Direction.Plane.HORIZONTAL) {
+            if (fedBy(level, pos.relative(dir))) {
+                return true;  // 两侧也认（贴哪边都能接上）
+            }
         }
-        return level.getFluidState(upstream).is(FluidTags.WATER);
+        return fedBy(level, pos.below());
+    }
+
+    /** 某一格能不能供水（带水的梘 / 正在转的装置 / 一格水）。 */
+    private static boolean fedBy(ServerLevel level, BlockPos p) {
+        BlockState s = level.getBlockState(p);
+        if (s.getBlock() instanceof JianBlock) {
+            return s.getValue(WATERED);
+        }
+        return WaterDevices.isRunning(s) || level.getFluidState(p).is(FluidTags.WATER);
     }
 
     /** 给紧挨着的稻田补水（四邻 + 正下方）。 */
@@ -129,5 +147,13 @@ public class JianBlock extends Block {
                               BlockEntity blockEntity, ItemStack tool) {
         super.playerDestroy(level, player, pos, state, blockEntity, tool);
         popResource(level, pos, new ItemStack(TiangongKaiwu.JIAN_ITEM.get()));
+    }
+    // ====== 碰撞箱（2026-09-20 补：原先 noCollission 导致玩家能穿过整套装置，
+    // 踏车更是站不上去、永远转不起来）======
+    /** 梘（浅槽：低位碰撞，能踩过去） */
+    @Override
+    public VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos,
+                                       CollisionContext context) {
+        return Block.box(0.0D, 0.0D, 0.0D, 16.0D, 6.0D, 16.0D);
     }
 }

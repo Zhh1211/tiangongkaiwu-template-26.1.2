@@ -28,6 +28,9 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 /**
  * 井上小汲：**桔槔**与**辘轳**。书里水利节最后一句：
@@ -167,5 +170,13 @@ public class WellLiftBlock extends Block {
         return this.kind == Kind.JIE_GAO
                 ? TiangongKaiwu.JIE_GAO_ITEM.get()
                 : TiangongKaiwu.LU_LU_ITEM.get();
+    }
+    // ====== 碰撞箱（2026-09-20 补：原先 noCollission 导致玩家能穿过整套装置，
+    // 踏车更是站不上去、永远转不起来）======
+    /** 桔槔 / 辘轳（低位碰撞） */
+    @Override
+    public VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos,
+                                       CollisionContext context) {
+        return Block.box(0.0D, 0.0D, 0.0D, 16.0D, 6.0D, 16.0D);
     }
 }

@@ -25,6 +25,9 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 /**
  * 风帆车。书里水利节：「揚郡以**風帆**數扇，**俟風轉車，風息則止**。此車為**救潦**，
@@ -149,5 +152,13 @@ public class FengFanBlock extends Block {
                               BlockEntity blockEntity, ItemStack tool) {
         super.playerDestroy(level, player, pos, state, blockEntity, tool);
         popResource(level, pos, new ItemStack(TiangongKaiwu.FENG_FAN_CHE_ITEM.get()));
+    }
+    // ====== 碰撞箱（2026-09-20 补：原先 noCollission 导致玩家能穿过整套装置，
+    // 踏车更是站不上去、永远转不起来）======
+    /** 风帆车（低位碰撞） */
+    @Override
+    public VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos,
+                                       CollisionContext context) {
+        return Block.box(0.0D, 0.0D, 0.0D, 16.0D, 6.0D, 16.0D);
     }
 }

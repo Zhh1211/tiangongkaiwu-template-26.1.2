@@ -29,6 +29,9 @@ import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 /**
  * 龙骨车（牛车／踏车／拔车）：书里「其湖池不流水，或以牛力轉盤，或聚數人踏轉。車身長者二丈，
@@ -332,5 +335,13 @@ public class DragonBoneCarBlock extends Block {
         if (!coreOk) {
             level.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
         }
+    }
+    // ====== 碰撞箱（2026-09-20 补：原先 noCollission 导致玩家能穿过整套装置，
+    // 踏车更是站不上去、永远转不起来）======
+    /** 龙骨车（车板：半格高，玩家可走/跳上去站住） */
+    @Override
+    public VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos,
+                                       CollisionContext context) {
+        return Block.box(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D);
     }
 }

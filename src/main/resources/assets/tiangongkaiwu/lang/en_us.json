@@ -154,5 +154,6 @@
     "entry.tiangongkaiwu.naili_shuili.spot_feng_fan_che.text": "The marsh-draining wheel of Yang county. Book: in Yang county several sails are set, turning the wheel when the wind comes, stopping when it dies. It turns only in rain. It does not draw water but REMOVES it — every three seconds it takes one water source nearby, draining marsh and lake block by block so the land can be planted. The book is explicit: this is to remove water, not to fetch it; it is of no use against drought.",
     "entry.tiangongkaiwu.naili_shuili.craft_tong_che": "Crafting the Water Wheel",
     "entry.tiangongkaiwu.naili_shuili.craft_shaft": "Crafting the Drive Shaft",
-    "entry.tiangongkaiwu.naili_shuili.craft_jian": "Crafting the Water Trough"
+    "entry.tiangongkaiwu.naili_shuili.craft_jian": "Crafting the Water Trough",
+    "block.tiangongkaiwu.rice.field_water": "Field water: %s / %s"
 }

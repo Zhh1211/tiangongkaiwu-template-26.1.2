@@ -1,6 +1,7 @@
 package com.example.tiangongkaiwu.item;
 
 import com.example.tiangongkaiwu.TiangongKaiwu;
+import com.example.tiangongkaiwu.block.RiceStalkBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -67,10 +68,11 @@ public class RiceGrainItem extends Item {
         if (!state.is(Blocks.WATER) || !level.getFluidState(pos).isSource()) {
             return InteractionResult.PASS;
         }
-        // 底部须为泥土系/泥（造田要求）
+        // 底部须为「可作田的土」——统一走 RiceStalkBlock.isPaddySoil：
+        // 泥土系/泥 + 书里点名的沙（沙田）、砂砾·粗泥（磽）、黏土（膩）。
+        // ⚠️ 这里原先只认 BlockTags.DIRT + MUD，导致沙/黏土上种不上（2026-09-20 实测反馈）。
         BlockState below = level.getBlockState(pos.below());
-        boolean soilOk = below.is(BlockTags.DIRT) || below.getBlock() == Blocks.MUD;
-        if (!soilOk) return InteractionResult.FAIL;
+        if (!RiceStalkBlock.isPaddySoil(below)) return InteractionResult.FAIL;
         // 正上方须空气（不种在水面被遮挡处）
         if (!level.getBlockState(pos.above()).isAir()) return InteractionResult.FAIL;
 

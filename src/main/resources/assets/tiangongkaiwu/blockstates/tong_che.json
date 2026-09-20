@@ -1,130 +1,130 @@
 {
   "variants": {
-    "part=0,plane=z,plugged=false": {
-      "model": "tiangongkaiwu:block/tong_che_p0_spin"
-    },
-    "part=0,plane=x,plugged=false": {
-      "model": "tiangongkaiwu:block/tong_che_p0_spin",
-      "y": 90
-    },
-    "part=0,plane=z,plugged=true": {
-      "model": "tiangongkaiwu:block/tong_che_p0_stop"
-    },
-    "part=0,plane=x,plugged=true": {
+    "part=0,plane=x,active=false": {
       "model": "tiangongkaiwu:block/tong_che_p0_stop",
       "y": 90
     },
-    "part=1,plane=z,plugged=false": {
-      "model": "tiangongkaiwu:block/tong_che_p1_spin"
-    },
-    "part=1,plane=x,plugged=false": {
-      "model": "tiangongkaiwu:block/tong_che_p1_spin",
+    "part=0,plane=x,active=true": {
+      "model": "tiangongkaiwu:block/tong_che_p0_spin",
       "y": 90
     },
-    "part=1,plane=z,plugged=true": {
-      "model": "tiangongkaiwu:block/tong_che_p1_stop"
+    "part=0,plane=z,active=false": {
+      "model": "tiangongkaiwu:block/tong_che_p0_stop"
     },
-    "part=1,plane=x,plugged=true": {
+    "part=0,plane=z,active=true": {
+      "model": "tiangongkaiwu:block/tong_che_p0_spin"
+    },
+    "part=1,plane=x,active=false": {
       "model": "tiangongkaiwu:block/tong_che_p1_stop",
       "y": 90
     },
-    "part=2,plane=z,plugged=false": {
-      "model": "tiangongkaiwu:block/tong_che_p2_spin"
-    },
-    "part=2,plane=x,plugged=false": {
-      "model": "tiangongkaiwu:block/tong_che_p2_spin",
+    "part=1,plane=x,active=true": {
+      "model": "tiangongkaiwu:block/tong_che_p1_spin",
       "y": 90
     },
-    "part=2,plane=z,plugged=true": {
-      "model": "tiangongkaiwu:block/tong_che_p2_stop"
+    "part=1,plane=z,active=false": {
+      "model": "tiangongkaiwu:block/tong_che_p1_stop"
     },
-    "part=2,plane=x,plugged=true": {
+    "part=1,plane=z,active=true": {
+      "model": "tiangongkaiwu:block/tong_che_p1_spin"
+    },
+    "part=2,plane=x,active=false": {
       "model": "tiangongkaiwu:block/tong_che_p2_stop",
       "y": 90
     },
-    "part=3,plane=z,plugged=false": {
-      "model": "tiangongkaiwu:block/tong_che_p3_spin"
-    },
-    "part=3,plane=x,plugged=false": {
-      "model": "tiangongkaiwu:block/tong_che_p3_spin",
+    "part=2,plane=x,active=true": {
+      "model": "tiangongkaiwu:block/tong_che_p2_spin",
       "y": 90
     },
-    "part=3,plane=z,plugged=true": {
-      "model": "tiangongkaiwu:block/tong_che_p3_stop"
+    "part=2,plane=z,active=false": {
+      "model": "tiangongkaiwu:block/tong_che_p2_stop"
     },
-    "part=3,plane=x,plugged=true": {
+    "part=2,plane=z,active=true": {
+      "model": "tiangongkaiwu:block/tong_che_p2_spin"
+    },
+    "part=3,plane=x,active=false": {
       "model": "tiangongkaiwu:block/tong_che_p3_stop",
       "y": 90
     },
-    "part=4,plane=z,plugged=false": {
-      "model": "tiangongkaiwu:block/tong_che_p4_spin"
-    },
-    "part=4,plane=x,plugged=false": {
-      "model": "tiangongkaiwu:block/tong_che_p4_spin",
+    "part=3,plane=x,active=true": {
+      "model": "tiangongkaiwu:block/tong_che_p3_spin",
       "y": 90
     },
-    "part=4,plane=z,plugged=true": {
-      "model": "tiangongkaiwu:block/tong_che_p4_stop"
+    "part=3,plane=z,active=false": {
+      "model": "tiangongkaiwu:block/tong_che_p3_stop"
     },
-    "part=4,plane=x,plugged=true": {
+    "part=3,plane=z,active=true": {
+      "model": "tiangongkaiwu:block/tong_che_p3_spin"
+    },
+    "part=4,plane=x,active=false": {
       "model": "tiangongkaiwu:block/tong_che_p4_stop",
       "y": 90
     },
-    "part=5,plane=z,plugged=false": {
-      "model": "tiangongkaiwu:block/tong_che_p5_spin"
-    },
-    "part=5,plane=x,plugged=false": {
-      "model": "tiangongkaiwu:block/tong_che_p5_spin",
+    "part=4,plane=x,active=true": {
+      "model": "tiangongkaiwu:block/tong_che_p4_spin",
       "y": 90
     },
-    "part=5,plane=z,plugged=true": {
-      "model": "tiangongkaiwu:block/tong_che_p5_stop"
+    "part=4,plane=z,active=false": {
+      "model": "tiangongkaiwu:block/tong_che_p4_stop"
     },
-    "part=5,plane=x,plugged=true": {
+    "part=4,plane=z,active=true": {
+      "model": "tiangongkaiwu:block/tong_che_p4_spin"
+    },
+    "part=5,plane=x,active=false": {
       "model": "tiangongkaiwu:block/tong_che_p5_stop",
       "y": 90
     },
-    "part=6,plane=z,plugged=false": {
-      "model": "tiangongkaiwu:block/tong_che_p6_spin"
-    },
-    "part=6,plane=x,plugged=false": {
-      "model": "tiangongkaiwu:block/tong_che_p6_spin",
+    "part=5,plane=x,active=true": {
+      "model": "tiangongkaiwu:block/tong_che_p5_spin",
       "y": 90
     },
-    "part=6,plane=z,plugged=true": {
-      "model": "tiangongkaiwu:block/tong_che_p6_stop"
+    "part=5,plane=z,active=false": {
+      "model": "tiangongkaiwu:block/tong_che_p5_stop"
     },
-    "part=6,plane=x,plugged=true": {
+    "part=5,plane=z,active=true": {
+      "model": "tiangongkaiwu:block/tong_che_p5_spin"
+    },
+    "part=6,plane=x,active=false": {
       "model": "tiangongkaiwu:block/tong_che_p6_stop",
       "y": 90
     },
-    "part=7,plane=z,plugged=false": {
-      "model": "tiangongkaiwu:block/tong_che_p7_spin"
-    },
-    "part=7,plane=x,plugged=false": {
-      "model": "tiangongkaiwu:block/tong_che_p7_spin",
+    "part=6,plane=x,active=true": {
+      "model": "tiangongkaiwu:block/tong_che_p6_spin",
       "y": 90
     },
-    "part=7,plane=z,plugged=true": {
-      "model": "tiangongkaiwu:block/tong_che_p7_stop"
+    "part=6,plane=z,active=false": {
+      "model": "tiangongkaiwu:block/tong_che_p6_stop"
     },
-    "part=7,plane=x,plugged=true": {
+    "part=6,plane=z,active=true": {
+      "model": "tiangongkaiwu:block/tong_che_p6_spin"
+    },
+    "part=7,plane=x,active=false": {
       "model": "tiangongkaiwu:block/tong_che_p7_stop",
       "y": 90
     },
-    "part=8,plane=z,plugged=false": {
-      "model": "tiangongkaiwu:block/tong_che_p8_spin"
+    "part=7,plane=x,active=true": {
+      "model": "tiangongkaiwu:block/tong_che_p7_spin",
+      "y": 90
     },
-    "part=8,plane=x,plugged=false": {
+    "part=7,plane=z,active=false": {
+      "model": "tiangongkaiwu:block/tong_che_p7_stop"
+    },
+    "part=7,plane=z,active=true": {
+      "model": "tiangongkaiwu:block/tong_che_p7_spin"
+    },
+    "part=8,plane=x,active=false": {
+      "model": "tiangongkaiwu:block/tong_che_p8_stop",
+      "y": 90
+    },
+    "part=8,plane=x,active=true": {
       "model": "tiangongkaiwu:block/tong_che_p8_spin",
       "y": 90
     },
-    "part=8,plane=z,plugged=true": {
+    "part=8,plane=z,active=false": {
       "model": "tiangongkaiwu:block/tong_che_p8_stop"
     },
-    "part=8,plane=x,plugged=true": {
-      "model": "tiangongkaiwu:block/tong_che_p8_stop",
-      "y": 90
+    "part=8,plane=z,active=true": {
+      "model": "tiangongkaiwu:block/tong_che_p8_spin"
     }
   }
 }
