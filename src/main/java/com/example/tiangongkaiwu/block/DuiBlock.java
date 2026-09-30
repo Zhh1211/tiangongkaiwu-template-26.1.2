@@ -42,8 +42,10 @@ import net.minecraft.world.phys.BlockHitResult;
  * 产物送**下方容器**，下方没有容器就弹到地上。于是「筒车转 → 轴送动力 → 漏斗喂谷 → 碓出米」
  * 这条全自动链不需要 GUI、不需要自建容器，仍然沿用 B/C 批那套 {@code scheduleTick} 局部规则。
  *
- * <p>相邻（六向）能拿到的最大动力决定两件事：<b>转不转</b>（=0 停），以及<b>舂不舂得透</b>
- * （配方里的 {@code min_power}）。轴上的动力本身已按「每过一格衰减 1」算好，这里直接读。
+ * <p><b>劲分配（2026-09-27 批 1 接入 {@link PowerNetwork}）</b>：每台碓有**劲定额**
+ * {@link PowerNetwork#DEFAULT_DEMAND}（=3，书页口径）。结算时从自己出发沿劲网泛洪一次，
+ * 按「全网劲总量 ÷ 全网机器（坐标序）」分劲——两台碓抢一台踏车的劲，谁也舂不透，
+ * 对应书里「不及則粗」。分到的劲 ≥ 配方 {@code min_power} 出白米，&gt;0 但不足出**糙米**，=0 停。
  */
 public class DuiBlock extends Block {
 
@@ -109,19 +111,9 @@ public class DuiBlock extends Block {
         level.scheduleTick(pos, this, INTERVAL);
     }
 
-    /** 相邻六向能拿到的最大动力（轴已含衰减；动力源直接读它在不在转）。 */
+    /** 本机从劲网分到的劲（PowerNetwork 确定性分配；Jade 也读这里）。 */
     public static int powerAt(Level level, BlockPos pos) {
-        int best = 0;
-        for (Direction dir : Direction.values()) {
-            BlockState neighbor = level.getBlockState(pos.relative(dir));
-            int power = neighbor.getBlock() instanceof ShaftBlock
-                    ? neighbor.getValue(ShaftBlock.POWER)
-                    : WaterDevices.emittedPower(neighbor);
-            if (power > best) {
-                best = power;
-            }
-        }
-        return best;
+        return PowerNetwork.allocate(level, pos, PowerNetwork.DEFAULT_DEMAND);
     }
 
     /** 舂一下：从上方容器取 1 个料，按动力出成品或糙米。 */

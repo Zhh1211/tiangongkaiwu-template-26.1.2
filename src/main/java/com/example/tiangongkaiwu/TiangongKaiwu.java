@@ -51,6 +51,7 @@ import com.example.tiangongkaiwu.block.RicePanicleBlock;
 import com.example.tiangongkaiwu.block.RiceStalkBlock;
 import com.example.tiangongkaiwu.block.RiceStalkBlockDry;
 import com.example.tiangongkaiwu.block.DragonBoneCarBlock;
+import com.example.tiangongkaiwu.block.GearBlock;
 import com.example.tiangongkaiwu.block.DuiBlock;
 import com.example.tiangongkaiwu.block.FengFanBlock;
 import com.example.tiangongkaiwu.block.JianBlock;
@@ -273,6 +274,21 @@ public class TiangongKaiwu {
     public static final DeferredItem<BlockItem> SHAFT_ITEM =
             ITEMS.registerSimpleBlockItem("shaft", SHAFT);
 
+    /** 牙轮：90 度变向节——只连互相垂直的邻轴，不直通（考据：王祯《农书》竖轮卧轮）。 */
+    public static final DeferredBlock<GearBlock> YA_LUN = BLOCKS.register(
+        "ya_lun",
+        () -> new GearBlock(
+            BlockBehaviour.Properties.of()
+                .mapColor(MapColor.WOOD)
+                .strength(0.8f)
+                .noOcclusion()
+                .sound(SoundType.WOOD)
+        )
+    );
+
+    public static final DeferredItem<BlockItem> YA_LUN_ITEM =
+            ITEMS.registerSimpleBlockItem("ya_lun", YA_LUN);
+
     /** 牛车（龙骨车·长车）：近旁有拴绳系住的牛则转，动力 10（书：一人竟日五亩，而牛则倍之）。 */
     public static final DeferredBlock<DragonBoneCarBlock> NIU_CHE = BLOCKS.register(
         "niu_che",
@@ -457,6 +473,7 @@ public class TiangongKaiwu {
                         output.accept(TONG_CHE_ITEM);
                         output.accept(JIAN_ITEM);
                         output.accept(SHAFT_ITEM);
+                        output.accept(YA_LUN_ITEM);
                         output.accept(NIU_CHE_ITEM);
                         output.accept(TA_CHE_ITEM);
                         output.accept(BA_CHE_ITEM);

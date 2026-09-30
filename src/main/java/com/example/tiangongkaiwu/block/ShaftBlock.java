@@ -1,6 +1,7 @@
 package com.example.tiangongkaiwu.block;
 
 import com.example.tiangongkaiwu.TiangongKaiwu;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -21,25 +22,26 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 /**
- * 传动轴：把动力源（筒车／牛车／踏车／拔车）的"劲"送到加工机器（将来：舂米臼、磨、砻）。
- * 动力源种类统一由 {@link WaterDevices} 认，这里不必逐个认识。
+ * 传动杆：把动力源（筒车／牛车／踏车／拔车）的「劲」送到加工机器（碓，将来磨/砻）。
  *
- * <p>传播规则（水利 B 批定的动力模型）：本格的动力 = 邻格动力里最大的那个 − 1。
- * 也就是**每过一格衰减 1 点**，所以动力有射程：筒车 12 点送 12 格，牛车 10 点送 10 格，
- * 踏车 5 点、拔车 2 点（数值取自书里灌田效率刻度）。
- * 好处是纯局部规则——不需要方块实体、不需要网络统计，性能稳、不会互相打架。
+ * <p><b>2026-09-27 起：劲网络化（§10.6 拍板）</b>——
+ * <ul>
+ * <li><b>零损耗</b>：不再「每格 −1」，劲沿网处处等价；本格 POWER 显示的是**所在网络的劲总量**；</li>
+ * <li><b>只沿自身轴向传播</b>：不再六向——垂直方向要变向，请用 {@link GearBlock 牙轮}；</li>
+ * <li>分配（谁的机器分到多少劲）由 {@link PowerNetwork} 统一结算，机器端只管问。</li>
+ * </ul>
  *
- * <p>power &gt; 0 时换"有劲"贴图，一眼看出哪一段通了、哪一段是断的。
- * 机器（后续批）只要贴着一段 power ≥ 需求的轴就能干活，于是"自动化"天然成立。
+ * <p><b>自动成型</b>：放置时顺着邻杆的轴向接（修掉「横着摆一串结果根根竖立」的观感问题）；
+ * 结算时若发现「自己轴向上没有邻杆、但别的方向恰有一根」，也自动转过去。
  */
 public class ShaftBlock extends Block {
 
-    /** 本格动力 0–15（同样也是"传到这里还剩多少劲"）。 */
+    /** 本格所在网络的劲总量（0–15，显示用；实际分配走 PowerNetwork）。 */
     public static final IntegerProperty POWER = IntegerProperty.create("power", 0, 15);
-    /** 轴朝向，仅影响外观（连接判定不挑朝向，摆成一串就通）。 */
+    /** 轴向：劲只沿它传播。 */
     public static final EnumProperty<Direction.Axis> AXIS = BlockStateProperties.AXIS;
 
-    /** 自己每隔多少 tick 重新结算一次动力。 */
+    /** 自调度间隔。 */
     public static final int INTERVAL = 10;
     /** 邻居变化后快速重算的延迟。 */
     public static final int REACT_DELAY = 2;
@@ -57,9 +59,33 @@ public class ShaftBlock extends Block {
         builder.add(POWER, AXIS);
     }
 
+    /**
+     * 放置自动成型：
+     * <ol>
+     * <li>点在某根杆的**端面**（面轴向 = 杆轴向）→ 顺着接着排；</li>
+     * <li>点在其它方块上 → 按点击面；</li>
+     * <li>周围已有杆可引导时（任何方向有邻杆）→ 顺第一根邻杆的轴向。</li>
+     * </ol>
+     * （第 3 条是为了"先随手摆错、再补排"时后面的杆能跟上前面那根的方向。）
+     */
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
-        return this.defaultBlockState().setValue(AXIS, context.getClickedFace().getAxis());
+        Direction face = context.getClickedFace();
+        Level level = context.getLevel();
+        BlockPos pos = context.getClickedPos();
+
+        BlockState behind = level.getBlockState(pos.relative(face.getOpposite()));
+        if (behind.getBlock() instanceof ShaftBlock
+                && behind.getValue(AXIS) == face.getAxis()) {
+            return this.defaultBlockState().setValue(AXIS, face.getAxis()); // 接着排
+        }
+        for (Direction dir : Direction.values()) {
+            BlockState nb = level.getBlockState(pos.relative(dir));
+            if (nb.getBlock() instanceof ShaftBlock) {
+                return this.defaultBlockState().setValue(AXIS, nb.getValue(AXIS)); // 顺邻杆
+            }
+        }
+        return this.defaultBlockState().setValue(AXIS, face.getAxis());
     }
 
     @Override
@@ -81,43 +107,46 @@ public class ShaftBlock extends Block {
 
     @Override
     protected void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
-        int incoming = 0;
-        for (Direction dir : Direction.values()) {
-            BlockPos neighborPos = pos.relative(dir);
-            BlockState neighbor = level.getBlockState(neighborPos);
-            int neighborPower;
-            if (neighbor.getBlock() instanceof ShaftBlock) {
-                neighborPower = neighbor.getValue(POWER);
-            } else {
-                neighborPower = WaterDevices.emittedPower(neighbor);
-                if (neighborPower <= 0) {
-                    continue;
-                }
-            }
-            int delivered = neighborPower - 1;
-            if (delivered > incoming) {
-                incoming = delivered;
-            }
-        }
-        if (incoming > MAX_POWER) {
-            incoming = MAX_POWER;
-        }
-        if (incoming < 0) {
-            incoming = 0;
+        // ① 自动重成型：自己轴向上没有邻杆，但恰好只有一个别的方向有邻杆 → 转过去
+        BlockState formed = reformAxis(level, pos, state);
+        if (formed != state) {
+            state = formed;
+            level.setBlock(pos, state, 2);
         }
 
-        if (incoming != state.getValue(POWER)) {
-            level.setBlock(pos, state.setValue(POWER, incoming), 2);
-            // 动力变了，让相邻轴也赶快重算（不然要等自己那一轮）
-            for (Direction dir : Direction.values()) {
-                BlockPos neighborPos = pos.relative(dir);
-                if (level.getBlockState(neighborPos).getBlock() instanceof ShaftBlock) {
-                    level.scheduleTick(neighborPos, this, REACT_DELAY);
-                }
-            }
+        // ② 劲显示：所在网络的劲总量（分配在机器端由 PowerNetwork 结算）
+        int power = Math.min(PowerNetwork.networkPower(level, pos), MAX_POWER);
+        if (power != state.getValue(POWER)) {
+            level.setBlock(pos, state.setValue(POWER, power), 2);
         }
-        // 自调度：动力源开停、拆装都能被跟上
         level.scheduleTick(pos, this, INTERVAL);
+    }
+
+    /**
+     * 自动重成型：数一数六个方向的邻杆/牙轮分布——
+     * 自己轴向上一个都没有、且恰好只有一个别的方向有 → 顺它转。
+     * 多方向都有邻杆时不动作（歧义，尊重现状），避免来回摆。
+     */
+    private static BlockState reformAxis(ServerLevel level, BlockPos pos, BlockState state) {
+        Direction.Axis axis = state.getValue(AXIS);
+        Direction.Axis other = null;
+        int others = 0;
+        for (Direction dir : Direction.values()) {
+            BlockState nb = level.getBlockState(pos.relative(dir));
+            boolean conduit = nb.getBlock() instanceof ShaftBlock || nb.getBlock() instanceof GearBlock;
+            if (!conduit) {
+                continue;
+            }
+            if (dir.getAxis() == axis) {
+                return state; // 自己轴上有邻杆，不动
+            }
+            other = dir.getAxis();
+            others++;
+        }
+        if (others == 1 && other != null) {
+            return state.setValue(AXIS, other);
+        }
+        return state;
     }
 
     /** 挖掉掉自己（不写战利品表，路径确定）。 */
@@ -127,9 +156,8 @@ public class ShaftBlock extends Block {
         super.playerDestroy(level, player, pos, state, blockEntity, tool);
         popResource(level, pos, new ItemStack(TiangongKaiwu.SHAFT_ITEM.get()));
     }
-    // ====== 碰撞箱（2026-09-20 补：原先 noCollission 导致玩家能穿过整套装置，
-    // 踏车更是站不上去、永远转不起来）======
-    /** 传动轴（低位碰撞） */
+
+    /** 传动杆（低位碰撞）。 */
     @Override
     public VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos,
                                        CollisionContext context) {

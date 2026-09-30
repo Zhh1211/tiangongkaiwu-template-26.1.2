@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "M M",
+    "MSM",
+    "M M"
+  ],
+  "key": {
+    "M": {
+      "tag": "minecraft:planks"
+    },
+    "S": {
+      "item": "minecraft:stick"
+    }
+  },
+  "result": {
+    "id": "tiangongkaiwu:ya_lun",
+    "count": 1
+  }
+}
