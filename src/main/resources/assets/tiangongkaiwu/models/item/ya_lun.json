@@ -1,3 +1,6 @@
 {
-  "parent": "tiangongkaiwu:block/ya_lun_y"
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "tiangongkaiwu:block/ya_lun"
+  }
 }
