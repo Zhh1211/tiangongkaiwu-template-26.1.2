@@ -7,6 +7,10 @@
   <img src="https://img.shields.io/badge/AI-Assisted-orange" alt="AI Assisted">
 </p>
 
+<p align="center">
+  <img src="docs/封面/cover_banner_1152x256.png" alt="天工开物" width="720">
+</p>
+
 > **一个初三学生，零 Java 基础，在 AI 的帮助下，试图把 1637 年的明代百科全书画进方块世界。**
 
 ---
