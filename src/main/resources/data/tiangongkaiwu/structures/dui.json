@@ -1,0 +1,79 @@
+{
+  "machine": "dui",
+  "source": "builtin (pre-nbt default)",
+  "note": "generated placeholder; will be replaced by user-built structure.nbt compile",
+  "parts": [
+    {
+      "pos": [
+        -1,
+        0,
+        0
+      ],
+      "role": "wood"
+    },
+    {
+      "pos": [
+        1,
+        0,
+        0
+      ],
+      "role": "wood"
+    },
+    {
+      "pos": [
+        -1,
+        1,
+        0
+      ],
+      "role": "wood"
+    },
+    {
+      "pos": [
+        1,
+        1,
+        0
+      ],
+      "role": "wood"
+    },
+    {
+      "pos": [
+        -1,
+        2,
+        0
+      ],
+      "role": "wood"
+    },
+    {
+      "pos": [
+        0,
+        2,
+        0
+      ],
+      "role": "wood"
+    },
+    {
+      "pos": [
+        1,
+        2,
+        0
+      ],
+      "role": "wood"
+    },
+    {
+      "pos": [
+        0,
+        1,
+        0
+      ],
+      "role": "slider"
+    },
+    {
+      "pos": [
+        0,
+        3,
+        0
+      ],
+      "role": "feed"
+    }
+  ]
+}
