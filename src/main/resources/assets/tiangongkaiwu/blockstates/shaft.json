@@ -48,6 +48,726 @@
     "axis=y,power=15": {
       "model": "tiangongkaiwu:block/shaft_powered"
     },
+    "axis=y,power=16": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=17": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=18": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=19": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=20": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=21": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=22": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=23": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=24": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=25": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=26": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=27": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=28": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=29": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=30": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=31": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=32": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=33": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=34": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=35": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=36": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=37": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=38": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=39": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=40": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=41": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=42": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=43": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=44": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=45": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=46": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=47": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=48": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=49": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=50": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=51": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=52": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=53": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=54": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=55": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=56": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=57": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=58": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=59": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=60": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=61": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=62": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=63": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=64": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=65": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=66": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=67": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=68": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=69": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=70": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=71": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=72": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=73": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=74": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=75": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=76": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=77": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=78": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=79": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=80": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=81": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=82": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=83": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=84": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=85": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=86": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=87": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=88": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=89": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=90": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=91": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=92": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=93": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=94": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=95": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=96": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=97": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=98": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=99": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=100": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=101": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=102": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=103": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=104": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=105": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=106": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=107": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=108": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=109": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=110": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=111": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=112": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=113": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=114": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=115": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=116": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=117": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=118": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=119": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=120": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=121": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=122": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=123": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=124": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=125": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=126": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=127": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=128": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=129": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=130": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=131": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=132": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=133": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=134": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=135": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=136": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=137": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=138": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=139": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=140": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=141": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=142": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=143": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=144": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=145": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=146": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=147": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=148": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=149": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=150": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=151": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=152": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=153": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=154": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=155": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=156": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=157": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=158": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=159": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=160": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=161": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=162": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=163": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=164": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=165": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=166": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=167": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=168": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=169": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=170": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=171": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=172": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=173": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=174": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=175": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=176": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=177": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=178": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=179": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=180": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=181": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=182": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=183": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=184": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=185": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=186": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=187": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=188": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=189": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=190": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=191": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=192": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=193": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=194": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=195": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=196": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=197": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=198": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=199": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=200": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=201": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=202": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=203": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=204": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=205": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=206": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=207": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=208": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=209": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=210": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=211": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=212": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=213": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=214": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=215": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=216": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=217": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=218": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=219": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=220": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=221": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=222": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=223": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=224": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=225": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=226": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=227": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=228": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=229": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=230": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=231": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=232": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=233": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=234": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=235": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=236": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=237": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=238": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=239": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=240": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=241": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=242": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=243": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=244": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=245": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=246": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=247": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=248": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=249": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=250": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=251": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=252": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=253": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=254": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
+    "axis=y,power=255": {
+      "model": "tiangongkaiwu:block/shaft_powered"
+    },
     "axis=z,power=0": {
       "model": "tiangongkaiwu:block/shaft",
       "x": 90
@@ -109,6 +829,966 @@
       "x": 90
     },
     "axis=z,power=15": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=16": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=17": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=18": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=19": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=20": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=21": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=22": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=23": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=24": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=25": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=26": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=27": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=28": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=29": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=30": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=31": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=32": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=33": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=34": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=35": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=36": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=37": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=38": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=39": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=40": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=41": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=42": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=43": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=44": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=45": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=46": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=47": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=48": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=49": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=50": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=51": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=52": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=53": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=54": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=55": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=56": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=57": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=58": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=59": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=60": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=61": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=62": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=63": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=64": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=65": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=66": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=67": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=68": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=69": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=70": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=71": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=72": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=73": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=74": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=75": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=76": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=77": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=78": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=79": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=80": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=81": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=82": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=83": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=84": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=85": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=86": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=87": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=88": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=89": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=90": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=91": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=92": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=93": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=94": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=95": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=96": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=97": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=98": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=99": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=100": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=101": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=102": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=103": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=104": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=105": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=106": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=107": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=108": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=109": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=110": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=111": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=112": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=113": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=114": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=115": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=116": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=117": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=118": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=119": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=120": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=121": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=122": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=123": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=124": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=125": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=126": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=127": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=128": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=129": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=130": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=131": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=132": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=133": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=134": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=135": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=136": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=137": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=138": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=139": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=140": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=141": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=142": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=143": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=144": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=145": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=146": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=147": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=148": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=149": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=150": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=151": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=152": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=153": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=154": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=155": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=156": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=157": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=158": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=159": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=160": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=161": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=162": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=163": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=164": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=165": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=166": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=167": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=168": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=169": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=170": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=171": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=172": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=173": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=174": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=175": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=176": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=177": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=178": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=179": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=180": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=181": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=182": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=183": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=184": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=185": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=186": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=187": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=188": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=189": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=190": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=191": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=192": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=193": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=194": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=195": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=196": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=197": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=198": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=199": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=200": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=201": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=202": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=203": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=204": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=205": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=206": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=207": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=208": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=209": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=210": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=211": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=212": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=213": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=214": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=215": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=216": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=217": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=218": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=219": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=220": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=221": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=222": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=223": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=224": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=225": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=226": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=227": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=228": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=229": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=230": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=231": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=232": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=233": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=234": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=235": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=236": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=237": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=238": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=239": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=240": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=241": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=242": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=243": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=244": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=245": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=246": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=247": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=248": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=249": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=250": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=251": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=252": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=253": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=254": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90
+    },
+    "axis=z,power=255": {
       "model": "tiangongkaiwu:block/shaft_powered",
       "x": 90
     },
@@ -188,6 +1868,1206 @@
       "y": 90
     },
     "axis=x,power=15": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=16": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=17": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=18": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=19": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=20": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=21": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=22": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=23": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=24": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=25": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=26": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=27": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=28": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=29": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=30": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=31": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=32": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=33": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=34": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=35": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=36": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=37": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=38": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=39": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=40": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=41": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=42": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=43": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=44": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=45": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=46": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=47": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=48": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=49": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=50": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=51": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=52": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=53": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=54": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=55": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=56": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=57": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=58": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=59": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=60": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=61": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=62": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=63": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=64": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=65": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=66": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=67": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=68": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=69": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=70": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=71": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=72": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=73": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=74": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=75": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=76": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=77": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=78": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=79": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=80": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=81": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=82": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=83": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=84": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=85": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=86": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=87": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=88": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=89": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=90": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=91": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=92": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=93": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=94": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=95": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=96": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=97": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=98": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=99": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=100": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=101": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=102": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=103": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=104": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=105": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=106": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=107": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=108": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=109": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=110": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=111": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=112": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=113": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=114": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=115": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=116": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=117": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=118": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=119": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=120": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=121": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=122": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=123": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=124": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=125": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=126": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=127": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=128": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=129": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=130": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=131": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=132": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=133": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=134": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=135": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=136": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=137": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=138": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=139": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=140": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=141": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=142": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=143": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=144": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=145": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=146": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=147": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=148": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=149": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=150": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=151": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=152": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=153": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=154": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=155": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=156": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=157": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=158": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=159": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=160": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=161": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=162": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=163": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=164": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=165": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=166": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=167": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=168": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=169": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=170": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=171": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=172": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=173": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=174": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=175": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=176": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=177": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=178": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=179": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=180": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=181": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=182": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=183": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=184": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=185": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=186": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=187": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=188": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=189": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=190": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=191": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=192": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=193": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=194": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=195": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=196": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=197": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=198": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=199": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=200": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=201": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=202": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=203": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=204": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=205": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=206": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=207": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=208": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=209": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=210": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=211": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=212": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=213": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=214": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=215": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=216": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=217": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=218": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=219": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=220": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=221": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=222": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=223": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=224": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=225": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=226": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=227": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=228": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=229": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=230": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=231": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=232": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=233": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=234": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=235": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=236": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=237": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=238": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=239": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=240": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=241": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=242": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=243": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=244": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=245": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=246": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=247": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=248": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=249": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=250": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=251": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=252": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=253": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=254": {
+      "model": "tiangongkaiwu:block/shaft_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,power=255": {
       "model": "tiangongkaiwu:block/shaft_powered",
       "x": 90,
       "y": 90

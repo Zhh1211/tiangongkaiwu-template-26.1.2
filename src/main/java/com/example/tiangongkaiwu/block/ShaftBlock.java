@@ -34,10 +34,10 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  * <p><b>自动成型</b>：放置时顺着邻杆的轴向接（修掉「横着摆一串结果根根竖立」的观感问题）；
  * 结算时若发现「自己轴向上没有邻杆、但别的方向恰有一根」，也自动转过去。
  */
-public class ShaftBlock extends Block {
+public class ShaftBlock extends Block implements net.minecraft.world.level.block.EntityBlock {
 
-    /** 本格所在网络的劲总量（0–15，显示用；实际分配走 PowerNetwork）。 */
-    public static final IntegerProperty POWER = IntegerProperty.create("power", 0, 15);
+    /** 本格所在网络的劲总量（0–255，显示用；实际分配走 PowerNetwork——真劲无上限，这只是显示属性域）。 */
+    public static final IntegerProperty POWER = IntegerProperty.create("power", 0, 255);
     /** 轴向：劲只沿它传播。 */
     public static final EnumProperty<Direction.Axis> AXIS = BlockStateProperties.AXIS;
 
@@ -45,7 +45,7 @@ public class ShaftBlock extends Block {
     public static final int INTERVAL = 10;
     /** 邻居变化后快速重算的延迟。 */
     public static final int REACT_DELAY = 2;
-    public static final int MAX_POWER = 15;
+    public static final int MAX_POWER = 255;
 
     public ShaftBlock(Properties properties) {
         super(properties);
@@ -100,8 +100,36 @@ public class ShaftBlock extends Block {
     }
 
     @Override
+    public net.minecraft.world.level.block.entity.BlockEntity newBlockEntity(
+            net.minecraft.core.BlockPos pos, BlockState state) {
+        return new com.example.tiangongkaiwu.block.entity.ShaftBlockEntity(pos, state);
+    }
+
+    /** 静态模型交给 BER 旋转渲染（ENTITYBLOCK_ANIMATED = 本体不再画一遍）。 */
+    @Override
+    protected net.minecraft.world.level.block.RenderShape getRenderShape(BlockState state) {
+        return net.minecraft.world.level.block.RenderShape.ENTITYBLOCK_ANIMATED;
+    }
+
+    /** 双端 ticker：每 10 tick 刷新网络三项指标缓存（Jade/红线只读缓存）。 */
+    @Override
+    public <T extends net.minecraft.world.level.block.entity.BlockEntity>
+            net.minecraft.world.level.block.entity.BlockEntityTicker<T> getTicker(
+                    Level level, BlockState state, net.minecraft.world.level.block.entity.BlockEntityType<T> type) {
+        if (type != TiangongKaiwu.SHAFT_BE_TYPE.get()) {
+            return null;
+        }
+        return (lv, pos, st, be) -> ((com.example.tiangongkaiwu.block.entity.ShaftBlockEntity) be).refreshStats();
+    }
+
+    @Override
     protected void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
-        // 劲显示：所在网络的劲总量（分配在机器端由 PowerNetwork 结算）
+        // ① 旧档自愈：没有 BE（老存档的杆）→ setBlock 重建，BER 挂载点补上
+        if (level.getBlockEntity(pos) == null) {
+            level.setBlock(pos, state, 3);
+        }
+
+        // ② 劲显示：所在网络的劲总量（分配在机器端由 PowerNetwork 结算）
         int power = Math.min(PowerNetwork.networkPower(level, pos), MAX_POWER);
         if (power != state.getValue(POWER)) {
             level.setBlock(pos, state.setValue(POWER, power), 2);

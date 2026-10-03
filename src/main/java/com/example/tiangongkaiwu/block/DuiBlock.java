@@ -53,6 +53,8 @@ public class DuiBlock extends Block {
     public static final EnumProperty<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
     /** 是否正在舂（驱动 4 帧动画）。 */
     public static final BooleanProperty ACTIVE = BooleanProperty.create("active");
+    /** 轮轴方向（2026-10-03：劲可穿过碓继续传——碓也是一根轴穿过去，方便一线堆多台）。 */
+    public static final EnumProperty<Direction.Axis> AXIS = BlockStateProperties.AXIS;
 
     /** 自调度间隔：每 10 tick 看一次动力与料。 */
     public static final int INTERVAL = 10;
@@ -65,17 +67,20 @@ public class DuiBlock extends Block {
         super(properties);
         this.registerDefaultState(this.stateDefinition.any()
                 .setValue(FACING, Direction.NORTH)
-                .setValue(ACTIVE, false));
+                .setValue(ACTIVE, false)
+                .setValue(AXIS, Direction.Axis.Y));
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(FACING, ACTIVE);
+        builder.add(FACING, ACTIVE, AXIS);
     }
 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
-        return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection());
+        return this.defaultBlockState()
+                .setValue(FACING, context.getHorizontalDirection())
+                .setValue(AXIS, context.getClickedFace().getAxis());
     }
 
     @Override

@@ -1,0 +1,74 @@
+{
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "p": "tiangongkaiwu:block/jian_plank",
+    "particle": "tiangongkaiwu:block/jian_plank"
+  },
+  "elements": [
+    {
+      "name": "floor",
+      "from": [0, 0, 0],
+      "to": [16, 2, 16],
+      "faces": {
+        "north": { "texture": "#p" },
+        "south": { "texture": "#p" },
+        "east": { "texture": "#p" },
+        "west": { "texture": "#p" },
+        "up": { "texture": "#p" },
+        "down": { "texture": "#p" }
+      }
+    },
+    {
+      "name": "post_nw",
+      "from": [0, 0, 0],
+      "to": [2, 7, 2],
+      "faces": {
+        "north": { "texture": "#p" },
+        "south": { "texture": "#p" },
+        "east": { "texture": "#p" },
+        "west": { "texture": "#p" },
+        "up": { "texture": "#p" },
+        "down": { "texture": "#p" }
+      }
+    },
+    {
+      "name": "post_ne",
+      "from": [14, 0, 0],
+      "to": [16, 7, 2],
+      "faces": {
+        "north": { "texture": "#p" },
+        "south": { "texture": "#p" },
+        "east": { "texture": "#p" },
+        "west": { "texture": "#p" },
+        "up": { "texture": "#p" },
+        "down": { "texture": "#p" }
+      }
+    },
+    {
+      "name": "post_sw",
+      "from": [0, 0, 14],
+      "to": [2, 7, 16],
+      "faces": {
+        "north": { "texture": "#p" },
+        "south": { "texture": "#p" },
+        "east": { "texture": "#p" },
+        "west": { "texture": "#p" },
+        "up": { "texture": "#p" },
+        "down": { "texture": "#p" }
+      }
+    },
+    {
+      "name": "post_se",
+      "from": [14, 0, 14],
+      "to": [16, 7, 16],
+      "faces": {
+        "north": { "texture": "#p" },
+        "south": { "texture": "#p" },
+        "east": { "texture": "#p" },
+        "west": { "texture": "#p" },
+        "up": { "texture": "#p" },
+        "down": { "texture": "#p" }
+      }
+    }
+  ]
+}

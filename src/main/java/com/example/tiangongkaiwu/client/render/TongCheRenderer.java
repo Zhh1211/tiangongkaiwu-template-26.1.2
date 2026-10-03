@@ -29,8 +29,8 @@ import net.neoforged.neoforge.client.model.data.ModelData;
  */
 public class TongCheRenderer implements BlockEntityRenderer<TongCheBlockEntity> {
 
-    /** 每游戏刻转角（度）。360 / 2 = 180 tick = 9 秒一圈。 */
-    public static final float DEG_PER_TICK = 2.0F;
+    /** 转速统一取自 PowerNetwork（D13：全设备同速）。 */
+    public static final float DEG_PER_TICK = com.example.tiangongkaiwu.block.PowerNetwork.ROTATION_DEG_PER_TICK;
 
     /** BER 提供者会传 Context 进来（注册接口约定），本渲染器用不到，收下即可。 */
     public TongCheRenderer(BlockEntityRendererProvider.Context context) {
@@ -40,13 +40,27 @@ public class TongCheRenderer implements BlockEntityRenderer<TongCheBlockEntity> 
     public void render(TongCheBlockEntity be, float partialTick, PoseStack pose,
                        MultiBufferSource buffer, int light, int overlay) {
         BlockState state = be.getBlockState();
-        boolean spinning = state.getValue(TongCheBlock.ACTIVE) && !state.getValue(TongCheBlock.PLUGGED);
-        if (spinning) {
-            be.wheelAngle = (be.wheelAngle + DEG_PER_TICK * partialTick) % 360.0F;
-        }
         var level = be.getLevel();
         if (level == null) {
             return;
+        }
+
+        // 转角 = 世界时间同源（2026-10-03 拍板）：所有轮子从同一个钟算角度，
+        // 天然全服同步——不再用各自 BE 累加（会各转各的、读档还归零）。
+        // 一圈 = 180 tick（360° ÷ 2°/tick），对 180 取模防大数浮点误差。
+        boolean active = state.getValue(TongCheBlock.ACTIVE) && !state.getValue(TongCheBlock.PLUGGED);
+        float now = (level.getGameTime() % 180L + partialTick) * DEG_PER_TICK;
+        float angle;
+        if (active) {
+            be.lastActive = true;
+            angle = now;
+        } else {
+            // 「转→停」瞬间抓拍当前角，之后冻在原地（断水的轮子停在手上，不跳回 0 度）
+            if (be.lastActive) {
+                be.frozenAngle = now;
+                be.lastActive = false;
+            }
+            angle = be.frozenAngle;
         }
 
         Direction.Axis plane = state.getValue(TongCheBlock.PLANE);
@@ -55,9 +69,9 @@ public class TongCheRenderer implements BlockEntityRenderer<TongCheBlockEntity> 
         pose.pushPose();
         pose.translate(0.5D, 0.5D, 0.5D);
         if (plane == Direction.Axis.Z) {
-            pose.mulPose(Axis.ZP.rotationDegrees(be.wheelAngle));
+            pose.mulPose(Axis.ZP.rotationDegrees(angle));
         } else {
-            pose.mulPose(Axis.XP.rotationDegrees(be.wheelAngle));
+            pose.mulPose(Axis.XP.rotationDegrees(angle));
         }
         pose.translate(-0.5D, -0.5D, -0.5D);
 

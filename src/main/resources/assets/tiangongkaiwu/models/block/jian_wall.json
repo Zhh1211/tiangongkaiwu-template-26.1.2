@@ -1,0 +1,22 @@
+{
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "p": "tiangongkaiwu:block/jian_plank",
+    "particle": "tiangongkaiwu:block/jian_plank"
+  },
+  "elements": [
+    {
+      "name": "wall_north",
+      "from": [2, 0, 0],
+      "to": [14, 7, 2],
+      "faces": {
+        "north": { "texture": "#p" },
+        "south": { "texture": "#p" },
+        "east": { "texture": "#p" },
+        "west": { "texture": "#p" },
+        "up": { "texture": "#p" },
+        "down": { "texture": "#p" }
+      }
+    }
+  ]
+}

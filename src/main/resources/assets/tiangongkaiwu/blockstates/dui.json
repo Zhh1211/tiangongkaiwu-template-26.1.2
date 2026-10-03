@@ -1,32 +1,92 @@
 {
   "variants": {
-    "facing=north,active=false": {
+    "axis=y,facing=north,active=false": {
       "model": "tiangongkaiwu:block/dui"
     },
-    "facing=north,active=true": {
+    "axis=y,facing=north,active=true": {
       "model": "tiangongkaiwu:block/dui_active"
     },
-    "facing=east,active=false": {
+    "axis=y,facing=east,active=false": {
       "model": "tiangongkaiwu:block/dui",
       "y": 90
     },
-    "facing=east,active=true": {
+    "axis=y,facing=east,active=true": {
       "model": "tiangongkaiwu:block/dui_active",
       "y": 90
     },
-    "facing=south,active=false": {
+    "axis=y,facing=south,active=false": {
       "model": "tiangongkaiwu:block/dui",
       "y": 180
     },
-    "facing=south,active=true": {
+    "axis=y,facing=south,active=true": {
       "model": "tiangongkaiwu:block/dui_active",
       "y": 180
     },
-    "facing=west,active=false": {
+    "axis=y,facing=west,active=false": {
       "model": "tiangongkaiwu:block/dui",
       "y": 270
     },
-    "facing=west,active=true": {
+    "axis=y,facing=west,active=true": {
+      "model": "tiangongkaiwu:block/dui_active",
+      "y": 270
+    },
+    "axis=x,facing=north,active=false": {
+      "model": "tiangongkaiwu:block/dui"
+    },
+    "axis=x,facing=north,active=true": {
+      "model": "tiangongkaiwu:block/dui_active"
+    },
+    "axis=x,facing=east,active=false": {
+      "model": "tiangongkaiwu:block/dui",
+      "y": 90
+    },
+    "axis=x,facing=east,active=true": {
+      "model": "tiangongkaiwu:block/dui_active",
+      "y": 90
+    },
+    "axis=x,facing=south,active=false": {
+      "model": "tiangongkaiwu:block/dui",
+      "y": 180
+    },
+    "axis=x,facing=south,active=true": {
+      "model": "tiangongkaiwu:block/dui_active",
+      "y": 180
+    },
+    "axis=x,facing=west,active=false": {
+      "model": "tiangongkaiwu:block/dui",
+      "y": 270
+    },
+    "axis=x,facing=west,active=true": {
+      "model": "tiangongkaiwu:block/dui_active",
+      "y": 270
+    },
+    "axis=z,facing=north,active=false": {
+      "model": "tiangongkaiwu:block/dui"
+    },
+    "axis=z,facing=north,active=true": {
+      "model": "tiangongkaiwu:block/dui_active"
+    },
+    "axis=z,facing=east,active=false": {
+      "model": "tiangongkaiwu:block/dui",
+      "y": 90
+    },
+    "axis=z,facing=east,active=true": {
+      "model": "tiangongkaiwu:block/dui_active",
+      "y": 90
+    },
+    "axis=z,facing=south,active=false": {
+      "model": "tiangongkaiwu:block/dui",
+      "y": 180
+    },
+    "axis=z,facing=south,active=true": {
+      "model": "tiangongkaiwu:block/dui_active",
+      "y": 180
+    },
+    "axis=z,facing=west,active=false": {
+      "model": "tiangongkaiwu:block/dui",
+      "y": 270
+    },
+    "axis=z,facing=west,active=true": {
       "model": "tiangongkaiwu:block/dui_active",
       "y": 270
     }

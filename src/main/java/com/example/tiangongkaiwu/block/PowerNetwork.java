@@ -13,6 +13,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
 /**
  * 「劲」网络：动力总量分配（2026-09-27 拍板：传输零损耗、只让机器消耗）。
@@ -39,8 +40,13 @@ public final class PowerNetwork {
 
     /** 每台机器的劲消耗定额（书页口径：碓的"劲"）。 */
     public static final int DEFAULT_DEMAND = 3;
+    /**
+     * 全设备统一转速（2026-10-03 D13 补充拍板：所有会转的都一样快）。
+     * 2°/tick = 9 秒一圈——筒车轮、传动杆共用此常量。
+     */
+    public static final float ROTATION_DEG_PER_TICK = 2.0F;
     /** 单次泛洪的方块数上限：防跑飞，也保证最坏情况下的开销有界。 */
-    private static final int MAX_NODES = 256;
+    private static final int MAX_NODES = 1024;
 
     private PowerNetwork() {
     }
@@ -56,6 +62,10 @@ public final class PowerNetwork {
      */
     public static int allocate(Level level, BlockPos machinePos, int demand) {
         Scan scan = scan(level, machinePos);
+        return allocateFrom(scan, demand);
+    }
+
+    private static int allocateFrom(Scan scan, int demand) {
         int totalDemand = scan.machines().size() * demand;
         if (totalDemand == 0) {
             return 0;
@@ -73,8 +83,21 @@ public final class PowerNetwork {
 
     // ==================== 泛洪 ====================
 
-    /** 一次泛洪的结果：全网劲总量 + 全部机器（按坐标序，分配用）。 */
-    private record Scan(int totalPower, List<BlockPos> machines) {
+    /** 一次泛洪的结果：全网劲总量 + 全部机器（按坐标序，分配用）+ 总需求。 */
+    private record Scan(int totalPower, List<BlockPos> machines, int totalDemand) {
+    }
+
+    /** 网络三项指标（供显示层缓存用）：供给 = Σ动力源；需求 = Σ机器定额；余 = max(0, 供−需)。 */
+    public record NetStats(int supply, int demand, int machines) {
+        public int surplus() {
+            return Math.max(0, this.supply - this.demand);
+        }
+    }
+
+    /** 一次扫描拿全网络三项（显示层缓存它，别每帧扫）。 */
+    public static NetStats stats(Level level, BlockPos anyPos) {
+        Scan scan = scan(level, anyPos);
+        return new NetStats(scan.totalPower(), scan.totalDemand(), scan.machines().size());
     }
 
     /** BFS 队列元素：位置 + 进入方向（决定牙轮往哪些方向传出）。 */
@@ -106,8 +129,15 @@ public final class PowerNetwork {
                         outDirs.add(d);
                     }
                 }
+            } else if (state.getBlock() instanceof DuiBlock dui) {
+                // 碓兼导劲：轮轴穿过碓体，沿自身轴向继续传（2026-10-03）
+                outDirs = dirsAlong(state.getValue(DuiBlock.AXIS));
+            } else if (WaterDevices.emittedPower(state) > 0) {
+                // 动力源兼导劲：轮轴穿过车体，沿自身轴向继续传（2026-10-03，修串联水车分网）
+                Direction.Axis axle = axleOf(state);
+                outDirs = axle != null ? dirsAlong(axle) : List.of();
             } else {
-                // 端点（机器或动力源）：不再外传
+                // 机器等端点：不再外传
                 continue;
             }
 
@@ -120,18 +150,20 @@ public final class PowerNetwork {
                 if (nb.getBlock() instanceof ShaftBlock || nb.getBlock() instanceof GearBlock) {
                     queue.add(new Entry(nbPos, dir));
                 } else if (nb.getBlock() == TiangongKaiwu.DUI.get()) {
-                    machines.add(nbPos);                       // 机器是端点：吃劲，不导劲
+                    machines.add(nbPos);                       // 机器：吃劲
+                    queue.add(new Entry(nbPos, dir));          // 2026-10-03：碓也沿轴导劲（一线堆多台）
                 } else {
-                    int power = WaterDevices.emittedPower(nb); // 动力源是端点：出劲，不导劲
+                    int power = WaterDevices.emittedPower(nb); // 动力源出劲
                     if (power > 0) {
                         totalPower += power;
+                        queue.add(new Entry(nbPos, dir));      // 2026-10-03：源也导劲（轮轴穿过车体），串联水车同网
                     }
                 }
             }
         }
 
         machines.sort(null); // BlockPos 自然序（确定性），任何机器视角算出的分配一致
-        return new Scan(totalPower, machines);
+        return new Scan(totalPower, machines, machines.size() * DEFAULT_DEMAND);
     }
 
     /** 沿某轴的两个方向。 */
@@ -143,5 +175,16 @@ public final class PowerNetwork {
             }
         }
         return dirs;
+    }
+
+    /** 动力源的「轮轴」方向：筒车 = 轮平面轴（plane=z → 轴沿 z）；其余车 = 车身朝向轴。 */
+    private static Direction.Axis axleOf(BlockState state) {
+        if (state.getBlock() instanceof TongCheBlock) {
+            return state.getValue(TongCheBlock.PLANE);
+        }
+        if (state.hasProperty(BlockStateProperties.HORIZONTAL_FACING)) {
+            return state.getValue(BlockStateProperties.HORIZONTAL_FACING).getAxis();
+        }
+        return null;
     }
 }

@@ -1,34 +1,79 @@
 {
-  "variants": {
-    "facing=south,watered=false": {
-      "model": "tiangongkaiwu:block/jian"
+  "multipart": [
+    {
+      "apply": {
+        "model": "tiangongkaiwu:block/jian_base"
+      }
     },
-    "facing=south,watered=true": {
-      "model": "tiangongkaiwu:block/jian_watered"
+    {
+      "when": {
+        "connect_north": false
+      },
+      "apply": {
+        "model": "tiangongkaiwu:block/jian_wall"
+      }
     },
-    "facing=west,watered=false": {
-      "model": "tiangongkaiwu:block/jian",
-      "y": 90
+    {
+      "when": {
+        "connect_east": false
+      },
+      "apply": {
+        "model": "tiangongkaiwu:block/jian_wall",
+        "y": 90
+      }
     },
-    "facing=west,watered=true": {
-      "model": "tiangongkaiwu:block/jian_watered",
-      "y": 90
+    {
+      "when": {
+        "connect_south": false
+      },
+      "apply": {
+        "model": "tiangongkaiwu:block/jian_wall",
+        "y": 180
+      }
     },
-    "facing=north,watered=false": {
-      "model": "tiangongkaiwu:block/jian",
-      "y": 180
+    {
+      "when": {
+        "connect_west": false
+      },
+      "apply": {
+        "model": "tiangongkaiwu:block/jian_wall",
+        "y": 270
+      }
     },
-    "facing=north,watered=true": {
-      "model": "tiangongkaiwu:block/jian_watered",
-      "y": 180
+    {
+      "when": {
+        "connect_north": true
+      },
+      "apply": {
+        "model": "tiangongkaiwu:block/jian_lip"
+      }
     },
-    "facing=east,watered=false": {
-      "model": "tiangongkaiwu:block/jian",
-      "y": 270
+    {
+      "when": {
+        "connect_east": true
+      },
+      "apply": {
+        "model": "tiangongkaiwu:block/jian_lip",
+        "y": 90
+      }
     },
-    "facing=east,watered=true": {
-      "model": "tiangongkaiwu:block/jian_watered",
-      "y": 270
+    {
+      "when": {
+        "connect_south": true
+      },
+      "apply": {
+        "model": "tiangongkaiwu:block/jian_lip",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "connect_west": true
+      },
+      "apply": {
+        "model": "tiangongkaiwu:block/jian_lip",
+        "y": 270
+      }
     }
-  }
+  ]
 }

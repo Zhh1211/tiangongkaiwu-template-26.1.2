@@ -106,14 +106,20 @@ public class TiangongKaiwuJadePlugin implements IWailaPlugin {
             }
 
             if (block instanceof ShaftBlock) {
-                tooltip.add(Component.translatable("jade.tiangongkaiwu.power",
-                        state.getValue(ShaftBlock.POWER)));
+                var be = accessor.getBlockEntity();
+                if (be instanceof com.example.tiangongkaiwu.block.entity.ShaftBlockEntity sbe) {
+                    tooltip.add(Component.translatable("jade.tiangongkaiwu.power_stats",
+                            sbe.supply, sbe.demand, sbe.supply - sbe.demand));
+                } else {
+                    tooltip.add(Component.translatable("jade.tiangongkaiwu.power",
+                            state.getValue(ShaftBlock.POWER)));
+                }
                 return;
             }
 
             if (block instanceof JianBlock) {
-                tooltip.add(Component.translatable(state.getValue(JianBlock.WATERED)
-                        ? "jade.tiangongkaiwu.trough_filled" : "jade.tiangongkaiwu.trough_empty"));
+                tooltip.add(Component.translatable("jade.tiangongkaiwu.trough_level",
+                        JianBlock.effOf(state)));
                 return;
             }
 

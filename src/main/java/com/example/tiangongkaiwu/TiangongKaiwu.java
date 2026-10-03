@@ -5,6 +5,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import com.mojang.logging.LogUtils;
 
+import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -57,6 +58,8 @@ import com.example.tiangongkaiwu.block.FengFanBlock;
 import com.example.tiangongkaiwu.block.JianBlock;
 import com.example.tiangongkaiwu.block.ShaftBlock;
 import com.example.tiangongkaiwu.block.TongCheBlock;
+import com.example.tiangongkaiwu.block.entity.JianBlockEntity;
+import com.example.tiangongkaiwu.block.entity.ShaftBlockEntity;
 import com.example.tiangongkaiwu.block.entity.TongCheBlockEntity;
 import com.example.tiangongkaiwu.block.WellLiftBlock;
 import com.example.tiangongkaiwu.block.HanmoTaiBlock;
@@ -260,6 +263,11 @@ public class TiangongKaiwu {
         )
     );
 
+    /** 梘方块实体：存所装流体种类（BER 动态渲染 + IFluidHandler capability，D12/D9）。 */
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<JianBlockEntity>> JIAN_BE_TYPE =
+        BLOCK_ENTITY_TYPES.register("jian",
+            () -> BlockEntityType.Builder.of(JianBlockEntity::new, JIAN.get()).build(null));
+
     /** 传动轴：把动力送到加工机器（沿轴网每格衰减 1 点）。 */
     public static final DeferredBlock<ShaftBlock> SHAFT = BLOCKS.register(
         "shaft",
@@ -272,6 +280,11 @@ public class TiangongKaiwu {
                 .sound(SoundType.WOOD)
         )
     );
+
+    /** 传动杆方块实体：BER 旋转挂载点（转角客户端自算，不存盘）。 */
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<ShaftBlockEntity>> SHAFT_BE_TYPE =
+        BLOCK_ENTITY_TYPES.register("shaft",
+            () -> BlockEntityType.Builder.of(ShaftBlockEntity::new, SHAFT.get()).build(null));
 
     public static final DeferredItem<BlockItem> TONG_CHE_ITEM =
             ITEMS.registerSimpleBlockItem("tong_che", TONG_CHE);
@@ -494,6 +507,11 @@ public class TiangongKaiwu {
     // ============================================================
     public TiangongKaiwu(IEventBus modEventBus, ModContainer modContainer) {
         modEventBus.addListener(this::commonSetup);
+
+        // 梘暴露标准 IFluidHandler（D9：批 3 的「筒」往里注水、三卷卤水/油/熔液复用）
+        modEventBus.addListener((net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent event) ->
+            event.registerBlockEntity(net.neoforged.neoforge.capabilities.Capabilities.FluidHandler.BLOCK,
+                JIAN_BE_TYPE.get(), (JianBlockEntity be, Direction side) -> be.getFluidHandler()));
 
         BLOCKS.register(modEventBus);
         ITEMS.register(modEventBus);
