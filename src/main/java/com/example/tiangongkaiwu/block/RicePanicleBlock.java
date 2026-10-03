@@ -8,6 +8,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
@@ -30,6 +31,12 @@ public class RicePanicleBlock extends Block {
 
     public RicePanicleBlock(Properties properties) {
         super(properties);
+    }
+
+    /** 作物不让天空光被挡（否则自身格子光照 0，cross 贴图渲染成黑影）。 */
+    @Override
+    protected boolean propagatesSkylightDown(BlockState state, BlockGetter level, BlockPos pos) {
+        return true;
     }
 
     @Override

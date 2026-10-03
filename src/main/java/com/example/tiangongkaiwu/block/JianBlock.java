@@ -88,28 +88,23 @@ public class JianBlock extends Block {
             level.setBlock(pos, state.setValue(WATERED, fed), 2);
         }
         if (fed && random.nextInt(IRRIGATE_CHANCE) == 0) {
-            irrigate(level, pos);
+            irrigate(level, pos, state);
         }
         level.scheduleTick(pos, this, INTERVAL);
     }
 
     /**
-     * 这一段有没有水：**先看上游一格（朝向的反面），再看四个水平邻格与正下方**。
+     * 这一段有没有水：**只看上游一格（朝向的反面）和正下方一格**。
      *
-     * <p>原实现只看上游一格，玩家把槽贴着水/筒车放却"接不上"（2026-09-20 实测反馈：
-     * 「放筒车旁边没有水」）——因为朝向得刚好对着水源才算。放宽后贴哪边都行，
-     * 但仍**不看下游**，避免自反馈成环。
+     * <p>2026-10-02 收紧：之前放宽到"四个水平邻格都认"，结果梘贴哪边都来水、
+     * 连垂直方向都送水，不像槽了。现在回归"槽就是槽"——水从上游顺着槽向来，
+     * 或者把槽架在水面上从底下汲水。
      */
     private static boolean isFed(ServerLevel level, BlockState state, BlockPos pos) {
         if (fedBy(level, pos.relative(state.getValue(FACING).getOpposite()))) {
-            return true;      // 上游优先
+            return true;      // 上游
         }
-        for (Direction dir : Direction.Plane.HORIZONTAL) {
-            if (fedBy(level, pos.relative(dir))) {
-                return true;  // 两侧也认（贴哪边都能接上）
-            }
-        }
-        return fedBy(level, pos.below());
+        return fedBy(level, pos.below()); // 架在水面上，从底下汲水
     }
 
     /** 某一格能不能供水（带水的梘 / 正在转的装置 / 一格水）。 */
@@ -121,11 +116,9 @@ public class JianBlock extends Block {
         return WaterDevices.isRunning(s) || level.getFluidState(p).is(FluidTags.WATER);
     }
 
-    /** 给紧挨着的稻田补水（四邻 + 正下方）。 */
-    private static void irrigate(ServerLevel level, BlockPos pos) {
-        for (Direction dir : Direction.Plane.HORIZONTAL) {
-            waterCell(level, pos.relative(dir));
-        }
+    /** 给稻田补水：水从槽口（FACING 前方一格）流出浇田，顺带润湿正下方。 */
+    private static void irrigate(ServerLevel level, BlockPos pos, BlockState state) {
+        waterCell(level, pos.relative(state.getValue(FACING)));
         waterCell(level, pos.below());
     }
 

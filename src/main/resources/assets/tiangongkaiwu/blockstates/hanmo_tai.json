@@ -1,7 +1,20 @@
 {
   "variants": {
-    "": {
-      "model": "tiangongkaiwu:block/hanmo_tai"
+    "facing=east": {
+      "model": "tiangongkaiwu:block/hanmo_tai",
+      "y": 270
+    },
+    "facing=north": {
+      "model": "tiangongkaiwu:block/hanmo_tai",
+      "y": 0
+    },
+    "facing=south": {
+      "model": "tiangongkaiwu:block/hanmo_tai",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "tiangongkaiwu:block/hanmo_tai",
+      "y": 90
     }
   }
 }

@@ -37,14 +37,14 @@
       "scope": 0,
       "allow_mirror_modeling": true,
       "from": [
-        1,
+        0,
         9,
-        2
+        0
       ],
       "to": [
-        15,
+        16,
         11,
-        14
+        16
       ],
       "autouv": 0,
       "color": 3,

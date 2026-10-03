@@ -60,13 +60,13 @@ public class ShaftBlock extends Block {
     }
 
     /**
-     * 放置自动成型：
-     * <ol>
+     * 放置轴向：
+     * <ul>
      * <li>点在某根杆的**端面**（面轴向 = 杆轴向）→ 顺着接着排；</li>
-     * <li>点在其它方块上 → 按点击面；</li>
-     * <li>周围已有杆可引导时（任何方向有邻杆）→ 顺第一根邻杆的轴向。</li>
-     * </ol>
-     * （第 3 条是为了"先随手摆错、再补排"时后面的杆能跟上前面那根的方向。）
+     * <li>其它情况 → 按点击面的轴向。</li>
+     * </ul>
+     * （2026-10-02 拍板：去掉「顺任意邻杆」和结算时的自动转向——
+     * 传动杆不自动连接，横竖全由玩家摆；垂直变向请用 {@link GearBlock 牙轮}。）
      */
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
@@ -78,12 +78,6 @@ public class ShaftBlock extends Block {
         if (behind.getBlock() instanceof ShaftBlock
                 && behind.getValue(AXIS) == face.getAxis()) {
             return this.defaultBlockState().setValue(AXIS, face.getAxis()); // 接着排
-        }
-        for (Direction dir : Direction.values()) {
-            BlockState nb = level.getBlockState(pos.relative(dir));
-            if (nb.getBlock() instanceof ShaftBlock) {
-                return this.defaultBlockState().setValue(AXIS, nb.getValue(AXIS)); // 顺邻杆
-            }
         }
         return this.defaultBlockState().setValue(AXIS, face.getAxis());
     }
@@ -107,46 +101,12 @@ public class ShaftBlock extends Block {
 
     @Override
     protected void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
-        // ① 自动重成型：自己轴向上没有邻杆，但恰好只有一个别的方向有邻杆 → 转过去
-        BlockState formed = reformAxis(level, pos, state);
-        if (formed != state) {
-            state = formed;
-            level.setBlock(pos, state, 2);
-        }
-
-        // ② 劲显示：所在网络的劲总量（分配在机器端由 PowerNetwork 结算）
+        // 劲显示：所在网络的劲总量（分配在机器端由 PowerNetwork 结算）
         int power = Math.min(PowerNetwork.networkPower(level, pos), MAX_POWER);
         if (power != state.getValue(POWER)) {
             level.setBlock(pos, state.setValue(POWER, power), 2);
         }
         level.scheduleTick(pos, this, INTERVAL);
-    }
-
-    /**
-     * 自动重成型：数一数六个方向的邻杆/牙轮分布——
-     * 自己轴向上一个都没有、且恰好只有一个别的方向有 → 顺它转。
-     * 多方向都有邻杆时不动作（歧义，尊重现状），避免来回摆。
-     */
-    private static BlockState reformAxis(ServerLevel level, BlockPos pos, BlockState state) {
-        Direction.Axis axis = state.getValue(AXIS);
-        Direction.Axis other = null;
-        int others = 0;
-        for (Direction dir : Direction.values()) {
-            BlockState nb = level.getBlockState(pos.relative(dir));
-            boolean conduit = nb.getBlock() instanceof ShaftBlock || nb.getBlock() instanceof GearBlock;
-            if (!conduit) {
-                continue;
-            }
-            if (dir.getAxis() == axis) {
-                return state; // 自己轴上有邻杆，不动
-            }
-            other = dir.getAxis();
-            others++;
-        }
-        if (others == 1 && other != null) {
-            return state.setValue(AXIS, other);
-        }
-        return state;
     }
 
     /** 挖掉掉自己（不写战利品表，路径确定）。 */

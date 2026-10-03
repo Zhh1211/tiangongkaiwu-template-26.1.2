@@ -106,8 +106,8 @@ public class TiangongKaiwuJadePlugin implements IWailaPlugin {
             }
 
             if (block instanceof ShaftBlock) {
-                tooltip.add(Component.translatable("jade.tiangongkaiwu.power_max",
-                        state.getValue(ShaftBlock.POWER), ShaftBlock.MAX_POWER));
+                tooltip.add(Component.translatable("jade.tiangongkaiwu.power",
+                        state.getValue(ShaftBlock.POWER)));
                 return;
             }
 

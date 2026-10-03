@@ -48,19 +48,22 @@ public final class PowerNetwork {
     /**
      * 给一台机器分配劲。
      *
+     * <p><b>2026-10-02 改：共同产生、共同消耗</b>——不再按坐标序排队分配（先到先得），
+     * 而是全网按比例均摊：供给 ≥ 总需求 → 每台都足劲；不足 → 每台拿到
+     * demand × 供给/总需求（全体等比例打折，一起"不及"，没有谁挤占谁）。
+     *
      * @return 分到的劲：= demand 劲足（"太过"）；1 ~ demand-1 劲不足（"不及"→出糙米）；0 没劲（停）。
      */
     public static int allocate(Level level, BlockPos machinePos, int demand) {
         Scan scan = scan(level, machinePos);
-        int remaining = scan.totalPower;
-        for (BlockPos m : scan.machines) {
-            int take = Math.min(demand, remaining);
-            if (m.equals(machinePos)) {
-                return take;
-            }
-            remaining -= take;
+        int totalDemand = scan.machines().size() * demand;
+        if (totalDemand == 0) {
+            return 0;
         }
-        return 0;
+        if (scan.totalPower() >= totalDemand) {
+            return demand;
+        }
+        return (int) ((long) demand * scan.totalPower() / totalDemand);
     }
 
     /** 网络劲总量（传动杆贴图用：本格通着多少劲，铜箍亮不亮）。 */

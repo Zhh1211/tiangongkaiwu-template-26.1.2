@@ -57,6 +57,7 @@ import com.example.tiangongkaiwu.block.FengFanBlock;
 import com.example.tiangongkaiwu.block.JianBlock;
 import com.example.tiangongkaiwu.block.ShaftBlock;
 import com.example.tiangongkaiwu.block.TongCheBlock;
+import com.example.tiangongkaiwu.block.entity.TongCheBlockEntity;
 import com.example.tiangongkaiwu.block.WellLiftBlock;
 import com.example.tiangongkaiwu.block.HanmoTaiBlock;
 import com.example.tiangongkaiwu.block.entity.HanmoTaiBlockEntity;
@@ -133,7 +134,7 @@ public class TiangongKaiwu {
         () -> new RiceStalkBlock(
             BlockBehaviour.Properties.of()
                 .mapColor(MapColor.PLANT)
-                
+                .noCollission()
                 .randomTicks()
                 .instabreak()
                 .sound(SoundType.CROP)
@@ -146,7 +147,7 @@ public class TiangongKaiwu {
         () -> new RicePanicleBlock(
             BlockBehaviour.Properties.of()
                 .mapColor(MapColor.PLANT)
-                
+                .noCollission()
                 .instabreak()
                 .sound(SoundType.CROP)
         )
@@ -158,7 +159,7 @@ public class TiangongKaiwu {
         () -> new RiceStalkBlockDry(
             BlockBehaviour.Properties.of()
                 .mapColor(MapColor.PLANT)
-                
+                .noCollission()
                 .randomTicks()
                 .instabreak()
                 .sound(SoundType.CROP)
@@ -240,6 +241,11 @@ public class TiangongKaiwu {
                 .sound(SoundType.WOOD)
         )
     );
+
+    /** 筒车方块实体：只承载客户端轮子转角（BER 旋转用），不存盘。 */
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<TongCheBlockEntity>> TONG_CHE_BE_TYPE =
+        BLOCK_ENTITY_TYPES.register("tong_che",
+            () -> BlockEntityType.Builder.of(TongCheBlockEntity::new, TONG_CHE.get()).build(null));
 
     /** 梘（引水槽）：把水引到远处的田里；槽里有水时替挨着的稻田补水。 */
     public static final DeferredBlock<JianBlock> JIAN = BLOCKS.register(

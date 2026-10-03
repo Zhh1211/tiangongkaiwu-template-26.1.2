@@ -93,6 +93,13 @@ public class RiceStalkBlock extends Block implements SimpleWaterloggedBlock, Bon
                 .setValue(MOISTURE, MAX_MOISTURE));
     }
 
+    /** 作物不让天空光被挡（否则自身格子光照 0，cross 贴图渲染成黑影）。 */
+    @Override
+    protected boolean propagatesSkylightDown(BlockState state, BlockGetter level, BlockPos pos) {
+        return true;
+    }
+
+
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(AGE, WATERLOGGED, MOISTURE);
