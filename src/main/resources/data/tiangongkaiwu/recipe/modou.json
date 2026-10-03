@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PP",
+    "LI"
+  ],
+  "key": {
+    "P": {
+      "tag": "minecraft:planks"
+    },
+    "L": {
+      "item": "minecraft:string"
+    },
+    "I": {
+      "item": "minecraft:ink_sac"
+    }
+  },
+  "result": {
+    "count": 1,
+    "id": "tiangongkaiwu:modou"
+  }
+}

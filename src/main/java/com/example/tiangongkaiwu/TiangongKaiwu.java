@@ -526,6 +526,7 @@ public class TiangongKaiwu {
                         output.accept(JIE_GAO_ITEM);
                         output.accept(LU_LU_ITEM);
                         output.accept(FENG_FAN_CHE_ITEM);
+                        output.accept(MODOU);
                     }).build());
 
     // ============================================================
