@@ -1,0 +1,7 @@
+{
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "particle": "tiangongkaiwu:block/dui_wood"
+  },
+  "elements": []
+}

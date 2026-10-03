@@ -58,6 +58,9 @@ import com.example.tiangongkaiwu.block.FengFanBlock;
 import com.example.tiangongkaiwu.block.JianBlock;
 import com.example.tiangongkaiwu.block.ShaftBlock;
 import com.example.tiangongkaiwu.block.TongCheBlock;
+import com.example.tiangongkaiwu.block.MechanismBlock;
+import com.example.tiangongkaiwu.block.entity.MechanismBlockEntity;
+import com.example.tiangongkaiwu.item.MoDouItem;
 import com.example.tiangongkaiwu.block.entity.JianBlockEntity;
 import com.example.tiangongkaiwu.block.entity.ShaftBlockEntity;
 import com.example.tiangongkaiwu.block.entity.TongCheBlockEntity;
@@ -187,6 +190,11 @@ public class TiangongKaiwu {
         )
     );
 
+    /** 墨斗：大型装置的装配钥匙（弹线成型/拆线还原）。 */
+    public static final DeferredItem<Item> MODOU = ITEMS.register(
+        "modou",
+        () -> new MoDouItem(new Item.Properties().stacksTo(1)));
+
     /** 糙米：动力不足时"舂不透"的产物（书：不及則粗）；丢回碓再舂一次即成白米。 */
     public static final DeferredItem<Item> BROWN_RICE = ITEMS.register(
         "brown_rice",
@@ -236,7 +244,7 @@ public class TiangongKaiwu {
     public static final DeferredBlock<TongCheBlock> TONG_CHE = BLOCKS.register(
         "tong_che",
         () -> new TongCheBlock(
-            BlockBehaviour.Properties.of()
+            BlockBehaviour.Properties.of().randomTicks()
                 .mapColor(MapColor.WOOD)
                 .strength(1.5f)
                 .noOcclusion()
@@ -285,6 +293,11 @@ public class TiangongKaiwu {
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<ShaftBlockEntity>> SHAFT_BE_TYPE =
         BLOCK_ENTITY_TYPES.register("shaft",
             () -> BlockEntityType.Builder.of(ShaftBlockEntity::new, SHAFT.get()).build(null));
+
+    /** 机构方块实体：存被替换的原方块（拆解还原）。 */
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<MechanismBlockEntity>> MECHANISM_BE_TYPE =
+        BLOCK_ENTITY_TYPES.register("mechanism",
+            () -> BlockEntityType.Builder.of(MechanismBlockEntity::new, TiangongKaiwu.MECHANISM.get()).build(null));
 
     public static final DeferredItem<BlockItem> TONG_CHE_ITEM =
             ITEMS.registerSimpleBlockItem("tong_che", TONG_CHE);
@@ -367,6 +380,19 @@ public class TiangongKaiwu {
                 .strength(2.0f)
                 .noOcclusion()
                 .sound(SoundType.STONE)
+        )
+    );
+
+    /** 机构方块（D15）：装置成型后的通用运动件——杵/杠杆/轮，本体不渲染走 BER。 */
+    public static final DeferredBlock<MechanismBlock> MECHANISM = BLOCKS.register(
+        "mechanism",
+        () -> new MechanismBlock(
+            BlockBehaviour.Properties.of()
+                .mapColor(MapColor.WOOD)
+                .strength(0.8f)
+                .noOcclusion()
+                .noCollission()
+                .sound(SoundType.WOOD)
         )
     );
 
@@ -547,6 +573,7 @@ public class TiangongKaiwu {
             event.accept(RICE_GRAIN);
             event.accept(RICE);
             event.accept(CAN_YE);
+            event.accept(MODOU);
         }
     }
 

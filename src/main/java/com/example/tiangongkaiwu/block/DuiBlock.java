@@ -55,6 +55,8 @@ public class DuiBlock extends Block {
     public static final BooleanProperty ACTIVE = BooleanProperty.create("active");
     /** 轮轴方向（2026-10-03：劲可穿过碓继续传——碓也是一根轴穿过去，方便一线堆多台）。 */
     public static final EnumProperty<Direction.Axis> AXIS = BlockStateProperties.AXIS;
+    /** 是否已成多方块（D15：墨斗弹线成型——只画臼，杵由上方机构方块渲染）。 */
+    public static final BooleanProperty FORMED = BooleanProperty.create("formed");
 
     /** 自调度间隔：每 10 tick 看一次动力与料。 */
     public static final int INTERVAL = 10;
@@ -68,12 +70,13 @@ public class DuiBlock extends Block {
         this.registerDefaultState(this.stateDefinition.any()
                 .setValue(FACING, Direction.NORTH)
                 .setValue(ACTIVE, false)
-                .setValue(AXIS, Direction.Axis.Y));
+                .setValue(AXIS, Direction.Axis.Y)
+                .setValue(FORMED, false));
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(FACING, ACTIVE, AXIS);
+        builder.add(FACING, ACTIVE, AXIS, FORMED);
     }
 
     @Override
@@ -121,13 +124,18 @@ public class DuiBlock extends Block {
         return PowerNetwork.allocate(level, pos, PowerNetwork.DEFAULT_DEMAND);
     }
 
-    /** 舂一下：从上方容器取 1 个料，按动力出成品或糙米。 */
+    /** 成型后的进料口：梁上料口（y=3，墨斗模板留出的位置）；未成型仍取正上方。 */
+    public static BlockPos inputPos(BlockPos pos, BlockState state) {
+        return state.getValue(FORMED) ? pos.above(3) : pos.above();
+    }
+
+    /** 舂一下：从进料口容器取 1 个料，按动力出成品或糙米。 */
     private void pound(ServerLevel level, BlockPos pos, int power) {
         Work work = findWork(level, pos, power);
         if (work == null) {
             return;
         }
-        Container from = containerAt(level, pos.above());
+        Container from = containerAt(level, inputPos(pos, level.getBlockState(pos)));
         if (from == null) {
             return;
         }
@@ -145,9 +153,9 @@ public class DuiBlock extends Block {
         }
     }
 
-    /** 上方容器里有没有能舂的料（动力不足但有糙米出路也算能舂）。 */
+    /** 进料口容器里有没有能舂的料（动力不足但有糙米出路也算能舂）。 */
     private Work findWork(ServerLevel level, BlockPos pos, int power) {
-        Container from = containerAt(level, pos.above());
+        Container from = containerAt(level, inputPos(pos, level.getBlockState(pos)));
         if (from == null) {
             return null;
         }
@@ -225,7 +233,7 @@ public class DuiBlock extends Block {
         Component message;
         if (power <= 0) {
             message = Component.translatable("block.tiangongkaiwu.dui.need_power");
-        } else if (containerAt(level, pos.above()) == null) {
+        } else if (containerAt(level, inputPos(pos, state)) == null) {
             message = Component.translatable("block.tiangongkaiwu.dui.need_container");
         } else {
             message = Component.translatable("block.tiangongkaiwu.dui.power", power);
@@ -235,11 +243,36 @@ public class DuiBlock extends Block {
         return ItemInteractionResult.sidedSuccess(false);
     }
 
+    /** 挖掉成型核心 → 杵位机构方块一并还原移除（不写战利品表，路径确定）。 */
+    @Override
+    public BlockState playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
+        if (!level.isClientSide && state.getValue(FORMED)) {
+            BlockPos slider = pos.above();
+            if (level.getBlockState(slider).getBlock() instanceof MechanismBlock) {
+                MechanismBlock.popAndRemove(level, slider);
+            }
+        }
+        return super.playerWillDestroy(level, pos, state, player);
+    }
+
     /** 挖掉掉自己（不写战利品表，路径确定）。 */
     @Override
     public void playerDestroy(Level level, Player player, BlockPos pos, BlockState state,
                               BlockEntity blockEntity, ItemStack tool) {
         super.playerDestroy(level, player, pos, state, blockEntity, tool);
         popResource(level, pos, new ItemStack(TiangongKaiwu.DUI_ITEM.get()));
+    }
+
+    /** 墨斗拆线还原：杵位还原原方块，核心退回未成型态。 */
+    public static void unform(ServerLevel level, BlockPos core) {
+        BlockState coreState = level.getBlockState(core);
+        if (!coreState.getValue(FORMED)) {
+            return;
+        }
+        BlockPos slider = core.above();
+        if (level.getBlockState(slider).getBlock() instanceof MechanismBlock) {
+            MechanismBlock.popAndRemove(level, slider);
+        }
+        level.setBlock(core, coreState.setValue(FORMED, false), 3);
     }
 }

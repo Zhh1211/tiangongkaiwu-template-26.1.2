@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "semantic=slider": {
+      "model": "tiangongkaiwu:block/mechanism_hidden"
+    },
+    "semantic=pivot": {
+      "model": "tiangongkaiwu:block/mechanism_hidden"
+    },
+    "semantic=rotor": {
+      "model": "tiangongkaiwu:block/mechanism_hidden"
+    }
+  }
+}

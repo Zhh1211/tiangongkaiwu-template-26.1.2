@@ -36,8 +36,9 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  * <p><b>单方块大轮</b>：一个方块，模型把整台 3×3 大轮越界画出去（Create 同款思路），
  * 轮子立在竖直平面里，`plane` 记轮面朝向（x/z）。
  *
- * <p><b>要激流才转</b>：只有车下一排（轮子触水那排及其下方）有**流动的水**（非水源）时才转——
- * 所以玩家得自己在河滨垒堰，"堰陂障流"，把水逼到车下。静水塘里它不转。
+ * <p><b>要激流才转（flowScore 门槛判据，D13）</b>：对轮子触水那排（及下方）的每格水取
+ * `getFlow` 动量矢量、投影到轮底切向求和——**静水塘动量和为 0 不转**；过门槛即转，
+ * 转速与劲恒定，不随流速涨落（要产量堆数量）。所以玩家在河滨垒堰"堰陂障流"造出水流即可。
  *
  * <p><b>两件事</b>：① 提水灌田——挨着的梘会从它这里"接到水"，由梘把水引到田里；
  * ② 输出动力 12 点给传动轴（书里效率刻度最高的装置，"昼夜不息，百亩无忧"）。
@@ -58,8 +59,8 @@ public class TongCheBlock extends Block implements net.minecraft.world.level.blo
     public static final int POWER_OUTPUT = 12;
     /** 结算间隔：每 20 tick（1 秒）一次。 */
     public static final int INTERVAL = 20;
-    /** 是否严格要求"流动的水"（书要"激轮"）。调 false 则静水也认。 */
-    public static final boolean REQUIRE_FLOWING_WATER = true;
+    /** flowScore 门槛：触水格动量切向分量之和 ≥ 此值即「激轮」成功（静水=0 不过）。 */
+    public static final double FLOW_SCORE_MIN = 0.015D;
     /** 直接灌周边田的概率门（1/4 → 平均 4 秒补 1 格）。 */
     private static final int IRRIGATE_CHANCE = 4;
 
@@ -105,7 +106,7 @@ public TongCheBlock(Properties properties) {
         level.scheduleTick(pos, this, INTERVAL);
 
         // 没水就先提个醒（车下须有激流，"堰陂障流"那一步）
-        if (!(placer instanceof Player player) || hasDrivingWater(level, pos, state.getValue(PLANE))) {
+        if (!(placer instanceof Player player) || flowScore(level, pos, state.getValue(PLANE)) >= FLOW_SCORE_MIN) {
             return;
         }
         player.displayClientMessage(Component.translatable("block.tiangongkaiwu.tong_che.need_water"), false);
@@ -113,10 +114,20 @@ public TongCheBlock(Properties properties) {
 
     // ==================== 核心结算 ====================
 
+    /** 旧档自愈入口（3c）：老存档的杆/车没有 pending tick，靠 random tick 唤醒。 */
+    @Override
+    protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
+        level.scheduleTick(pos, this, 1);
+    }
+
     @Override
     protected void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
+        // 旧档自愈：没有 BE（BE 引入前的老车）→ setBlock 重建，BER 挂载点补上
+        if (level.getBlockEntity(pos) == null) {
+            level.setBlock(pos, state, 3);
+        }
         Direction.Axis plane = state.getValue(PLANE);
-        boolean spinning = !state.getValue(PLUGGED) && hasDrivingWater(level, pos, plane);
+        boolean spinning = !state.getValue(PLUGGED) && flowScore(level, pos, plane) >= FLOW_SCORE_MIN;
         if (spinning != state.getValue(ACTIVE)) {
             level.setBlock(pos, state.setValue(ACTIVE, spinning), 3);
         }
@@ -131,22 +142,27 @@ public TongCheBlock(Properties properties) {
         level.scheduleTick(pos, this, INTERVAL);
     }
 
-    /** 轮子触水那排（横向三格及其正下方）有没有"能激轮"的水。 */
-    public static boolean hasDrivingWater(Level level, BlockPos pos, Direction.Axis plane) {
+    /**
+     * flowScore：轮子触水那排（横向三格及正下方）所有水的动量矢量，
+     * 投影到轮底切向取绝对值求和。静水塘=0；有流即过门槛（方向不问，轮正转反转都能被水推）。
+     *
+     * <p>切向推导：轮面在竖直平面里绕 PLANE 轴转——plane=Z（轮面 XY）轮底切向是 X；
+     * plane=X（轮面 ZY）轮底切向是 Z。
+     */
+    public static double flowScore(Level level, BlockPos pos, Direction.Axis plane) {
+        double score = 0.0D;
         for (int w = -1; w <= 1; w++) {
-            BlockPos p = plane == Direction.Axis.X ? pos.offset(0, -1, w) : pos.offset(w, -1, 0);
-            if (isDrivingWater(level.getFluidState(p)) || isDrivingWater(level.getFluidState(p.below()))) {
-                return true;
+            BlockPos base = plane == Direction.Axis.X ? pos.offset(0, -1, w) : pos.offset(w, -1, 0);
+            for (BlockPos p : new BlockPos[] {base, base.below()}) {
+                FluidState fluid = level.getFluidState(p);
+                if (!fluid.is(FluidTags.WATER)) {
+                    continue;
+                }
+                net.minecraft.world.phys.Vec3 flow = fluid.getFlow(level, p);
+                score += plane == Direction.Axis.X ? Math.abs(flow.z()) : Math.abs(flow.x());
             }
         }
-        return false;
-    }
-
-    private static boolean isDrivingWater(FluidState fluid) {
-        if (!fluid.is(FluidTags.WATER)) {
-            return false;
-        }
-        return !REQUIRE_FLOWING_WATER || !fluid.isSource();
+        return score;
     }
 
     /** 直接给挨着轮子的稻田补水（不经过梘也能用，梘的作用是把水引远）。 */

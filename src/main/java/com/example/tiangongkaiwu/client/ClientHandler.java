@@ -3,6 +3,7 @@ package com.example.tiangongkaiwu.client;
 import com.example.tiangongkaiwu.TiangongKaiwu;
 import com.example.tiangongkaiwu.client.gui.HanmoTaiScreen;
 import com.example.tiangongkaiwu.client.render.JianRenderer;
+import com.example.tiangongkaiwu.client.render.MechanismRenderer;
 import com.example.tiangongkaiwu.client.render.ShaftRenderer;
 import com.example.tiangongkaiwu.client.render.TongCheRenderer;
 import com.example.tiangongkaiwu.menu.HanmoTaiMenu;
@@ -25,5 +26,6 @@ public class ClientHandler {
         event.registerBlockEntityRenderer(TiangongKaiwu.TONG_CHE_BE_TYPE.get(), TongCheRenderer::new);
         event.registerBlockEntityRenderer(TiangongKaiwu.JIAN_BE_TYPE.get(), JianRenderer::new);
         event.registerBlockEntityRenderer(TiangongKaiwu.SHAFT_BE_TYPE.get(), ShaftRenderer::new);
+        event.registerBlockEntityRenderer(TiangongKaiwu.MECHANISM_BE_TYPE.get(), MechanismRenderer::new);
     }
 }
