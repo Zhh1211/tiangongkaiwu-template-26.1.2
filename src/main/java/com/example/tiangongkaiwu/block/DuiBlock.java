@@ -107,6 +107,22 @@ public class DuiBlock extends Block {
 
     @Override
     protected void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
+        // ① 结构完整性自检（2026-10-04 拍板）：成型机器的框架（木/轴）残缺 → 自动退回未成型态。
+        //    只查框架件：拆漏斗=闲置不散架（既承诺行为）；共享方块各自独立校验，天然支持共用。
+        if (state.getValue(FORMED)) {
+            com.example.tiangongkaiwu.multiblock.StructureTemplate template =
+                    com.example.tiangongkaiwu.multiblock.MultiBlockTemplates.get("dui");
+            if (template != null && template.matchAt(level, pos,
+                    r -> r == com.example.tiangongkaiwu.multiblock.StructureTemplate.Role.WOOD
+                            || r == com.example.tiangongkaiwu.multiblock.StructureTemplate.Role.SHAFT_SOCKET
+                            || r == com.example.tiangongkaiwu.multiblock.StructureTemplate.Role.PIVOT
+                            || r == com.example.tiangongkaiwu.multiblock.StructureTemplate.Role.ROTOR) < 0) {
+                level.setBlock(pos, state.setValue(FORMED, false), 3);
+                state = level.getBlockState(pos);
+                level.playSound(null, pos, SoundEvents.WOOD_BREAK, SoundSource.BLOCKS, 0.6F, 0.7F);
+            }
+        }
+
         int power = powerAt(level, pos);
         boolean working = power > 0 && findWork(level, pos, power) != null;
         if (working != state.getValue(ACTIVE)) {

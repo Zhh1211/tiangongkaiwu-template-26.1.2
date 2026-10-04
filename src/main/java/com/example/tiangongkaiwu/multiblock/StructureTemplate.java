@@ -67,16 +67,28 @@ public final class StructureTemplate {
      * 在 core 处尝试匹配：四向旋转各试一遍，全部部件合格返回旋转次数，否则 -1。
      */
     public int matchAt(Level level, BlockPos core) {
+        return matchAt(level, core, role -> true);
+    }
+
+    /**
+     * 带角色过滤的匹配（结构完整性自检用）：
+     * 只校验通过过滤的角色——成型碓查框架（WOOD/SHAFT_SOCKET/PIVOT/ROTOR），
+     * 跳过 SLIDER（成型后已是机构方块）与 FEED（拆漏斗=闲置不散架的既承诺行为）。
+     */
+    public int matchAt(Level level, BlockPos core, java.util.function.Predicate<Role> roles) {
         for (int rot = 0; rot < 4; rot++) {
-            if (fits(level, core, rot)) {
+            if (fits(level, core, rot, roles)) {
                 return rot;
             }
         }
         return -1;
     }
 
-    private boolean fits(Level level, BlockPos core, int rot) {
+    private boolean fits(Level level, BlockPos core, int rot, java.util.function.Predicate<Role> roles) {
         for (Part part : this.parts) {
+            if (!roles.test(part.role())) {
+                continue;
+            }
             BlockPos p = core.offset(spin(part.pos(), rot));
             BlockState state = level.getBlockState(p);
             boolean ok = switch (part.role()) {
