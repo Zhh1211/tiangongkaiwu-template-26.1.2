@@ -112,6 +112,11 @@ public final class PowerNetwork {
 
         visited.add(start);
         queue.add(new Entry(start, null));
+        // 起点机器给自己记账（2026-10-04 诡案正修：调用者定额不进总需求 →
+        // 单台碓 demand=0 早退不干活；摆个无用碓反而"修好"的诡异现象即源于此）
+        if (level.getBlockState(start).getBlock() == TiangongKaiwu.DUI.get()) {
+            machines.add(start);
+        }
 
         while (!queue.isEmpty() && visited.size() < MAX_NODES) {
             Entry cur = queue.poll();
