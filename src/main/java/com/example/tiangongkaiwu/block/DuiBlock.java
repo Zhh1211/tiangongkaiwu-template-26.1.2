@@ -124,9 +124,20 @@ public class DuiBlock extends Block {
         return PowerNetwork.allocate(level, pos, PowerNetwork.DEFAULT_DEMAND);
     }
 
-    /** 成型后的进料口：梁上料口（y=3，墨斗模板留出的位置）；未成型仍取正上方。 */
-    public static BlockPos inputPos(BlockPos pos, BlockState state) {
-        return state.getValue(FORMED) ? pos.above(3) : pos.above();
+    /**
+     * 成型后的进料口：模板把漏斗放在轴梁上（核心上方 1~3 格内），向上找第一个容器；
+     * 未成型仍取正上方。（料口在核心正上方的轴线上，四向旋转不变式，无需存旋转。）
+     */
+    public static BlockPos inputPos(Level level, BlockPos pos, BlockState state) {
+        if (state.getValue(FORMED)) {
+            for (int i = 1; i <= 3; i++) {
+                BlockPos p = pos.above(i);
+                if (level.getBlockEntity(p) instanceof Container) {
+                    return p;
+                }
+            }
+        }
+        return pos.above();
     }
 
     /** 舂一下：从进料口容器取 1 个料，按动力出成品或糙米。 */
@@ -135,7 +146,7 @@ public class DuiBlock extends Block {
         if (work == null) {
             return;
         }
-        Container from = containerAt(level, inputPos(pos, level.getBlockState(pos)));
+        Container from = containerAt(level, inputPos(level, pos, level.getBlockState(pos)));
         if (from == null) {
             return;
         }
@@ -155,7 +166,7 @@ public class DuiBlock extends Block {
 
     /** 进料口容器里有没有能舂的料（动力不足但有糙米出路也算能舂）。 */
     private Work findWork(ServerLevel level, BlockPos pos, int power) {
-        Container from = containerAt(level, inputPos(pos, level.getBlockState(pos)));
+        Container from = containerAt(level, inputPos(level, pos, level.getBlockState(pos)));
         if (from == null) {
             return null;
         }
@@ -233,7 +244,7 @@ public class DuiBlock extends Block {
         Component message;
         if (power <= 0) {
             message = Component.translatable("block.tiangongkaiwu.dui.need_power");
-        } else if (containerAt(level, inputPos(pos, state)) == null) {
+        } else if (containerAt(level, inputPos(level, pos, state)) == null) {
             message = Component.translatable("block.tiangongkaiwu.dui.need_container");
         } else {
             message = Component.translatable("block.tiangongkaiwu.dui.power", power);

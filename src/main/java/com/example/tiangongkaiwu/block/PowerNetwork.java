@@ -141,6 +141,27 @@ public final class PowerNetwork {
                 continue;
             }
 
+            // ① 端点发现：六向都看——机器可以挂在轴旁/轴下取劲（2026-10-04：多方块"碓挂轴下"设计），
+            //    动力源贴面也互通（修"碓贴着车却没劲"的暗坑）
+            for (Direction dir : Direction.values()) {
+                BlockPos nbPos = cur.pos().relative(dir);
+                if (!visited.add(nbPos)) {
+                    continue;
+                }
+                BlockState nb = level.getBlockState(nbPos);
+                if (nb.getBlock() == TiangongKaiwu.DUI.get()) {
+                    machines.add(nbPos);                  // 机器：吃劲
+                    queue.add(new Entry(nbPos, dir));     // 碓沿自身轴导劲（一线堆多台）
+                } else {
+                    int power = WaterDevices.emittedPower(nb);
+                    if (power > 0) {
+                        totalPower += power;
+                        queue.add(new Entry(nbPos, dir)); // 源出劲且沿轮轴导劲（串联水车同网）
+                    }
+                }
+            }
+
+            // ② 传导延伸：杆/牙轮只沿轴规则走（六向发现不传导，防劲网泄漏）
             for (Direction dir : outDirs) {
                 BlockPos nbPos = cur.pos().relative(dir);
                 if (!visited.add(nbPos)) {
@@ -149,15 +170,6 @@ public final class PowerNetwork {
                 BlockState nb = level.getBlockState(nbPos);
                 if (nb.getBlock() instanceof ShaftBlock || nb.getBlock() instanceof GearBlock) {
                     queue.add(new Entry(nbPos, dir));
-                } else if (nb.getBlock() == TiangongKaiwu.DUI.get()) {
-                    machines.add(nbPos);                       // 机器：吃劲
-                    queue.add(new Entry(nbPos, dir));          // 2026-10-03：碓也沿轴导劲（一线堆多台）
-                } else {
-                    int power = WaterDevices.emittedPower(nb); // 动力源出劲
-                    if (power > 0) {
-                        totalPower += power;
-                        queue.add(new Entry(nbPos, dir));      // 2026-10-03：源也导劲（轮轴穿过车体），串联水车同网
-                    }
                 }
             }
         }
