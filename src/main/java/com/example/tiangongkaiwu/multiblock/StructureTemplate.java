@@ -6,7 +6,6 @@ import java.util.Locale;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.world.Container;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -73,7 +72,7 @@ public final class StructureTemplate {
             boolean ok = switch (part.role()) {
                 case WOOD, PIVOT, ROTOR -> isWoodish(state);
                 case SLIDER -> state.isAir() || isWoodish(state);
-                case FEED -> state.isAir() || level.getBlockEntity(p) instanceof Container;
+                case FEED -> state.is(net.minecraft.world.level.block.Blocks.HOPPER); // 料口=漏斗（2026-10-04 拍板，视觉自说明）
                 case SHAFT_SOCKET -> state.isAir()
                         || state.getBlock() instanceof com.example.tiangongkaiwu.block.ShaftBlock;
             };
