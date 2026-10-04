@@ -142,19 +142,22 @@ public final class PowerNetwork {
             }
 
             // ① 端点发现：六向都看——机器可以挂在轴旁/轴下取劲（2026-10-04：多方块"碓挂轴下"设计），
-            //    动力源贴面也互通（修"碓贴着车却没劲"的暗坑）
+            //    动力源贴面也互通（修"碓贴着车却没劲"的暗坑）。
+            //    ⚠️ 只对真正入账的机器/源标 visited——邻杆不能在这里吞掉，否则②永远进不了队（10/4 杆不传劲 bug）。
             for (Direction dir : Direction.values()) {
                 BlockPos nbPos = cur.pos().relative(dir);
-                if (!visited.add(nbPos)) {
+                if (visited.contains(nbPos)) {
                     continue;
                 }
                 BlockState nb = level.getBlockState(nbPos);
                 if (nb.getBlock() == TiangongKaiwu.DUI.get()) {
+                    visited.add(nbPos);
                     machines.add(nbPos);                  // 机器：吃劲
                     queue.add(new Entry(nbPos, dir));     // 碓沿自身轴导劲（一线堆多台）
                 } else {
                     int power = WaterDevices.emittedPower(nb);
                     if (power > 0) {
+                        visited.add(nbPos);
                         totalPower += power;
                         queue.add(new Entry(nbPos, dir)); // 源出劲且沿轮轴导劲（串联水车同网）
                     }
