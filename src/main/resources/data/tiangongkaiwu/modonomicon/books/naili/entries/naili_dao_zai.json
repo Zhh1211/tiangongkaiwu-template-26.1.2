@@ -19,15 +19,35 @@
   "pages": [
     {
       "type": "modonomicon:text",
+      "text": "凡苗自函活以至颖栗，早者食水三斗，晚者食水五斗，失水即枯（将刈之时少水一升，谷数虽存，米粒缩小，入碾、臼中亦多断碎），此七灾也。汲灌之智，人巧已无余矣。"
+    },
+    {
+      "type": "modonomicon:text",
       "text": "entry.tiangongkaiwu.naili_dao_zai.page1"
+    },
+    {
+      "type": "modonomicon:text",
+      "text": "凡稻撒种时，或水浮数寸，其谷未即沉下，骤发狂风，堆积一隅，此二灾也。谨视风定而后撒，则沉匀成秧矣。凡谷种生秧之后，防雀聚食，此三灾也。立标飘扬鹰俑，则雀可驱矣。凡秧沉脚未定，阴雨连绵，则损折过半，此四灾也。邀天晴霁三日，则粒粒皆生矣。"
     },
     {
       "type": "modonomicon:text",
       "text": "entry.tiangongkaiwu.naili_dao_zai.page2"
     },
     {
+      "type": "modonomicon:empty"
+    },
+    {
       "type": "modonomicon:text",
       "text": "entry.tiangongkaiwu.naili_dao_zai.page3"
+    },
+    {
+      "type": "modonomicon:spotlight",
+      "item": {
+        "item": "tiangongkaiwu:rice_stalk_dry"
+      },
+      "title": "entry.tiangongkaiwu.naili_dao_zai.spot_rice_stalk_dry.title",
+      "text": "entry.tiangongkaiwu.naili_dao_zai.spot_rice_stalk_dry.text",
+      "anchor": "rice_stalk_dry"
     }
   ]
 }

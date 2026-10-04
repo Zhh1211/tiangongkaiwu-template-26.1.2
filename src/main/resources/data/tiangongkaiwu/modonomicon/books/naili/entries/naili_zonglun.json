@@ -1,21 +1,52 @@
 {
   "category": "naili_juan",
   "name": "entry.tiangongkaiwu.naili_zonglun.name",
-  "icon": {"item": "modonomicon:modonomicon_green"},
+  "icon": {
+    "item": "modonomicon:modonomicon_green"
+  },
   "x": 0,
   "y": 0,
   "pages": [
+    {
+      "type": "modonomicon:text",
+      "text": "宋子曰：上古神农氏若存若亡，然味其徽号两言，至今存矣。生人不能久生而五谷生之，五谷不能自生而生人生之。土脉历时代而异，种性随水土而分。不然神农去陶唐食已千年矣，耒耜之利，以教天下，岂有隐焉。而纷纷嘉种，必待后稷详明，其故何也？纨裤之子，以赭衣视笠蓑；经生之家，以农夫为诟詈。晨炊晚饷，知其味而忘其源者众矣！夫先农而系之以神，岂人力之所为哉！"
+    },
     {
       "type": "modonomicon:text",
       "text": "entry.tiangongkaiwu.naili_zonglun.page1"
     },
     {
       "type": "modonomicon:text",
+      "text": "凡谷无定名。百谷，指成数言。五谷则麻、菽、麦、稷、黍，独遗稻者，以著书圣贤起自西北也。今天下育民人者，稻居十七，而来、牟、黍、稷居十三。麻、菽二者，功用已全，入蔬饵、膏馔之中，而犹系之谷者，从其朔也。"
+    },
+    {
+      "type": "modonomicon:text",
       "text": "entry.tiangongkaiwu.naili_zonglun.page2"
+    },
+    {
+      "type": "modonomicon:empty"
     },
     {
       "type": "modonomicon:text",
       "text": "entry.tiangongkaiwu.naili_zonglun.page3"
+    },
+    {
+      "type": "modonomicon:spotlight",
+      "item": {
+        "item": "tiangongkaiwu:hanmo_tai"
+      },
+      "title": "entry.tiangongkaiwu.naili_zonglun.spot_hanmo_tai.title",
+      "text": "entry.tiangongkaiwu.naili_zonglun.spot_hanmo_tai.text",
+      "anchor": "hanmo_tai"
+    },
+    {
+      "type": "modonomicon:spotlight",
+      "item": {
+        "item": "tiangongkaiwu:can_ye"
+      },
+      "title": "entry.tiangongkaiwu.naili_zonglun.spot_can_ye.title",
+      "text": "entry.tiangongkaiwu.naili_zonglun.spot_can_ye.text",
+      "anchor": "can_ye"
     }
   ]
 }

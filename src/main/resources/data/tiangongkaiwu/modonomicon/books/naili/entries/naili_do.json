@@ -19,15 +19,62 @@
   "pages": [
     {
       "type": "modonomicon:text",
+      "text": "凡稻种最多。不粘者，禾曰秔，米曰粳。粘者，禾曰稌，米曰糯（南方无粘黍，酒皆糯米所为）。质本粳而晚收带粘（俗名婺源光之类），不可为酒，只可为粥者，又一种性也。凡稻谷形有长芒、短芒（江南名长芒者曰浏阳早，短芒者曰吉安早）、长粒、尖粒、圆顶、扁面不一。其中米色有雪白、牙黄、大赤、半紫、杂黑不一。"
+    },
+    {
+      "type": "modonomicon:text",
       "text": "entry.tiangongkaiwu.naili_do.page1"
+    },
+    {
+      "type": "modonomicon:text",
+      "text": "湿种之期，最早者春分以前，名为社种（遇天寒有冻死不生者），最迟者后于清明。凡播种，先以稻麦稿包浸数日，俟其生芽，撒于田中，生出寸许，其名曰秧。秧生三十日即拔起分栽。若田亩逢旱干、水溢，不可插秧。秧过期，老而长节，即栽于亩中，生谷数粒，结果而已。凡秧田一亩所生秧，供移栽二十五亩。"
     },
     {
       "type": "modonomicon:text",
       "text": "entry.tiangongkaiwu.naili_do.page2"
     },
     {
+      "type": "modonomicon:empty"
+    },
+    {
       "type": "modonomicon:text",
       "text": "entry.tiangongkaiwu.naili_do.page3"
+    },
+    {
+      "type": "modonomicon:spotlight",
+      "item": {
+        "item": "tiangongkaiwu:rice_stalk"
+      },
+      "title": "entry.tiangongkaiwu.naili_do.spot_rice_stalk.title",
+      "text": "entry.tiangongkaiwu.naili_do.spot_rice_stalk.text",
+      "anchor": "rice_stalk"
+    },
+    {
+      "type": "modonomicon:spotlight",
+      "item": {
+        "item": "tiangongkaiwu:rice_panicle"
+      },
+      "title": "entry.tiangongkaiwu.naili_do.spot_rice_panicle.title",
+      "text": "entry.tiangongkaiwu.naili_do.spot_rice_panicle.text",
+      "anchor": "rice_panicle"
+    },
+    {
+      "type": "modonomicon:spotlight",
+      "item": {
+        "item": "tiangongkaiwu:rice_grain"
+      },
+      "title": "entry.tiangongkaiwu.naili_do.spot_rice_grain.title",
+      "text": "entry.tiangongkaiwu.naili_do.spot_rice_grain.text",
+      "anchor": "rice_grain"
+    },
+    {
+      "type": "modonomicon:spotlight",
+      "item": {
+        "item": "tiangongkaiwu:dui"
+      },
+      "title": "entry.tiangongkaiwu.naili_do.spot_dui.title",
+      "text": "entry.tiangongkaiwu.naili_do.spot_dui.text",
+      "anchor": "dui"
     }
   ]
 }
