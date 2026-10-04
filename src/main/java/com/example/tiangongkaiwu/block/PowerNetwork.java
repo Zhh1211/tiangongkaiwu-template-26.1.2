@@ -130,8 +130,12 @@ public final class PowerNetwork {
                     }
                 }
             } else if (state.getBlock() instanceof DuiBlock dui) {
-                // 碓兼导劲：轮轴穿过碓体，沿自身轴向继续传（2026-10-03）
-                outDirs = dirsAlong(state.getValue(DuiBlock.AXIS));
+                // 碓：六向探网（2026-10-04）——机器与网的连接不限自身轴向（碓挂轴下时，
+                // 轴在正上方，沿旧 AXIS 找永远够不着）。机器=端点+任意相邻轴皆可接入。
+                outDirs = new ArrayList<>();
+                for (Direction d : Direction.values()) {
+                    outDirs.add(d);
+                }
             } else if (WaterDevices.emittedPower(state) > 0) {
                 // 动力源兼导劲：轮轴穿过车体，沿自身轴向继续传（2026-10-03，修串联水车分网）
                 Direction.Axis axle = axleOf(state);
