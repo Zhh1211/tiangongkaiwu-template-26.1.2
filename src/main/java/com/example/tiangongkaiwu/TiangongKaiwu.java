@@ -58,6 +58,8 @@ import com.example.tiangongkaiwu.block.FengFanBlock;
 import com.example.tiangongkaiwu.block.JianBlock;
 import com.example.tiangongkaiwu.block.ShaftBlock;
 import com.example.tiangongkaiwu.block.TongCheBlock;
+import com.example.tiangongkaiwu.block.TubeBlock;
+import com.example.tiangongkaiwu.block.entity.TubeBlockEntity;
 import com.example.tiangongkaiwu.block.MechanismBlock;
 import com.example.tiangongkaiwu.block.entity.MechanismBlockEntity;
 import com.example.tiangongkaiwu.item.MoDouItem;
@@ -177,6 +179,15 @@ public class TiangongKaiwu {
         "rice_grain",
         () -> new RiceGrainItem(new Item.Properties())
     );
+
+    // 作物方块的物品形态：仅供书上镜（Modonomicon spotlight 需 ItemStack）与创造选取，
+    // 不进创造栏、不出现在任何配方/战利品中。
+    public static final DeferredItem<BlockItem> RICE_STALK_ITEM =
+        ITEMS.registerSimpleBlockItem("rice_stalk", RICE_STALK);
+    public static final DeferredItem<BlockItem> RICE_PANICLE_ITEM =
+        ITEMS.registerSimpleBlockItem("rice_panicle", RICE_PANICLE);
+    public static final DeferredItem<BlockItem> RICE_STALK_DRY_ITEM =
+        ITEMS.registerSimpleBlockItem("rice_stalk_dry", RICE_STALK_DRY);
 
     /** 米：脱粒产物，可食（小恢复主食档：饱食 3 / 饱和度 0.4）。*/
     public static final DeferredItem<Item> RICE = ITEMS.register(
@@ -450,6 +461,31 @@ public class TiangongKaiwu {
             ITEMS.registerSimpleBlockItem("feng_fan_che", FENG_FAN_CHE);
 
     // ============================================================
+    // 车系拆分（D16）：筒 = 流体机器。「筒是筒、车是车」——车产劲，筒吃劲做流体的功。
+    // 两种安装位即两种形态：右键梘段=泵形态（提水上山，附着在段上）；
+    // 独立放置=滑轮形态（与世界批量汲泻，四模式）。
+    // ============================================================
+    /** 筒：流体机器（劲定额 3，档位「不及则慢」）。 */
+    public static final DeferredBlock<TubeBlock> TUBE = BLOCKS.register(
+        "tong",
+        () -> new TubeBlock(
+            BlockBehaviour.Properties.of()
+                .mapColor(MapColor.WOOD)
+                .strength(1.0f)
+                .noOcclusion()
+                .sound(SoundType.WOOD)
+        )
+    );
+
+    public static final DeferredItem<BlockItem> TUBE_ITEM =
+            ITEMS.register("tong", () -> new TubeBlock.TubeItem(TUBE.get(), new Item.Properties()));
+
+    /** 筒的方块实体：劲网三项指标缓存（Jade 用）。 */
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<TubeBlockEntity>> TUBE_BE_TYPE =
+        BLOCK_ENTITY_TYPES.register("tube",
+            () -> BlockEntityType.Builder.of(TubeBlockEntity::new, TUBE.get()).build(null));
+
+    // ============================================================
     // 翰墨台与残页
     // ============================================================
     public static final DeferredBlock<HanmoTaiBlock> HANMO_TAI = BLOCKS.register(
@@ -516,6 +552,7 @@ public class TiangongKaiwu {
                         output.accept(XUAN_ZHI);
                         output.accept(HANMO_TAI_ITEM);
                         output.accept(TONG_CHE_ITEM);
+                        output.accept(TUBE_ITEM);
                         output.accept(JIAN_ITEM);
                         output.accept(SHAFT_ITEM);
                         output.accept(YA_LUN_ITEM);

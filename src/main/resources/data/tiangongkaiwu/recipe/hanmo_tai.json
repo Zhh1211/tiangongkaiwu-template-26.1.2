@@ -2,16 +2,19 @@
   "type": "minecraft:crafting_shaped",
   "category": "building",
   "pattern": [
-    "PP",
+    "PI",
     "WW",
     "WW"
   ],
   "key": {
     "P": {
-      "item": "minecraft:paper"
+      "tag": "tiangongkaiwu:paper"
+    },
+    "I": {
+      "tag": "tiangongkaiwu:ink"
     },
     "W": {
-      "item": "minecraft:oak_planks"
+      "tag": "minecraft:planks"
     }
   },
   "result": {

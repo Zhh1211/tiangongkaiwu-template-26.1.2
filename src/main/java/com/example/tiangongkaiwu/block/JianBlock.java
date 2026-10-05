@@ -6,8 +6,10 @@ import com.example.tiangongkaiwu.block.entity.JianBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.tags.FluidTags;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -17,91 +19,114 @@ import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.block.state.properties.EnumProperty;
-import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.phys.BlockHitResult;
 
 import net.neoforged.neoforge.fluids.FluidStack;
 
 import org.jetbrains.annotations.Nullable;
 
 /**
- * 梘（引水槽）——批 2 流体化重做（D7/D11/D12）。
+ * 梘（引水槽）——D16 连通器重做：**梘是渠，不是容器**。
  *
- * <p>水位 = {@code LEVEL(0-7) × SUB(0/1)} 共 16 个有效档（eff = LEVEL*2+SUB），
- * 纯局部规则传播：
+ * <p>水存于每段 BE 的 FluidStack（mB 计量，**1 源方块 = 1B = 1000mB = 1 段满**），
+ * 「级」抽象已退役。全网总量守恒，规则：
  * <ul>
- *   <li>正下方有水（或正在转的取水装置）→ 自己灌满（汲水）；</li>
- *   <li>水平邻梘的水位比我高 ≥2 → 我涨 1 级（水位差保持 1 的压力梯度，
- *       每两格降一级、平地 16 格，见 D12）；</li>
- *   <li>正下方是梘 → 直落给它（垂直方向不衰减），向上永不流；</li>
- *   <li>有水时按概率给四邻稻田补水，<b>耗自己 1 级水位</b>（灌田有价）。</li>
+ *   <li>**重力转移**：邻段水位比我高 ≥500mB → 它向我转 250mB（缓慢均衡）；
+ *       正上方梘段 → 直落 250mB（向上永不流，D7）；</li>
+ *   <li>**汲水**：正下方是世界流体源 → 每周期渗入 250mB（明渠浸水，渐满）；</li>
+ *   <li>**灌田**：按 mB 预算漫灌，1 点田水 = 250mB；</li>
+ *   <li>**泵（TUBE 附着）**：筒按在段上，吃劲把水从低处搬到劲去向——水不能上山，
+ *       筒以劲提之（D16）。劲来向 = 邻侧的杆/动力源，水顺劲而行。</li>
  * </ul>
  *
- * <p>去 FACING 自动邻接（D7）：槽没有朝向，水往哪流全看水位差。
- * 保留 FACING/WATERED 两个遗留属性仅为旧档自愈（旧梘 watered=true → 迁移为满水），
- * 迁移在首次 tick 完成后归零，玩家无感。
- *
- * <p>流体种类存 BE（{@link JianBlockEntity}），对外暴露标准 IFluidHandler（D9）；
- * 槽内水体由客户端 BER 动态渲染（按所装流体取贴图染色，D12）。
+ * <p>车系直喂已删除（D16 拆分）：桔槔/辘轳保留直喂（井具本职提水）。
+ * 流体种类存 BE（{@link JianBlockEntity}），对外暴露标准 IFluidHandler（D9）；
+ * 槽内水体由客户端 BER 按填充率动态渲染（D12）。
  */
 public class JianBlock extends Block implements EntityBlock {
 
-    /** 高 3 位水位（0-7）。 */
-    public static final IntegerProperty LEVEL = IntegerProperty.create("level", 0, 7);
-    /** 半级位（0/1）——与 LEVEL 合成 16 个有效档。 */
-    public static final IntegerProperty SUB = IntegerProperty.create("sub", 0, 1);
     /** 四向邻接（有相邻梘段则该侧开口），供 multipart 模型成型。 */
     public static final BooleanProperty CONNECT_NORTH = BooleanProperty.create("connect_north");
     public static final BooleanProperty CONNECT_SOUTH = BooleanProperty.create("connect_south");
     public static final BooleanProperty CONNECT_EAST = BooleanProperty.create("connect_east");
     public static final BooleanProperty CONNECT_WEST = BooleanProperty.create("connect_west");
-
-    // ===== 遗留属性：仅为旧档自愈，新逻辑不使用 =====
-    public static final EnumProperty<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
-    public static final BooleanProperty WATERED = BooleanProperty.create("watered");
+    /**
+     * 四向隔板（墨斗点侧面插/拆）：该侧封死——水不互通、墙板闭合。
+     * 插板联动隔壁梘的对侧（一块板隔两家）。
+     */
+    public static final BooleanProperty SEAL_NORTH = BooleanProperty.create("seal_north");
+    public static final BooleanProperty SEAL_SOUTH = BooleanProperty.create("seal_south");
+    public static final BooleanProperty SEAL_EAST = BooleanProperty.create("seal_east");
+    public static final BooleanProperty SEAL_WEST = BooleanProperty.create("seal_west");
+    /** 泵附着（筒按在该段上，D16）：有劲则把水从低处搬向劲去向。 */
+    public static final BooleanProperty TUBE = BooleanProperty.create("tube");
 
     /** 结算周期（tick）。 */
     public static final int INTERVAL = 10;
     /** 邻居变化后的快速重算延迟。 */
     public static final int REACT_DELAY = 2;
-    /** 补水节奏：每次结算 1/4 概率 → 平均 2 秒补 1 格，同时耗自己 1 级水位。 */
+    /** 补水节奏：每次结算 1/4 概率。 */
     private static final int IRRIGATE_CHANCE = 4;
 
-    /** 满槽有效水位。 */
-    public static final int MAX_EFF = 15;
+    /** 单次重力转移量（mB）。 */
+    private static final int TRANSFER_MB = 250;
+    /** 触发水平均衡的水位差（mB）。 */
+    private static final int LEVEL_DIFF = 500;
+    /** 1 点田水的代价（mB）。 */
+    public static final int MB_PER_MOISTURE = 250;
+    /** 每段容量（mB），与 {@link JianBlockEntity#SEGMENT_CAPACITY} 一致。 */
+    public static final int SEGMENT_MB = 1000;
 
     public JianBlock(Properties properties) {
         super(properties);
         this.registerDefaultState(this.stateDefinition.any()
-                .setValue(LEVEL, 0)
-                .setValue(SUB, 0)
                 .setValue(CONNECT_NORTH, false)
                 .setValue(CONNECT_SOUTH, false)
                 .setValue(CONNECT_EAST, false)
                 .setValue(CONNECT_WEST, false)
-                .setValue(FACING, Direction.NORTH)
-                .setValue(WATERED, false));
+                .setValue(SEAL_NORTH, false)
+                .setValue(SEAL_SOUTH, false)
+                .setValue(SEAL_EAST, false)
+                .setValue(SEAL_WEST, false)
+                .setValue(TUBE, false));
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(LEVEL, SUB, CONNECT_NORTH, CONNECT_SOUTH, CONNECT_EAST, CONNECT_WEST,
-                FACING, WATERED);
+        builder.add(CONNECT_NORTH, CONNECT_SOUTH, CONNECT_EAST, CONNECT_WEST,
+                SEAL_NORTH, SEAL_SOUTH, SEAL_EAST, SEAL_WEST, TUBE);
     }
 
-    /** 有效水位（0-15）。 */
-    public static int effOf(BlockState state) {
-        return state.getValue(LEVEL) * 2 + state.getValue(SUB);
+    /** 方向 → 该侧隔板属性。 */
+    public static BooleanProperty sealFor(Direction dir) {
+        return switch (dir) {
+            case NORTH -> SEAL_NORTH;
+            case SOUTH -> SEAL_SOUTH;
+            case EAST -> SEAL_EAST;
+            case WEST -> SEAL_WEST;
+            default -> SEAL_NORTH; // 垂直向无隔板（不该到这）
+        };
     }
 
-    private static BlockState withEff(BlockState state, int eff) {
-        eff = Math.clamp(eff, 0, MAX_EFF);
-        return state.setValue(LEVEL, eff / 2).setValue(SUB, eff % 2);
+    /**
+     * 墨斗插/拆隔板：目标侧取反，并**联动**隔壁梘的对侧同插同拆（一块板隔两家）。
+     */
+    public static void toggleSeal(ServerLevel level, BlockPos pos, Direction side) {
+        BlockState state = level.getBlockState(pos);
+        boolean now = !state.getValue(sealFor(side));
+        level.setBlock(pos, state.setValue(sealFor(side), now), 3);
+        BlockPos np = pos.relative(side);
+        BlockState ns = level.getBlockState(np);
+        if (ns.getBlock() instanceof JianBlock) {
+            level.setBlock(np, ns.setValue(sealFor(side.getOpposite()), now), 3);
+        }
     }
 
     @Override
@@ -127,86 +152,159 @@ public class JianBlock extends Block implements EntityBlock {
     }
 
     // ============================================================
-    // 结算：汲水 / 梯度传播 / 直落 / 灌田 / 邻接成型 / 旧档自愈
+    // 结算：泵 / 重力转移 / 汲水 / 灌田 / 邻接成型
     // ============================================================
 
     @Override
     protected void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
-        // ① 旧档自愈：旧梘 watered=true → 迁移为满水并清除遗留标记
-        if (state.getValue(WATERED)) {
-            state = withEff(state, MAX_EFF).setValue(WATERED, false);
-            level.setBlock(pos, state, 2);
+        if (!(level.getBlockEntity(pos) instanceof JianBlockEntity jbe)) {
+            return; // 无 BE 不结算
         }
 
-        int eff = effOf(state);
-        int newEff = eff;
-        boolean fillFluid = false;
-
-        // ② 正下方汲水：水面 / 正在转的取水装置 → 灌满
-        BlockPos below = pos.below();
-        if (newEff < MAX_EFF
-                && (level.getFluidState(below).is(FluidTags.WATER) || WaterDevices.isRunning(level.getBlockState(below)))) {
-            newEff = MAX_EFF;
-            fillFluid = true;
+        // ① 泵（TUBE 附着）：劲推水上山——从低处段搬向劲去向段
+        if (state.getValue(TUBE)) {
+            int jin = PowerNetwork.allocate(level, pos, PowerNetwork.DEFAULT_DEMAND);
+            if (jin > 0 && pumpOnce(level, pos, random)) {
+                level.playSound(null, pos, SoundEvents.WATER_AMBIENT, SoundSource.BLOCKS, 0.4F, 1.6F);
+            }
         }
 
-        // ③ 水平梯度：邻梘水位比我高 ≥2 → 我涨 1 级（差保持 1，D12 压力梯度）
+        int myMb = jbe.getMb();
+
+        // ② 重力转移（局部连通器，每周期只收一笔）
+        // ②a 直落：正上方段的水往下落
+        BlockPos above = pos.above();
+        if (myMb <= SEGMENT_MB - TRANSFER_MB
+                && level.getBlockEntity(above) instanceof JianBlockEntity ube
+                && ube.getMb() >= TRANSFER_MB) {
+            if (JianBlock.transfer(level, above, pos, TRANSFER_MB)) {
+                level.scheduleTick(above, this, INTERVAL);
+            }
+        }
+        // ②b 水平均衡：邻段比我高 ≥LEVEL_DIFF → 它向我转一笔
         for (Direction dir : Direction.Plane.HORIZONTAL) {
-            BlockState nb = level.getBlockState(pos.relative(dir));
-            if (nb.getBlock() instanceof JianBlock && effOf(nb) > newEff + 1 && newEff < MAX_EFF) {
-                newEff++;
+            BlockPos p = pos.relative(dir);
+            if (level.getBlockEntity(p) instanceof JianBlockEntity nbe
+                    && nbe.getMb() - jbe.getMb() >= LEVEL_DIFF) {
+                if (JianBlock.transfer(level, p, pos, TRANSFER_MB)) {
+                    level.scheduleTick(p, this, INTERVAL);
+                }
+                break; // 每周期只收一笔
             }
         }
 
-        // ④ 正下方直落：垂直方向不衰减（比水平梯度高一档）
-        if (level.getBlockState(below).getBlock() instanceof JianBlock) {
-            BlockState belowState = level.getBlockState(below);
-            if (effOf(belowState) < newEff) {
-                level.setBlock(below, withEff(belowState, newEff), 2);
-                level.scheduleTick(below, this, INTERVAL);
+        int myMb2 = jbe.getMb();
+
+        // ③ 汲水：正下方是世界流体源（或井具在提水——桔槔/辘轳本职直喂）→ 每周期渗入 250mB
+        FluidState below = level.getFluidState(pos.below());
+        boolean wellFeeding = WaterDevices.isRunning(level.getBlockState(pos.below()));
+        if ((below.isSource() && !below.isEmpty()) || wellFeeding) {
+            FluidState source = below.isSource() && !below.isEmpty() ? below : Fluids.WATER.defaultFluidState();
+            if (myMb2 < SEGMENT_MB) {
+                jbe.accept(source.getType(), TRANSFER_MB);
             }
         }
 
-        // ⑤ 灌田（漫灌）：以本段为源沿连体田洪水填充——
-        //    需水量 = Σ(7-田水)+枯秆 1 点；供给 = 本段水位（1 级 = 1 点需水）；
-        //    够就全灌，不够近处优先灌到水尽；一滴没浇出去就不扣水。
-        if (newEff > 0 && random.nextInt(IRRIGATE_CHANCE) == 0) {
-            newEff = floodIrrigate(level, pos, newEff);
+        // ④ 灌田（漫灌）：mB 预算，1 点田水 250mB；只灌水（熔岩段不灌）
+        if (jbe.getMb() >= MB_PER_MOISTURE && !jbe.getFluid().isEmpty()
+                && jbe.getFluid().getFluid().isSame(Fluids.WATER)
+                && random.nextInt(IRRIGATE_CHANCE) == 0) {
+            int spent = floodIrrigate(level, pos, jbe.getMb());
+            if (spent > 0) {
+                jbe.drainMb(spent);
+            }
         }
 
-        // ⑥ 邻接成型：四侧是否有相邻梘段（multipart 模型按此开口）
-        boolean cn = level.getBlockState(pos.north()).getBlock() instanceof JianBlock;
-        boolean cs = level.getBlockState(pos.south()).getBlock() instanceof JianBlock;
-        boolean ce = level.getBlockState(pos.east()).getBlock() instanceof JianBlock;
-        boolean cw = level.getBlockState(pos.west()).getBlock() instanceof JianBlock;
+        // ⑤ 邻接成型：两侧都没隔板才开口（隔板=墙板闭合）
+        boolean cn = canConnect(state, level, pos, Direction.NORTH);
+        boolean cs = canConnect(state, level, pos, Direction.SOUTH);
+        boolean ce = canConnect(state, level, pos, Direction.EAST);
+        boolean cw = canConnect(state, level, pos, Direction.WEST);
 
         BlockState newState = state
                 .setValue(CONNECT_NORTH, cn).setValue(CONNECT_SOUTH, cs)
                 .setValue(CONNECT_EAST, ce).setValue(CONNECT_WEST, cw);
-        newState = withEff(newState, newEff);
         if (newState != state) {
             level.setBlock(pos, newState, 2);
-        }
-
-        // ⑦ BE 对账：流体种类/液量与水位一致（渲染与 capability 的真相源）
-        if (level.getBlockEntity(pos) instanceof JianBlockEntity jbe) {
-            if (fillFluid && jbe.getFluid().isEmpty()) {
-                jbe.setFluid(new FluidStack(net.minecraft.world.level.material.Fluids.WATER, 1));
-            }
-            jbe.reconcile(effOf(newState));
         }
 
         level.scheduleTick(pos, this, INTERVAL);
     }
 
     /**
+     * 泵一次工作（D16）：劲来向 = 邻侧的杆/动力源；水顺劲而行——
+     * 从其余邻段中水位最高者搬 {@link #SEGMENT_MB} 到劲去向的段。
+     *
+     * @return 是否搬成功
+     */
+    private boolean pumpOnce(ServerLevel level, BlockPos pos, RandomSource random) {
+        Direction inDir = null;
+        for (Direction d : Direction.values()) {
+            BlockState nb = level.getBlockState(pos.relative(d));
+            if (nb.getBlock() instanceof ShaftBlock || WaterDevices.emittedPower(nb) > 0) {
+                inDir = d;
+                break;
+            }
+        }
+        if (inDir == null) {
+            return false; // 劲不经轴来（隔空连网），无从定向
+        }
+        Direction outDir = inDir.getOpposite();
+        BlockPos outPos = pos.relative(outDir);
+        BlockPos best = null;
+        int bestMb = -1;
+        for (Direction d : Direction.values()) {
+            if (d == outDir) {
+                continue;
+            }
+            BlockPos p = pos.relative(d);
+            if (level.getBlockEntity(p) instanceof JianBlockEntity nbe
+                    && nbe.getMb() >= SEGMENT_MB && nbe.getMb() > bestMb) {
+                bestMb = nbe.getMb();
+                best = p;
+            }
+        }
+        if (best == null) {
+            return false;
+        }
+        return JianBlock.transfer(level, best, outPos, SEGMENT_MB);
+    }
+
+    /** 段间转移：同流体、目标容量内；成功返回 true。 */
+    public static boolean transfer(ServerLevel level, BlockPos from, BlockPos to, int amount) {
+        if (from.equals(to) || amount <= 0) {
+            return false;
+        }
+        if (!(level.getBlockEntity(from) instanceof JianBlockEntity fbe)
+                || !(level.getBlockEntity(to) instanceof JianBlockEntity tbe)) {
+            return false;
+        }
+        FluidStack f = fbe.getFluid();
+        if (f.isEmpty() || f.getAmount() < amount) {
+            return false;
+        }
+        return tbe.accept(f.getFluid(), amount) >= amount;
+    }
+
+    /** 该侧能否开口：邻格是梘、我没插隔板、对面也没插隔板。 */
+    private static boolean canConnect(BlockState state, ServerLevel level, BlockPos pos, Direction dir) {
+        if (state.getValue(sealFor(dir))) {
+            return false;
+        }
+        BlockState nb = level.getBlockState(pos.relative(dir));
+        return nb.getBlock() instanceof JianBlock && !nb.getValue(sealFor(dir.getOpposite()));
+    }
+
+    /**
      * 漫灌：从槽段四邻出发，沿相邻稻秆/枯秆洪水填充整片连体田。
      *
-     * <p>预算 = 传入的有效水位（1 级 = 1 点需水）；近处优先（BFS 天然按距离序），
-     * 预算耗尽即停；一整轮下来一块田都没浇到（预算没花出去）则不扣水位。
+     * <p>预算 = 传入 mB（1 点田水 = {@link #MB_PER_MOISTURE}）；近处优先（BFS 天然按距离序），
+     * 预算耗尽即停；一整轮下来一块田都没浇到（预算没花出去）则不扣水。
      * 访问上限 256 格，防超大连体田卡结算。
+     *
+     * @return 实际花掉的 mB
      */
-    private static int floodIrrigate(ServerLevel level, BlockPos pos, int budget) {
+    private int floodIrrigate(ServerLevel level, BlockPos pos, int budget) {
         it.unimi.dsi.fastutil.objects.ObjectOpenHashSet<BlockPos> visited =
                 new it.unimi.dsi.fastutil.objects.ObjectOpenHashSet<>();
         java.util.ArrayDeque<BlockPos> queue = new java.util.ArrayDeque<>();
@@ -223,15 +321,15 @@ public class JianBlock extends Block implements EntityBlock {
             if (s.getBlock() == TiangongKaiwu.RICE_STALK.get()) {
                 int moisture = s.getValue(RiceStalkBlock.MOISTURE);
                 int deficit = RiceStalkBlock.MAX_MOISTURE - moisture;
-                if (deficit > 0) {
-                    int give = Math.min(deficit, budget - spent);
-                    level.setBlock(p, RiceStalkBlock.withMoisture(s, moisture + give), 2);
-                    spent += give;
+                int affordable = Math.min(deficit, (budget - spent) / MB_PER_MOISTURE);
+                if (affordable > 0) {
+                    level.setBlock(p, RiceStalkBlock.withMoisture(s, moisture + affordable), 2);
+                    spent += affordable * MB_PER_MOISTURE;
                 }
             } else if (s.getBlock() == TiangongKaiwu.RICE_STALK_DRY.get()) {
-                if (spent < budget) {
+                if (budget - spent >= MB_PER_MOISTURE) {
                     level.setBlock(p, RiceStalkBlockDry.reviveState(s), 3);
-                    spent++;
+                    spent += MB_PER_MOISTURE;
                 }
             } else {
                 continue; // 非田块：不向外扩散（漫灌沿田走，不入空气）
@@ -247,12 +345,28 @@ public class JianBlock extends Block implements EntityBlock {
                 }
             }
         }
-        return spent > 0 ? budget - spent : budget; // 只实浇才扣水
+        return spent; // 只实浇才扣水（0 = 没花出去）
     }
 
     // ============================================================
-    // BE 与掉落
+    // 交互：拆泵 / BE
     // ============================================================
+
+    @Override
+    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos,
+                                              Player player, InteractionHand hand, BlockHitResult hit) {
+        if (!stack.isEmpty() || !state.getValue(TUBE)) {
+            return super.useItemOn(stack, state, level, pos, player, hand, hit);
+        }
+        if (level.isClientSide) {
+            return ItemInteractionResult.sidedSuccess(true);
+        }
+        // 空手右键：拆下泵（筒退还）
+        level.setBlock(pos, state.setValue(TUBE, false), 3);
+        Block.popResource(level, pos, new ItemStack(TiangongKaiwu.TUBE_ITEM.get()));
+        level.playSound(null, pos, SoundEvents.WOOD_BREAK, SoundSource.BLOCKS, 0.6F, 0.9F);
+        return ItemInteractionResult.sidedSuccess(false);
+    }
 
     @Nullable
     @Override

@@ -50,13 +50,15 @@ public class JianRenderer implements BlockEntityRenderer<JianBlockEntity> {
         if (!(state.getBlock() instanceof JianBlock)) {
             return;
         }
-        int eff = JianBlock.effOf(state);
-        if (eff <= 0) {
+        // 液量即真相（D16 连通器模型）：填充率 = 段内 mB / 段容量
+        FluidStack fluid = be.getFluid();
+        int mb = fluid == null || fluid.isEmpty() ? 0 : fluid.getAmount();
+        if (mb <= 0) {
             return;
         }
+        float fill = Math.min(1.0F, mb / (float) JianBlockEntity.SEGMENT_CAPACITY);
 
         // 流体贴图与染色（D12）：BE 里是什么流体就用什么的
-        FluidStack fluid = be.getFluid();
         if (fluid == null || fluid.isEmpty()) {
             fluid = new FluidStack(Fluids.WATER, 1);
         }
@@ -83,7 +85,7 @@ public class JianRenderer implements BlockEntityRenderer<JianBlockEntity> {
         }
 
         float y0 = WATER_BOTTOM;
-        float y1 = Mth.lerp(eff / (float) JianBlock.MAX_EFF, WATER_BOTTOM, WATER_TOP_MAX);
+        float y1 = Mth.lerp(fill, WATER_BOTTOM, WATER_TOP_MAX);
         float x0 = INSET;
         float x1 = 1.0F - INSET;
         float z0 = INSET;

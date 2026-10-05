@@ -12,6 +12,7 @@ import com.example.tiangongkaiwu.TiangongKaiwu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
@@ -33,6 +34,9 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
  * <ul>
  * <li>传动杆：只沿**自身轴向**传播（不再六向、不再每格衰减）；</li>
  * <li>牙轮：从进入方向垂直的四个方向传出——**90° 变向必须经过牙轮**；</li>
+ * <li>小牙轮啮合（2026-10-04 拍板：只留小牙轮）：相邻**同轴**牙轮轮齿咬合直连
+ *     （相邻方向 ⊥ 轴），平行错位的两根杆得以相接——"差一格的两根平行杆"；
+ *     沿轴向相邻仍不直通（轮面平行咬不上，直通请用传动杆）。</li>
  * <li>动力源（筒车/牛车/踏车/拔车）与机器（碓）是**端点**：只出劲/只吃劲，不导劲。</li>
  * </ul>
  */
@@ -114,7 +118,7 @@ public final class PowerNetwork {
         queue.add(new Entry(start, null));
         // 起点机器给自己记账（2026-10-04 诡案正修：调用者定额不进总需求 →
         // 单台碓 demand=0 早退不干活；摆个无用碓反而"修好"的诡异现象即源于此）
-        if (level.getBlockState(start).getBlock() == TiangongKaiwu.DUI.get()) {
+        if (isMachine(level.getBlockState(start))) {
             machines.add(start);
         }
 
@@ -134,9 +138,8 @@ public final class PowerNetwork {
                         outDirs.add(d);
                     }
                 }
-            } else if (state.getBlock() instanceof DuiBlock dui) {
-                // 碓：六向探网（2026-10-04）——机器与网的连接不限自身轴向（碓挂轴下时，
-                // 轴在正上方，沿旧 AXIS 找永远够不着）。机器=端点+任意相邻轴皆可接入。
+            } else if (isMachine(state)) {
+                // 机器（碓/筒/泵段）：六向探网（碓挂轴下、筒贴杆皆可接入）。机器=端点+任意相邻轴皆可接入。
                 outDirs = new ArrayList<>();
                 for (Direction d : Direction.values()) {
                     outDirs.add(d);
@@ -163,6 +166,10 @@ public final class PowerNetwork {
                     visited.add(nbPos);
                     machines.add(nbPos);                  // 机器：吃劲
                     queue.add(new Entry(nbPos, dir));     // 碓沿自身轴导劲（一线堆多台）
+                } else if (isMachine(nb)) {
+                    visited.add(nbPos);
+                    machines.add(nbPos);                  // 机器（筒/泵段）：吃劲
+                    queue.add(new Entry(nbPos, dir));
                 } else {
                     int power = WaterDevices.emittedPower(nb);
                     if (power > 0) {
@@ -184,6 +191,28 @@ public final class PowerNetwork {
                     queue.add(new Entry(nbPos, dir));
                 }
             }
+
+            // ③ 小牙轮啮合（2026-10-04）：相邻同轴牙轮 ⊥ 轴向直连——补 ② 够不着的
+            //    「进入方向那一侧」的啮合邻居（② 的 outDirs 避开了 entry 轴）。
+            //    只咬牙轮不咬杆：沿轴不直通的铁律不破。
+            if (state.getBlock() instanceof GearBlock) {
+                Direction.Axis axle = state.getValue(GearBlock.AXIS);
+                for (Direction dir : Direction.values()) {
+                    if (dir.getAxis() == axle) {
+                        continue;
+                    }
+                    BlockPos nbPos = cur.pos().relative(dir);
+                    if (visited.contains(nbPos)) {
+                        continue;
+                    }
+                    BlockState nb = level.getBlockState(nbPos);
+                    if (nb.getBlock() instanceof GearBlock
+                            && nb.getValue(GearBlock.AXIS) == axle) {
+                        visited.add(nbPos);
+                        queue.add(new Entry(nbPos, dir));
+                    }
+                }
+            }
         }
 
         machines.sort(null); // BlockPos 自然序（确定性），任何机器视角算出的分配一致
@@ -199,6 +228,15 @@ public final class PowerNetwork {
             }
         }
         return dirs;
+    }
+
+    /** 劲网的「机器」：吃劲的端点（D16 起含筒与梘泵段）。 */
+    private static boolean isMachine(BlockState state) {
+        Block block = state.getBlock();
+        if (block == TiangongKaiwu.DUI.get() || block == TiangongKaiwu.TUBE.get()) {
+            return true;
+        }
+        return state.hasProperty(JianBlock.TUBE) && state.getValue(JianBlock.TUBE);
     }
 
     /** 动力源的「轮轴」方向：筒车 = 轮平面轴（plane=z → 轴沿 z）；其余车 = 车身朝向轴。 */

@@ -75,6 +75,14 @@
       "title": "entry.tiangongkaiwu.naili_do.spot_dui.title",
       "text": "entry.tiangongkaiwu.naili_do.spot_dui.text",
       "anchor": "dui"
+    },
+    {
+      "type": "modonomicon:multiblock",
+      "multiblock_name": "entry.tiangongkaiwu.naili_do.multiblock_dui.name",
+      "multiblock_id": "dui",
+      "text": "entry.tiangongkaiwu.naili_do.multiblock_dui.text",
+      "show_visualize_button": true,
+      "anchor": "dui_structure"
     }
   ]
 }

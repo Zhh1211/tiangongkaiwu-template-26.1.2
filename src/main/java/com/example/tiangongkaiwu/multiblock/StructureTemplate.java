@@ -89,19 +89,88 @@ public final class StructureTemplate {
             if (!roles.test(part.role())) {
                 continue;
             }
-            BlockPos p = core.offset(spin(part.pos(), rot));
-            BlockState state = level.getBlockState(p);
-            boolean ok = switch (part.role()) {
-                case WOOD, PIVOT, ROTOR -> isWoodish(state);
-                case SLIDER -> state.isAir() || isWoodish(state);
-                case FEED -> isHopperWithFacing(state, part, rot);
-                case SHAFT_SOCKET -> isShaftWithAxis(state, part, rot);
-            };
-            if (!ok) {
+            if (!checkPart(level, core, part, rot)) {
                 return false;
             }
         }
         return true;
+    }
+
+    /**
+     * 单部件校验（幽灵预览 / 缺件明细共用）：该部件位在 rot 下是否合格。
+     * 判定与 {@link #fits} 完全同源，两处永不漂移。
+     */
+    public boolean checkPart(Level level, BlockPos core, Part part, int rot) {
+        BlockPos p = core.offset(spin(part.pos(), rot));
+        BlockState state = level.getBlockState(p);
+        return switch (part.role()) {
+            case WOOD, PIVOT, ROTOR -> isWoodish(state);
+            case SLIDER -> state.isAir() || isWoodish(state);
+            case FEED -> isHopperWithFacing(state, part, rot);
+            case SHAFT_SOCKET -> isShaftWithAxis(state, part, rot);
+        };
+    }
+
+    /**
+     * 匹配得最好的旋转：全对则同 {@link #matchAt}；不全对返回**不合格件最少**的旋转
+     * （确定性）——幽灵预览与缺件明细用「最接近能成」的视角展示。
+     */
+    public int bestRotAt(Level level, BlockPos core) {
+        int minBad = Integer.MAX_VALUE;
+        int best = 0;
+        for (int rot = 0; rot < 4; rot++) {
+            int bad = countBad(level, core, rot);
+            if (bad < minBad) {
+                minBad = bad;
+                best = rot;
+            }
+        }
+        return best;
+    }
+
+    /**
+     * 同上，但缺件数**并列**时优先取 {@code preferredRot}（2026-10-04 反馈：
+     * 空地上没有摆好的锚点参考，预览方向应随玩家面向变，而不是永远锁一个方向）。
+     */
+    public int bestRotAt(Level level, BlockPos core, int preferredRot) {
+        int minBad = Integer.MAX_VALUE;
+        int best = 0;
+        for (int rot = 0; rot < 4; rot++) {
+            int bad = countBad(level, core, rot);
+            if (bad < minBad) {
+                minBad = bad;
+                best = rot;
+            }
+        }
+        if (preferredRot >= 0 && preferredRot < 4
+                && countBad(level, core, preferredRot) == minBad) {
+            return preferredRot;
+        }
+        return best;
+    }
+
+    private int countBad(Level level, BlockPos core, int rot) {
+        int bad = 0;
+        for (Part part : this.parts) {
+            if (!checkPart(level, core, part, rot)) {
+                bad++;
+            }
+        }
+        return bad;
+    }
+
+    /**
+     * 某旋转下的缺件统计（按角色计，索引 = {@link Role#ordinal()}）。
+     * SLIDER 自动换装不计缺（空气/木料均可承接）。
+     */
+    public int[] missingAt(Level level, BlockPos core, int rot) {
+        int[] missing = new int[Role.values().length];
+        for (Part part : this.parts) {
+            if (!checkPart(level, core, part, rot)) {
+                missing[part.role().ordinal()]++;
+            }
+        }
+        return missing;
     }
 
     /** 轴位：必须是传动杆，且轴向与模板样例按旋转换算后一致。 */
@@ -133,7 +202,7 @@ public final class StructureTemplate {
     }
 
     /** 轴名随结构旋转：spin 奇数次 x↔z 互换，y 不变（与 {@link #spin} 的 (x,z)→(z,−x) 一致）。 */
-    private static String rotateAxisName(String axis, int rot) {
+    public static String rotateAxisName(String axis, int rot) {
         if (rot % 2 == 0 || axis.equals("y")) {
             return axis;
         }
@@ -141,7 +210,7 @@ public final class StructureTemplate {
     }
 
     /** 水平朝向随结构旋转：与 spin 的偏移旋转同向（NORTH→WEST），上下向不变。 */
-    private static Direction rotateFacing(Direction d, int rot) {
+    public static Direction rotateFacing(Direction d, int rot) {
         if (d.getAxis() == Direction.Axis.Y) {
             return d;
         }
@@ -149,6 +218,22 @@ public final class StructureTemplate {
             d = d.getCounterClockWise();
         }
         return d;
+    }
+
+    /**
+     * 自动补料的放置方块态（2026-10-04 墨斗潜行右键）：模板样例按结构旋转换算。
+     * WOOD/SLIDER 返回 null（木料按玩家背包物品放置、运动件成型时生成）。
+     */
+    public BlockState placementState(Part part, int rot) {
+        return switch (part.role()) {
+            case WOOD, PIVOT, ROTOR, SLIDER -> null;
+            case FEED -> net.minecraft.world.level.block.Blocks.HOPPER.defaultBlockState()
+                    .setValue(BlockStateProperties.FACING_HOPPER,
+                            rotateFacing(Direction.byName(part.props().get("facing")), rot));
+            case SHAFT_SOCKET -> com.example.tiangongkaiwu.TiangongKaiwu.SHAFT.get().defaultBlockState()
+                    .setValue(ShaftBlock.AXIS,
+                            Direction.Axis.byName(rotateAxisName(part.props().get("axis"), rot)));
+        };
     }
 
     /** 某旋转下某角色的全部世界坐标（幽灵预览/补料/自检共用）。 */

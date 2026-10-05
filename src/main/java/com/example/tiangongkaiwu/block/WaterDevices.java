@@ -32,18 +32,15 @@ public final class WaterDevices {
         return 0;
     }
 
-    /** 这台装置在转吗（转着的车／轮／井具可以把水送给梘）。 */
+    /**
+     * 这台井具在提水吗（桔槔/辘轳的本职：井上提水可以直接喂梘，不经筒）。
+     *
+     * <p>D16 车系拆分（2026-10-05）：**车系（筒车/牛车/踏车/拔车）不再直接喂梘**——
+     * 车只产劲，流体做功归筒（泵形态/滑轮形态）。风帆车依旧**故意不在**这里
+     * （书：去水非取水也；排涝走筒·滑轮形态）。
+     */
     public static boolean isRunning(BlockState state) {
-        Block block = state.getBlock();
-        if (block instanceof TongCheBlock) {
-            return TongCheBlock.isRunning(state);
-        }
-        if (block instanceof DragonBoneCarBlock car) {
-            return car.isRunning(state);
-        }
-        // 桔槔／辘轳也算"在提水"，所以它们可以喂梘。
-        // 注意：风帆车**故意不在**这里——它是**排水**的（书：去水非取水也），不能倒着给梘送水。
-        if (block instanceof WellLiftBlock lift) {
+        if (state.getBlock() instanceof WellLiftBlock lift) {
             return lift.isRunning(state);
         }
         return false;

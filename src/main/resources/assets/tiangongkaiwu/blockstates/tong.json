@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "draining=false": {
+      "model": "tiangongkaiwu:block/tong"
+    },
+    "draining=true": {
+      "model": "tiangongkaiwu:block/tong"
+    }
+  }
+}

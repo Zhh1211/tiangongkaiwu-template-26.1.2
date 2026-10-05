@@ -10,28 +10,25 @@ import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
+import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 
 import org.jetbrains.annotations.Nullable;
 
 /**
- * 梘的方块实体：只存「装的是哪种流体」（FluidStack）。
+ * 梘段的方块实体（D16 连通器模型）：存本段持有的流体（FluidStack，mB 计量）。
  *
- * <p>水位（LEVEL×SUB）放在方块状态里，供传播规则与贴图直接读；
- * 流体种类放 BE，随区块存档并同步到客户端（BER 按它取贴图染色，D12）。
- * 约定：1 级有效水位 = {@link #MB_PER_LEVEL} mB，BE 里的液量与方块状态水位
- * 由 {@link JianBlock} 的 tick 负责对账。
+ * <p><b>段 = 网络的显示窗口，不是独立水箱</b>：水在「梘网」里守恒流动（重力分配：
+ * 高段向低段转移、正下方直落），每段的液量是分配的结果。真实流体量以 mB 计，
+ * **1 源方块 = 1B = 1000mB = 1 段满**（D16，社区共识单位；旧「级」抽象已退役）。
  *
- * <p>同时对外暴露标准 {@link IFluidHandler}（D9）：批 3 的「筒」往里注水、
- * 以后三卷的卤水/油/熔液都走这个口子。
+ * <p>对外暴露标准 {@link IFluidHandler}（D9）：筒、卤水、油、熔液都走这个口子。
  */
 public class JianBlockEntity extends BlockEntity {
 
-    /** 1 级有效水位对应的液量（mB）。16 级封顶 → 1600 mB。 */
-    public static final int MB_PER_LEVEL = 100;
-    /** 满槽容量（mB）。 */
-    public static final int CAPACITY = 16 * MB_PER_LEVEL;
+    /** 每段容量（mB）= 1B = 1 个源方块。 */
+    public static final int SEGMENT_CAPACITY = 1000;
 
     private FluidStack fluid = FluidStack.EMPTY;
     private final FluidHandler handler = new FluidHandler();
@@ -46,35 +43,56 @@ public class JianBlockEntity extends BlockEntity {
         return this.fluid;
     }
 
-    /** 设置流体种类（不改液量；空 stack 视为清空）。 */
-    public void setFluid(FluidStack stack) {
-        this.fluid = stack == null ? FluidStack.EMPTY : stack;
-        this.setChanged();
-        this.sync();
+    /** 本段当前液量（mB）。 */
+    public int getMb() {
+        return this.fluid.isEmpty() ? 0 : this.fluid.getAmount();
     }
 
-    /** 把 BE 液量对账成方块状态的有效水位（由 JianBlock.tick 调用）。 */
-    public void reconcile(int effLevel) {
-        int target = Math.clamp(effLevel, 0, 16) * MB_PER_LEVEL;
-        if (effLevel <= 0) {
-            if (!this.fluid.isEmpty()) {
-                this.fluid = FluidStack.EMPTY;
-                this.setChanged();
-                this.sync();
-            }
-            return;
+    /**
+     * 接受流体：同种或空段才收，容量 {@link #SEGMENT_CAPACITY} 封顶。
+     *
+     * @return 实际接受的 mB
+     */
+    public int accept(Fluid fluid, int amount) {
+        if (fluid == null || amount <= 0) {
+            return 0;
         }
         if (this.fluid.isEmpty()) {
-            this.fluid = new FluidStack(net.minecraft.world.level.material.Fluids.WATER, target);
+            int accepted = Math.min(amount, SEGMENT_CAPACITY);
+            this.fluid = new FluidStack(fluid, accepted);
             this.setChanged();
             this.sync();
-            return;
+            return accepted;
         }
-        if (this.fluid.getAmount() != target) {
-            this.fluid = new FluidStack(this.fluid.getFluid(), target);
+        if (!FluidStack.isSameFluidSameComponents(new FluidStack(fluid, 1), this.fluid)) {
+            return 0;
+        }
+        int accepted = Math.min(amount, SEGMENT_CAPACITY - this.fluid.getAmount());
+        if (accepted > 0) {
+            this.fluid.grow(accepted);
             this.setChanged();
             this.sync();
         }
+        return accepted;
+    }
+
+    /**
+     * 排出流体：不足则排空为止。
+     *
+     * @return 实际排出的 mB
+     */
+    public int drainMb(int amount) {
+        if (amount <= 0 || this.fluid.isEmpty()) {
+            return 0;
+        }
+        int drained = Math.min(amount, this.fluid.getAmount());
+        this.fluid.shrink(drained);
+        if (this.fluid.isEmpty()) {
+            this.fluid = FluidStack.EMPTY;
+        }
+        this.setChanged();
+        this.sync();
+        return drained;
     }
 
     public IFluidHandler getFluidHandler() {
@@ -122,7 +140,7 @@ public class JianBlockEntity extends BlockEntity {
         }
     }
 
-    // ============ 标准 IFluidHandler（D9） ============
+    // ============ 标准 IFluidHandler（D9，容量=段容量） ============
 
     private class FluidHandler implements IFluidHandler {
 
@@ -138,7 +156,7 @@ public class JianBlockEntity extends BlockEntity {
 
         @Override
         public int getTankCapacity(int tank) {
-            return CAPACITY;
+            return SEGMENT_CAPACITY;
         }
 
         @Override
@@ -151,23 +169,9 @@ public class JianBlockEntity extends BlockEntity {
             if (resource == null || resource.isEmpty()) {
                 return 0;
             }
-            if (JianBlockEntity.this.fluid.isEmpty()) {
-                int accepted = Math.min(resource.getAmount(), CAPACITY);
-                if (action.execute()) {
-                    JianBlockEntity.this.fluid = new FluidStack(resource.getFluid(), accepted);
-                    JianBlockEntity.this.setChanged();
-                    JianBlockEntity.this.sync();
-                }
-                return accepted;
-            }
-            if (!FluidStack.isSameFluidSameComponents(resource, JianBlockEntity.this.fluid)) {
-                return 0;
-            }
-            int accepted = Math.min(resource.getAmount(), CAPACITY - JianBlockEntity.this.fluid.getAmount());
+            int accepted = JianBlockEntity.this.accept(resource.getFluid(), resource.getAmount());
             if (action.execute() && accepted > 0) {
-                JianBlockEntity.this.fluid.grow(accepted);
-                JianBlockEntity.this.setChanged();
-                JianBlockEntity.this.sync();
+                // accept 内部已写入并同步
             }
             return accepted;
         }
@@ -191,12 +195,7 @@ public class JianBlockEntity extends BlockEntity {
             int drained = Math.min(maxDrain, JianBlockEntity.this.fluid.getAmount());
             FluidStack out = new FluidStack(JianBlockEntity.this.fluid.getFluid(), drained);
             if (action.execute()) {
-                JianBlockEntity.this.fluid.shrink(drained);
-                if (JianBlockEntity.this.fluid.isEmpty()) {
-                    JianBlockEntity.this.fluid = FluidStack.EMPTY;
-                }
-                JianBlockEntity.this.setChanged();
-                JianBlockEntity.this.sync();
+                JianBlockEntity.this.drainMb(drained);
             }
             return out;
         }

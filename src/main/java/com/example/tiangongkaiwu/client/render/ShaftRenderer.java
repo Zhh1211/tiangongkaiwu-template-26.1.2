@@ -1,5 +1,8 @@
 package com.example.tiangongkaiwu.client.render;
 
+import com.example.tiangongkaiwu.TiangongKaiwu;
+import com.example.tiangongkaiwu.block.GearBlock;
+import com.example.tiangongkaiwu.block.MechanismBlock;
 import com.example.tiangongkaiwu.block.PowerNetwork;
 import com.example.tiangongkaiwu.block.ShaftBlock;
 import com.example.tiangongkaiwu.block.entity.ShaftBlockEntity;
@@ -15,9 +18,13 @@ import net.minecraft.client.renderer.block.ModelBlockRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.state.BlockState;
 
 import net.neoforged.neoforge.client.model.data.ModelData;
@@ -28,13 +35,38 @@ import net.neoforged.neoforge.client.model.data.ModelData;
  * <p>红线规则（2026-10-03 拍板）：杆上铜箍的红度 = 所在网络的劲占比——
  * 劲越多越红，劲少接近原木色。实现 = 顶点色 G/B 按比例衰减（红移），
  * 基准 24 劲（两台筒车）即满红。
+ *
+ * <p><b>包壳轴（2026-10-04 拍板）</b>：杆旁边有方块（非杆族）→ 自动叠加**静止的**
+ * 木质套壳模型——杆在壳里转，壳不跟着转（机械动力包壳同款观感）。
+ * 包壳是纯客户端判定（每帧查 6 邻），零方块状态、零服务器同步，
+ * 拆掉旁边的木头套壳自动消失。多方块成型时 SHAFT_SOCKET 的杆嵌在木梁里 → 天然包壳。
  */
 public class ShaftRenderer implements BlockEntityRenderer<ShaftBlockEntity> {
 
     /** 最红时 G/B 的保留比例（0.55 → 明显红移但不糊死贴图）。 */
     public static final float MAX_REDSHIFT = 0.55F;
 
+    /** 包壳模型（独立烘焙，ClientHandler 注册；孔沿 Y 轴，按 AXIS 转向）。 */
+    public static final ModelResourceLocation CASING_MODEL =
+            ModelResourceLocation.standalone(
+                    ResourceLocation.fromNamespaceAndPath(TiangongKaiwu.MODID, "block/shaft_casing"));
+
     public ShaftRenderer(BlockEntityRendererProvider.Context context) {
+    }
+
+    /** 包壳判定：六邻有非空气且非杆族（杆/牙轮/机构）的方块 → 嵌进结构里了。 */
+    private static boolean isCased(BlockGetter level, BlockPos pos) {
+        for (Direction dir : Direction.values()) {
+            BlockState nb = level.getBlockState(pos.relative(dir));
+            if (nb.isAir()
+                    || nb.getBlock() instanceof ShaftBlock
+                    || nb.getBlock() instanceof GearBlock
+                    || nb.getBlock() instanceof MechanismBlock) {
+                continue;
+            }
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -57,6 +89,27 @@ public class ShaftRenderer implements BlockEntityRenderer<ShaftBlockEntity> {
         float redBoost = 1.0F - (1.0F - MAX_REDSHIFT) * ratio;
 
         Direction.Axis axis = state.getValue(ShaftBlock.AXIS);
+
+        // ---- 包壳：先画（不随劲旋转），孔按轴向转向；杆在壳里转 ----
+        if (isCased(level, be.getBlockPos())) {
+            BakedModel casing = Minecraft.getInstance().getModelManager().getModel(CASING_MODEL);
+            pose.pushPose();
+            pose.translate(0.5D, 0.5D, 0.5D);
+            switch (axis) {
+                case X -> pose.mulPose(Axis.ZP.rotationDegrees(90.0F));
+                case Z -> pose.mulPose(Axis.XP.rotationDegrees(90.0F));
+                default -> {
+                }
+            }
+            pose.translate(-0.5D, -0.5D, -0.5D);
+            var dispatcher0 = Minecraft.getInstance().getBlockRenderer();
+            dispatcher0.getModelRenderer().tesselateWithoutAO(level, casing, state, be.getBlockPos(),
+                    pose, buffer.getBuffer(RenderType.cutout()), false,
+                    RandomSource.create(), state.getSeed(be.getBlockPos()), overlay,
+                    ModelData.EMPTY, RenderType.cutout());
+            pose.popPose();
+        }
+
         pose.pushPose();
         pose.translate(0.5D, 0.5D, 0.5D);
         switch (axis) {

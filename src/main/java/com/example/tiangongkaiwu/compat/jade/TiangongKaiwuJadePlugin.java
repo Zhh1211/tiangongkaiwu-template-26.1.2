@@ -9,6 +9,7 @@ import com.example.tiangongkaiwu.block.RiceStalkBlock;
 import com.example.tiangongkaiwu.block.RiceStalkBlockDry;
 import com.example.tiangongkaiwu.block.ShaftBlock;
 import com.example.tiangongkaiwu.block.TongCheBlock;
+import com.example.tiangongkaiwu.block.TubeBlock;
 import com.example.tiangongkaiwu.block.WaterDevices;
 import com.example.tiangongkaiwu.block.WellLiftBlock;
 
@@ -53,7 +54,7 @@ public class TiangongKaiwuJadePlugin implements IWailaPlugin {
                 RiceStalkBlock.class, RiceStalkBlockDry.class,
                 TongCheBlock.class, ShaftBlock.class, JianBlock.class,
                 DragonBoneCarBlock.class, WellLiftBlock.class, FengFanBlock.class,
-                DuiBlock.class}) {
+                TubeBlock.class, DuiBlock.class}) {
             registration.registerBlockComponent(DEVICE_STATE, type);
         }
     }
@@ -118,8 +119,21 @@ public class TiangongKaiwuJadePlugin implements IWailaPlugin {
             }
 
             if (block instanceof JianBlock) {
-                tooltip.add(Component.translatable("jade.tiangongkaiwu.trough_level",
-                        JianBlock.effOf(state)));
+                if (accessor.getBlockEntity() instanceof com.example.tiangongkaiwu.block.entity.JianBlockEntity jbe) {
+                    tooltip.add(Component.translatable("jade.tiangongkaiwu.trough_level",
+                            jbe.getMb(), com.example.tiangongkaiwu.block.entity.JianBlockEntity.SEGMENT_CAPACITY));
+                }
+                return;
+            }
+
+            if (block instanceof TubeBlock tube) {
+                boolean drawing = !state.getValue(TubeBlock.DRAINING);
+                tooltip.add(Component.translatable(drawing
+                        ? "jade.tiangongkaiwu.tube_draw" : "jade.tiangongkaiwu.tube_drain"));
+                if (accessor.getBlockEntity() instanceof com.example.tiangongkaiwu.block.entity.TubeBlockEntity tbe) {
+                    tooltip.add(Component.translatable("jade.tiangongkaiwu.power_stats",
+                            tbe.supply, tbe.demand, tbe.supply - tbe.demand));
+                }
                 return;
             }
 

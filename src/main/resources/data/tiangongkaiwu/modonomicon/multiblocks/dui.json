@@ -1,0 +1,32 @@
+{
+  "type": "modonomicon:dense",
+  "pattern": [
+    [
+      "ABA"
+    ],
+    [
+      "CCC"
+    ],
+    [
+      "A0A"
+    ]
+  ],
+  "mapping": {
+    "A": {
+      "type": "modonomicon:display",
+      "display": "minecraft:oak_log"
+    },
+    "B": {
+      "type": "modonomicon:blockstate",
+      "block": "minecraft:hopper[facing=down,enabled=true]"
+    },
+    "C": {
+      "type": "modonomicon:blockstate",
+      "block": "tiangongkaiwu:shaft[axis=z]"
+    },
+    "0": {
+      "type": "modonomicon:block",
+      "block": "tiangongkaiwu:dui"
+    }
+  }
+}
