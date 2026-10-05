@@ -57,6 +57,7 @@ import com.example.tiangongkaiwu.block.DuiBlock;
 import com.example.tiangongkaiwu.block.FengFanBlock;
 import com.example.tiangongkaiwu.block.JianBlock;
 import com.example.tiangongkaiwu.block.ShaftBlock;
+import com.example.tiangongkaiwu.block.GearBoxBlock;
 import com.example.tiangongkaiwu.block.TongCheBlock;
 import com.example.tiangongkaiwu.block.TubeBlock;
 import com.example.tiangongkaiwu.block.entity.TubeBlockEntity;
@@ -77,6 +78,7 @@ import com.example.tiangongkaiwu.hanmo.network.PuzzleDonePayload;
 import com.example.tiangongkaiwu.hanmo.network.PuzzleSyncPayload;
 import com.example.tiangongkaiwu.hanmo.network.SettlementResultPayload;
 import com.example.tiangongkaiwu.item.CanYeItem;
+import com.example.tiangongkaiwu.item.GeWuZhaJiItem;
 import com.example.tiangongkaiwu.item.FertilizerItem;
 import com.example.tiangongkaiwu.item.RiceBranItem;
 import com.example.tiangongkaiwu.item.ResidualData;
@@ -486,6 +488,41 @@ public class TiangongKaiwu {
             () -> BlockEntityType.Builder.of(TubeBlockEntity::new, TUBE.get()).build(null));
 
     // ============================================================
+    // 格物致知（D17）：合轮的奖品——十字齿轮箱（劲网全通节点）+ 格物札记
+    // ============================================================
+    /** 十字齿轮箱（横向）：劲从任意方向进、其余五向皆可出。 */
+    public static final DeferredBlock<GearBoxBlock> GEAR_BOX = BLOCKS.register(
+        "gear_box",
+        () -> new GearBoxBlock(
+            BlockBehaviour.Properties.of()
+                .mapColor(MapColor.METAL)
+                .strength(1.5f)
+                .sound(SoundType.WOOD)
+        )
+    );
+    /** 十字齿轮箱（竖版）：与横向合成转换互换，劲网行为一致。 */
+    public static final DeferredBlock<GearBoxBlock> GEAR_BOX_VERTICAL = BLOCKS.register(
+        "gear_box_vertical",
+        () -> new GearBoxBlock(
+            BlockBehaviour.Properties.of()
+                .mapColor(MapColor.METAL)
+                .strength(1.5f)
+                .sound(SoundType.WOOD)
+        )
+    );
+
+    public static final DeferredItem<BlockItem> GEAR_BOX_ITEM =
+            ITEMS.registerSimpleBlockItem("gear_box", GEAR_BOX);
+    public static final DeferredItem<BlockItem> GEAR_BOX_VERTICAL_ITEM =
+            ITEMS.registerSimpleBlockItem("gear_box_vertical", GEAR_BOX_VERTICAL);
+
+    /** 格物札记：研究载体（右键结构件判定，致知解锁配方，用完即毁）。 */
+    public static final DeferredItem<GeWuZhaJiItem> GE_WU_ZHA_JI = ITEMS.register(
+        "ge_wu_zha_ji",
+        () -> new GeWuZhaJiItem(new Item.Properties())
+    );
+
+    // ============================================================
     // 翰墨台与残页
     // ============================================================
     public static final DeferredBlock<HanmoTaiBlock> HANMO_TAI = BLOCKS.register(
@@ -553,6 +590,9 @@ public class TiangongKaiwu {
                         output.accept(HANMO_TAI_ITEM);
                         output.accept(TONG_CHE_ITEM);
                         output.accept(TUBE_ITEM);
+                        output.accept(GEAR_BOX_ITEM);
+                        output.accept(GEAR_BOX_VERTICAL_ITEM);
+                        output.accept(GE_WU_ZHA_JI);
                         output.accept(JIAN_ITEM);
                         output.accept(SHAFT_ITEM);
                         output.accept(YA_LUN_ITEM);

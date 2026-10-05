@@ -130,6 +130,12 @@ public final class PowerNetwork {
             List<Direction> outDirs;
             if (state.getBlock() instanceof ShaftBlock shaft) {
                 outDirs = dirsAlong(state.getValue(ShaftBlock.AXIS));
+            } else if (state.getBlock() instanceof GearBoxBlock) {
+                // 十字齿轮箱（D17 合轮奖品）：劲网全通节点——任意进、任意出（兼直通与变向）
+                outDirs = new ArrayList<>();
+                for (Direction d : Direction.values()) {
+                    outDirs.add(d);
+                }
             } else if (state.getBlock() instanceof GearBlock) {
                 // 牙轮：向进入方向的垂直向传出；起点无进入方向 → 六向
                 outDirs = new ArrayList<>();
@@ -187,7 +193,8 @@ public final class PowerNetwork {
                     continue;
                 }
                 BlockState nb = level.getBlockState(nbPos);
-                if (nb.getBlock() instanceof ShaftBlock || nb.getBlock() instanceof GearBlock) {
+                if (nb.getBlock() instanceof ShaftBlock || nb.getBlock() instanceof GearBlock
+                        || nb.getBlock() instanceof GearBoxBlock) {
                     queue.add(new Entry(nbPos, dir));
                 }
             }

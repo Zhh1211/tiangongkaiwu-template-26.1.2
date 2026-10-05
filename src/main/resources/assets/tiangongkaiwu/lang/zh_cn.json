@@ -209,5 +209,14 @@
     "block.tiangongkaiwu.tong.mode_draw": "当前：汲——抽取邻侧流体入梘网（右键切换）",
     "block.tiangongkaiwu.tong.mode_drain": "当前：泻——梘网流体排向世界（右键切换）",
     "jade.tiangongkaiwu.tube_draw": "汲水中（邻侧流体入梘网）",
-    "jade.tiangongkaiwu.tube_drain": "排水中（梘网流体排向世界）"
+    "jade.tiangongkaiwu.tube_drain": "排水中（梘网流体排向世界）",
+    "item.tiangongkaiwu.ge_wu_zha_ji": "格物札记",
+    "block.tiangongkaiwu.gear_box": "十字齿轮箱",
+    "block.tiangongkaiwu.gear_box_vertical": "十字齿轮箱（竖）",
+    "ge_wu.he_lun.riddle": "「四轮相衔，纵横其位」",
+    "ge_wu.he_lun.goal": "四牙轮围成一圈，轴平行地面、都指向中心——摆成后拿札记点任意一轮。",
+    "ge_wu.he_lun.materials": "所需：牙轮 ×4（按在地面/侧面即可定轴向）",
+    "ge_wu.he_lun.toast": "致知：合轮",
+    "ge_wu.he_lun.desc": "四轮相衔而劲分赴四方——十字齿轮箱已可合成",
+    "ge_wu.already_known": "此中巧法，早已了然于心。"
 }

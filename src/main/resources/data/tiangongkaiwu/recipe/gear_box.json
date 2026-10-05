@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "G G",
+    " P ",
+    "G G"
+  ],
+  "key": {
+    "G": {
+      "item": "tiangongkaiwu:ya_lun"
+    },
+    "P": {
+      "tag": "minecraft:planks"
+    }
+  },
+  "result": {
+    "id": "tiangongkaiwu:gear_box",
+    "count": 1
+  }
+}

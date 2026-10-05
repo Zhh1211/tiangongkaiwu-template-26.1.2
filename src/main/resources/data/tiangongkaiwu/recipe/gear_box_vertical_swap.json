@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "tiangongkaiwu:gear_box_vertical"
+    }
+  ],
+  "result": {
+    "id": "tiangongkaiwu:gear_box",
+    "count": 1
+  }
+}
