@@ -19,23 +19,33 @@
   "pages": [
     {
       "type": "modonomicon:text",
+      "text": "凡麦有数种。小麦曰来，麦之长也；大麦曰牟、曰穬；杂麦曰雀、曰荞。皆以播种同时，花形相似，粉食同功，而得麦名也。荞麦实非麦类，然以其为粉疗饥，传名为麦，则麦之而已。"
+    },
+    {
+      "type": "modonomicon:text",
       "text": "entry.tiangongkaiwu.naili_mai.page1"
+    },
+    {
+      "type": "modonomicon:empty"
+    },
+    {
+      "type": "modonomicon:text",
+      "text": "凡北方小麦，历四时之气，自秋播种，明年初夏方收。麦性食水甚少。扬州谚云：寸麦不怕尺水，谓麦初长时，任水灭顶无伤；尺麦只怕寸水，谓成熟时，寸水软根倒茎沾泥，则麦粒尽烂于地面也。"
     },
     {
       "type": "modonomicon:text",
       "text": "entry.tiangongkaiwu.naili_mai.page2"
     },
     {
+      "type": "modonomicon:empty"
+    },
+    {
+      "type": "modonomicon:text",
+      "text": "凡麦与稻初耕垦土则同，播种以后，则耘耔诸勤苦皆属稻，麦惟施耨而已。凡粪麦田，既种以后，粪无可施，为计在先也。凡麦收空隙，可再种他物。自初夏至季秋，时日亦半载，择土宜而为之，惟人所取也。"
+    },
+    {
       "type": "modonomicon:text",
       "text": "entry.tiangongkaiwu.naili_mai.page3"
-    },
-    {
-      "type": "modonomicon:text",
-      "text": "entry.tiangongkaiwu.naili_mai.page4"
-    },
-    {
-      "type": "modonomicon:text",
-      "text": "entry.tiangongkaiwu.naili_mai.page5"
     },
     {
       "type": "modonomicon:spotlight",

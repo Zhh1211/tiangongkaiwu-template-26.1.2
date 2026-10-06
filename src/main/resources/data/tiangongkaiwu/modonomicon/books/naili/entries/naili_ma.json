@@ -19,11 +19,29 @@
   "pages": [
     {
       "type": "modonomicon:text",
+      "text": "凡麻可粒可油者，惟火麻、胡麻二种。胡麻即脂麻，相传西汉始自大宛来。今胡麻味美而功高，即以冠百谷不为过。火麻子粒压油无多，皮为疏恶布，其值几何？"
+    },
+    {
+      "type": "modonomicon:text",
       "text": "entry.tiangongkaiwu.naili_ma.page1"
+    },
+    {
+      "type": "modonomicon:empty"
+    },
+    {
+      "type": "modonomicon:text",
+      "text": "种胡麻法，或治畦圃，或垄田亩。土碎草净之极，然后以地灰微湿，拌匀麻子而撒种之。早者三月种，迟者不出大暑前。"
     },
     {
       "type": "modonomicon:text",
       "text": "entry.tiangongkaiwu.naili_ma.page2"
+    },
+    {
+      "type": "modonomicon:empty"
+    },
+    {
+      "type": "modonomicon:text",
+      "text": "收子榨油，每石得四十斤余，其枯用以肥田；若饥荒之年，则留供人食。"
     },
     {
       "type": "modonomicon:text",

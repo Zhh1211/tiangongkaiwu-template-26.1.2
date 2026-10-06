@@ -19,11 +19,29 @@
   "pages": [
     {
       "type": "modonomicon:text",
+      "text": "凡粮食米而不粉者，种类甚多。相去数百里，则色味形质，随方而变，大同小异，千百其名。北人唯以大米呼粳稻，而其余概以小米名之。"
+    },
+    {
+      "type": "modonomicon:text",
       "text": "entry.tiangongkaiwu.naili_shuji.page1"
+    },
+    {
+      "type": "modonomicon:empty"
+    },
+    {
+      "type": "modonomicon:text",
+      "text": "凡黍与稷同类，粱与粟同类。黍有粘有不粘，粘者为酒；稷有粳无粘。凡粘黍粘粟，统名曰秫，非二种外更有秫也。"
     },
     {
       "type": "modonomicon:text",
       "text": "entry.tiangongkaiwu.naili_shuji.page2"
+    },
+    {
+      "type": "modonomicon:empty"
+    },
+    {
+      "type": "modonomicon:text",
+      "text": "凡粟与粱统名黄米，粘粟可为酒。已上四米皆春种秋获，耕耨之法与来、牟同，而种收之候则相悬绝云。"
     },
     {
       "type": "modonomicon:text",
