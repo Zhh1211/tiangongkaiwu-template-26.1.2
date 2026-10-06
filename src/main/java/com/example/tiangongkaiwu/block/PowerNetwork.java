@@ -33,7 +33,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
  * <p>传播规则（§10.6 拍板）：
  * <ul>
  * <li>传动杆：只沿**自身轴向**传播（不再六向、不再每格衰减）；</li>
- * <li>牙轮：从进入方向垂直的四个方向传出——**90° 变向必须经过牙轮**；</li>
+ * <li>牙轮：只沿自身轴传导（2026-10-06：垂直小齿轮相卡，90° 变向移交齿轮箱）——**变向必须经过十字齿轮箱**；</li>
  * <li>小牙轮啮合（2026-10-04 拍板：只留小牙轮）：相邻**同轴**牙轮轮齿咬合直连
  *     （相邻方向 ⊥ 轴），平行错位的两根杆得以相接——"差一格的两根平行杆"；
  *     沿轴向相邻仍不直通（轮面平行咬不上，直通请用传动杆）。</li>
@@ -137,13 +137,9 @@ public final class PowerNetwork {
                     outDirs.add(d);
                 }
             } else if (state.getBlock() instanceof GearBlock) {
-                // 牙轮：向进入方向的垂直向传出；起点无进入方向 → 六向
-                outDirs = new ArrayList<>();
-                for (Direction d : Direction.values()) {
-                    if (cur.entryDir() == null || d.getAxis() != cur.entryDir().getAxis()) {
-                        outDirs.add(d);
-                    }
-                }
+                // 牙轮（2026-10-06 修正）：一格空间两个垂直小齿轮会相卡——**牙轮不再 90° 变向**，
+                // 只沿自身轴传导（与杆同规则）。变向统一归十字齿轮箱（D17）。
+                outDirs = dirsAlong(state.getValue(GearBlock.AXIS));
             } else if (isMachine(state)) {
                 // 机器（碓/筒/泵段）：六向探网（碓挂轴下、筒贴杆皆可接入）。机器=端点+任意相邻轴皆可接入。
                 outDirs = new ArrayList<>();
