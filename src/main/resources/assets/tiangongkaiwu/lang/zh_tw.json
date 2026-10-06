@@ -218,5 +218,9 @@
     "ge_wu.he_lun.materials": "所需：牙輪 ×4（按在地面/側面即可定軸向）",
     "ge_wu.he_lun.toast": "致知：合輪",
     "ge_wu.he_lun.desc": "四輪相銜而勁分赴四方——十字齒輪箱已可合成",
-    "ge_wu.already_known": "此中巧法，早已了然於心。"
+    "ge_wu.already_known": "此中巧法，早已了然於心。",
+    "item.tiangongkaiwu.mai_ren": "麥仁",
+    "item.tiangongkaiwu.mai_fan": "麥飯",
+    "entry.tiangongkaiwu.naili_mai.spot_jiagong.title": "舂麥成仁，麥飯豆羹",
+    "entry.tiangongkaiwu.naili_mai.spot_jiagong.text": "麥粒入碓，借水力舂搗，去殼成仁；兩份麥仁盛一碗，便是「麥飯豆羹」裡的麥飯——古人貫賤通食，雖粗糲而耐飢。"
 }

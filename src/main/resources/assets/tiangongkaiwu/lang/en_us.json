@@ -218,5 +218,9 @@
     "ge_wu.he_lun.materials": "Needs: Cogwheel x4 (place on floor/sides to set the axis)",
     "ge_wu.he_lun.toast": "Enlightened: Cross Gearbox",
     "ge_wu.he_lun.desc": "Four wheels interlocked, power flows to all sides - the Cross Gearbox can now be crafted",
-    "ge_wu.already_known": "This trick is already known to you."
+    "ge_wu.already_known": "This trick is already known to you.",
+    "item.tiangongkaiwu.mai_ren": "Wheat Groats",
+    "item.tiangongkaiwu.mai_fan": "Wheat Rice",
+    "entry.tiangongkaiwu.naili_mai.spot_jiagong.title": "Pounding Wheat into Groats",
+    "entry.tiangongkaiwu.naili_mai.spot_jiagong.text": "Feed wheat to the pestle-driven Du; hulled by water power, it yields groats. Two groats in a bowl make Wheat Rice - the humble staple of 'wheat rice and bean soup' that rich and poor alike ate to fill the belly."
 }

@@ -36,6 +36,15 @@
     {
       "type": "modonomicon:text",
       "text": "entry.tiangongkaiwu.naili_mai.page5"
+    },
+    {
+      "type": "modonomicon:spotlight",
+      "item": {
+        "item": "tiangongkaiwu:mai_fan"
+      },
+      "title": "entry.tiangongkaiwu.naili_mai.spot_jiagong.title",
+      "text": "entry.tiangongkaiwu.naili_mai.spot_jiagong.text",
+      "anchor": "jiagong"
     }
   ]
 }

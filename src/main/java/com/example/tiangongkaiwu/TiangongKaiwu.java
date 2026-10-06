@@ -523,6 +523,22 @@ public class TiangongKaiwu {
     );
 
     // ============================================================
+    // 批 4 · 麦线（2026-10-06 拍板：作物/种子/麦穗=原版小麦，只补加工链）
+    // 稻线是水培（自研机制）必须自造；麦线旱地种植与原版小麦完全重合，
+    // 自造无 gameplay 增量。麦线实质 = 碓舂麦仁 + 麦饭豆羹 + 书页。
+    // ============================================================
+    /** 麦仁：碓舂小麦所得（舂透 ×2），麦饭的原料——加工中间品，不可生食。 */
+    public static final DeferredItem<Item> MAI_REN = ITEMS.registerSimpleItem("mai_ren");
+
+    /** 麦饭：「麦饭豆羹」——两份麦仁盛一碗，正餐档，吃完还碗。 */
+    public static final DeferredItem<Item> MAI_FAN = ITEMS.registerSimpleItem("mai_fan",
+        new Item.Properties().food(new net.minecraft.world.food.FoodProperties.Builder()
+            .nutrition(6)
+            .saturationModifier(0.6F)
+            .usingConvertsTo(net.minecraft.world.item.Items.BOWL)
+            .build()));
+
+    // ============================================================
     // 翰墨台与残页
     // ============================================================
     public static final DeferredBlock<HanmoTaiBlock> HANMO_TAI = BLOCKS.register(
@@ -587,6 +603,8 @@ public class TiangongKaiwu {
                         output.accept(CAN_YE);
                         output.accept(SONGYAN_MO);
                         output.accept(XUAN_ZHI);
+                        output.accept(MAI_REN);
+                        output.accept(MAI_FAN);
                         output.accept(HANMO_TAI_ITEM);
                         output.accept(TONG_CHE_ITEM);
                         output.accept(TUBE_ITEM);

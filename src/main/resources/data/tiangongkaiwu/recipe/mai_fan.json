@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {"item": "tiangongkaiwu:mai_ren"},
+    {"item": "tiangongkaiwu:mai_ren"},
+    {"item": "minecraft:bowl"}
+  ],
+  "result": {
+    "id": "tiangongkaiwu:mai_fan",
+    "count": 1
+  }
+}
