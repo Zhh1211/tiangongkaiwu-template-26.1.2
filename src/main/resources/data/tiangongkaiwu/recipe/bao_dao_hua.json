@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:campfire_cooking",
+  "category": "food",
+  "ingredient": {
+    "item": "tiangongkaiwu:rice_grain"
+  },
+  "result": {
+    "id": "tiangongkaiwu:bao_dao_hua",
+    "count": 1
+  }
+}

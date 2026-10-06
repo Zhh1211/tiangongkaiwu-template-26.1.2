@@ -589,6 +589,11 @@ public class TiangongKaiwu {
             .nutrition(1).saturationModifier(0.1F).build()));
     /** 豆瓣：碓舂菽所得，豆浆的原料。 */
     public static final DeferredItem<Item> DOU_BAN = ITEMS.registerSimpleItem("dou_ban");
+    /** 爆稻花：稻谷放营火上烤——古有「爆糯谷占岁」之俗，稻线彩蛋零食。 */
+    public static final DeferredItem<Item> BAO_DAO_HUA = ITEMS.registerSimpleItem("bao_dao_hua",
+        new Item.Properties().food(new net.minecraft.world.food.FoodProperties.Builder()
+            .nutrition(1).saturationModifier(0.1F).fast().build()));
+
     /** 豆浆：碗装饮品（流体版留咸篇）。 */
     public static final DeferredItem<Item> DOU_JIANG = ITEMS.registerSimpleItem("dou_jiang",
         new Item.Properties().food(new net.minecraft.world.food.FoodProperties.Builder()
@@ -663,6 +668,7 @@ public class TiangongKaiwu {
                         output.accept(XUAN_ZHI);
                         output.accept(MAI_REN);
                         output.accept(MAI_FAN);
+                        output.accept(BAO_DAO_HUA);
                         output.accept(SU_GU);
                         output.accept(SU_MI);
                         output.accept(SU_MI_ZHOU);
