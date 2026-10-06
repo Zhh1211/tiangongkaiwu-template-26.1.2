@@ -58,6 +58,7 @@ import com.example.tiangongkaiwu.block.FengFanBlock;
 import com.example.tiangongkaiwu.block.JianBlock;
 import com.example.tiangongkaiwu.block.ShaftBlock;
 import com.example.tiangongkaiwu.block.GearBoxBlock;
+import com.example.tiangongkaiwu.block.NailiCropBlock;
 import com.example.tiangongkaiwu.block.TongCheBlock;
 import com.example.tiangongkaiwu.block.TubeBlock;
 import com.example.tiangongkaiwu.block.entity.TubeBlockEntity;
@@ -539,6 +540,63 @@ public class TiangongKaiwu {
             .build()));
 
     // ============================================================
+    // 批 5 · 杂粮三连（黍稷粟 / 麻 / 菽）：四个旱地作物 + 脱粒级加工
+    // 谷粒即种子；雨天加速（赖天时）；黍米=酿酒伏笔不可食；豆浆=碗装合成
+    // （流体豆浆+真卤水豆腐留咸篇一次做对）；豆养地机制等 #40 地力。
+    // ============================================================
+    public static final DeferredBlock<NailiCropBlock> SU = BLOCKS.register("su",
+        () -> new NailiCropBlock(BlockBehaviour.Properties.of()
+            .mapColor(MapColor.PLANT).noCollission().randomTicks()
+            .instabreak().sound(SoundType.CROP)));
+    public static final DeferredBlock<NailiCropBlock> SHU = BLOCKS.register("shu",
+        () -> new NailiCropBlock(BlockBehaviour.Properties.of()
+            .mapColor(MapColor.PLANT).noCollission().randomTicks()
+            .instabreak().sound(SoundType.CROP)));
+    public static final DeferredBlock<NailiCropBlock> MA = BLOCKS.register("ma",
+        () -> new NailiCropBlock(BlockBehaviour.Properties.of()
+            .mapColor(MapColor.PLANT).noCollission().randomTicks()
+            .instabreak().sound(SoundType.CROP)));
+    public static final DeferredBlock<NailiCropBlock> DOU = BLOCKS.register("dou",
+        () -> new NailiCropBlock(BlockBehaviour.Properties.of()
+            .mapColor(MapColor.PLANT).noCollission().randomTicks()
+            .instabreak().sound(SoundType.CROP)));
+
+    /** 谷粒即种子：四个收获物都是 BlockItem（拿在手里可直接种回耕地）。 */
+    public static final DeferredItem<BlockItem> SU_GU =
+            ITEMS.registerSimpleBlockItem("su_gu", SU);
+    public static final DeferredItem<BlockItem> SHU_MI =
+            ITEMS.registerSimpleBlockItem("shu_mi", SHU);
+    public static final DeferredItem<BlockItem> MA_ZI =
+            ITEMS.registerSimpleBlockItem("ma_zi", MA);
+    public static final DeferredItem<BlockItem> DOU_ZI =
+            ITEMS.registerSimpleBlockItem("dou", DOU);
+
+    /** 粟米：碓舂粟谷所得，小米粥的原料。 */
+    public static final DeferredItem<Item> SU_MI = ITEMS.registerSimpleItem("su_mi");
+    /** 粟米粥：北方早餐原型，轻正餐，吃完还碗。 */
+    public static final DeferredItem<Item> SU_MI_ZHOU = ITEMS.registerSimpleItem("su_mi_zhou",
+        new Item.Properties().food(new net.minecraft.world.food.FoodProperties.Builder()
+            .nutrition(5).saturationModifier(0.5F)
+            .usingConvertsTo(net.minecraft.world.item.Items.BOWL)
+            .build()));
+    /** 麻皮：麻秆剥取的纤维，碓舂成麻线（乃服篇纺织线头）。 */
+    public static final DeferredItem<Item> MA_PI = ITEMS.registerSimpleItem("ma_pi");
+    /** 麻线：乃服篇纺织的原料。 */
+    public static final DeferredItem<Item> MA_XIAN = ITEMS.registerSimpleItem("ma_xian");
+    /** 烤麻籽：油料零食（营火烤制）。 */
+    public static final DeferredItem<Item> KAO_MA_ZI = ITEMS.registerSimpleItem("kao_ma_zi",
+        new Item.Properties().food(new net.minecraft.world.food.FoodProperties.Builder()
+            .nutrition(1).saturationModifier(0.1F).build()));
+    /** 豆瓣：碓舂菽所得，豆浆的原料。 */
+    public static final DeferredItem<Item> DOU_BAN = ITEMS.registerSimpleItem("dou_ban");
+    /** 豆浆：碗装饮品（流体版留咸篇）。 */
+    public static final DeferredItem<Item> DOU_JIANG = ITEMS.registerSimpleItem("dou_jiang",
+        new Item.Properties().food(new net.minecraft.world.food.FoodProperties.Builder()
+            .nutrition(2).saturationModifier(0.3F)
+            .usingConvertsTo(net.minecraft.world.item.Items.BOWL)
+            .build()));
+
+    // ============================================================
     // 翰墨台与残页
     // ============================================================
     public static final DeferredBlock<HanmoTaiBlock> HANMO_TAI = BLOCKS.register(
@@ -605,6 +663,17 @@ public class TiangongKaiwu {
                         output.accept(XUAN_ZHI);
                         output.accept(MAI_REN);
                         output.accept(MAI_FAN);
+                        output.accept(SU_GU);
+                        output.accept(SU_MI);
+                        output.accept(SU_MI_ZHOU);
+                        output.accept(SHU_MI);
+                        output.accept(MA_PI);
+                        output.accept(MA_ZI);
+                        output.accept(KAO_MA_ZI);
+                        output.accept(MA_XIAN);
+                        output.accept(DOU_ZI);
+                        output.accept(DOU_BAN);
+                        output.accept(DOU_JIANG);
                         output.accept(HANMO_TAI_ITEM);
                         output.accept(TONG_CHE_ITEM);
                         output.accept(TUBE_ITEM);

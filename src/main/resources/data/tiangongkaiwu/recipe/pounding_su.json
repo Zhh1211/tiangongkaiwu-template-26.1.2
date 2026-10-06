@@ -1,0 +1,11 @@
+{
+  "type": "tiangongkaiwu:pounding",
+  "input": {
+    "item": "tiangongkaiwu:su_gu"
+  },
+  "result": {
+    "id": "tiangongkaiwu:su_mi",
+    "count": 2
+  },
+  "min_power": 3
+}

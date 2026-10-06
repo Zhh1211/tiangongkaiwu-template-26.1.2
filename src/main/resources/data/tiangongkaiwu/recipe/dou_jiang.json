@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "tiangongkaiwu:dou_ban"
+    },
+    {
+      "item": "tiangongkaiwu:dou_ban"
+    },
+    {
+      "item": "minecraft:bowl"
+    }
+  ],
+  "result": {
+    "id": "tiangongkaiwu:dou_jiang",
+    "count": 1
+  }
+}

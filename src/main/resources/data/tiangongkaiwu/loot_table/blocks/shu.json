@@ -1,0 +1,42 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:alternatives",
+          "children": [
+            {
+              "type": "minecraft:item",
+              "name": "tiangongkaiwu:shu_mi",
+              "conditions": [
+                {
+                  "condition": "minecraft:block_state_property",
+                  "block": "tiangongkaiwu:shu",
+                  "properties": {
+                    "age": "7"
+                  }
+                }
+              ],
+              "functions": [
+                {
+                  "function": "minecraft:set_count",
+                  "count": {
+                    "type": "minecraft:uniform",
+                    "min": 2,
+                    "max": 4
+                  }
+                }
+              ]
+            },
+            {
+              "type": "minecraft:item",
+              "name": "tiangongkaiwu:shu_mi"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

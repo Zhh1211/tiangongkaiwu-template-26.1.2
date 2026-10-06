@@ -1,0 +1,11 @@
+{
+  "type": "tiangongkaiwu:pounding",
+  "input": {
+    "item": "tiangongkaiwu:dou"
+  },
+  "result": {
+    "id": "tiangongkaiwu:dou_ban",
+    "count": 2
+  },
+  "min_power": 3
+}

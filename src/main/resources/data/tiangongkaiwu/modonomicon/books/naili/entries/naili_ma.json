@@ -28,6 +28,15 @@
     {
       "type": "modonomicon:text",
       "text": "entry.tiangongkaiwu.naili_ma.page3"
+    },
+    {
+      "type": "modonomicon:spotlight",
+      "item": {
+        "item": "tiangongkaiwu:ma_xian"
+      },
+      "title": "entry.tiangongkaiwu.naili_ma.spot_maxian.title",
+      "text": "entry.tiangongkaiwu.naili_ma.spot_maxian.text",
+      "anchor": "spot_maxian"
     }
   ]
 }

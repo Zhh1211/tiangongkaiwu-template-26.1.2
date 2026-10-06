@@ -1,0 +1,60 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:alternatives",
+          "children": [
+            {
+              "type": "minecraft:item",
+              "name": "tiangongkaiwu:ma_pi",
+              "conditions": [
+                {
+                  "condition": "minecraft:block_state_property",
+                  "block": "tiangongkaiwu:ma",
+                  "properties": {
+                    "age": "7"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "minecraft:item",
+              "name": "tiangongkaiwu:ma_zi"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "tiangongkaiwu:ma_zi",
+          "conditions": [
+            {
+              "condition": "minecraft:block_state_property",
+              "block": "tiangongkaiwu:ma",
+              "properties": {
+                "age": "7"
+              }
+            }
+          ],
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 1,
+                "max": 2
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

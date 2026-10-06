@@ -1,0 +1,11 @@
+{
+  "type": "tiangongkaiwu:pounding",
+  "input": {
+    "item": "tiangongkaiwu:ma_pi"
+  },
+  "result": {
+    "id": "tiangongkaiwu:ma_xian",
+    "count": 2
+  },
+  "min_power": 3
+}

@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:campfire_cooking",
+  "category": "food",
+  "ingredient": {
+    "item": "tiangongkaiwu:ma_zi"
+  },
+  "result": {
+    "id": "tiangongkaiwu:kao_ma_zi",
+    "count": 1
+  }
+}
