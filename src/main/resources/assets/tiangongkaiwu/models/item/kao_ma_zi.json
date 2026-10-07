@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "minecraft:item/cookie"
+    "layer0": "tiangongkaiwu:item/kao_ma_zi"
   }
 }

@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "minecraft:item/glow_berries"
+    "layer0": "tiangongkaiwu:item/bao_dao_hua"
   }
 }
