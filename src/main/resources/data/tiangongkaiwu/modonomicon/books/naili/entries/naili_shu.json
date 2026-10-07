@@ -1,49 +1,55 @@
 {
-  "category": "naili_juan",
-  "name": "entry.tiangongkaiwu.naili_shu.name",
-  "icon": {
-    "item": "minecraft:beetroot"
-  },
-  "x": 4,
-  "y": 6,
-  "parents": [
-    {
-      "entry": "naili_ma",
-      "line_enabled": true
-    }
-  ],
-  "condition": {
-    "type": "modonomicon:advancement",
-    "advancement_id": "tiangongkaiwu:unlock/naili_shu"
-  },
-  "pages": [
-    {
-      "type": "modonomicon:text",
-      "text": "凡菽种类之多，与稻、黍相等，播种收获之期，四季相承。果腹之功在人日用，盖与饮食相终始。凡为豉、为酱、为腐，皆于大豆中取质焉。"
+    "category": "naili_juan",
+    "name": "entry.tiangongkaiwu.naili_shu.name",
+    "icon": {
+        "item": "minecraft:beetroot"
     },
-    {
-      "type": "modonomicon:text",
-      "text": "entry.tiangongkaiwu.naili_shu.page1"
+    "x": 4,
+    "y": 6,
+    "parents": [
+        {
+            "entry": "naili_ma",
+            "line_enabled": true
+        }
+    ],
+    "condition": {
+        "type": "modonomicon:advancement",
+        "advancement_id": "tiangongkaiwu:unlock/naili_shu"
     },
-    {
-      "type": "modonomicon:empty"
-    },
-    {
-      "type": "modonomicon:text",
-      "text": "凡耕绿豆及大豆田地，耒耜欲浅，不宜深入。盖豆质根短而苗直，耕土既深，土块曲压，则不生者半矣。「深耕」二字不可施之菽类，此先农之所未发者。"
-    },
-    {
-      "type": "modonomicon:text",
-      "text": "entry.tiangongkaiwu.naili_shu.page2"
-    },
-    {
-      "type": "modonomicon:spotlight",
-      "item": {
-        "item": "tiangongkaiwu:dou_jiang"
-      },
-      "title": "entry.tiangongkaiwu.naili_shu.spot_doujiang.title",
-      "text": "entry.tiangongkaiwu.naili_shu.spot_doujiang.text",
-      "anchor": "spot_doujiang"
-    }
-  ]
+    "pages": [
+        {
+            "type": "modonomicon:text",
+            "text": "凡菽种类之多，与稻、黍相等，播种收获之期，四季相承。果腹之功在人日用，盖与饮食相终始。凡为豉、为酱、为腐，皆于大豆中取质焉。"
+        },
+        {
+            "type": "modonomicon:text",
+            "text": "entry.tiangongkaiwu.naili_shu.page1"
+        },
+        {
+            "type": "modonomicon:empty"
+        },
+        {
+            "type": "modonomicon:text",
+            "text": "凡耕绿豆及大豆田地，耒耜欲浅，不宜深入。盖豆质根短而苗直，耕土既深，土块曲压，则不生者半矣。「深耕」二字不可施之菽类，此先农之所未发者。"
+        },
+        {
+            "type": "modonomicon:text",
+            "text": "entry.tiangongkaiwu.naili_shu.page2"
+        },
+        {
+            "type": "modonomicon:spotlight",
+            "item": {
+                "item": "tiangongkaiwu:dou_jiang"
+            },
+            "title": "entry.tiangongkaiwu.naili_shu.spot_doujiang.title",
+            "text": "entry.tiangongkaiwu.naili_shu.spot_doujiang.text",
+            "anchor": "spot_doujiang"
+        },
+        {
+            "type": "modonomicon:crafting_recipe",
+            "recipe_id_1": "tiangongkaiwu:dou_jiang",
+            "title1": "entry.tiangongkaiwu.naili_shu.craft_doujiang",
+            "anchor": "craft_doujiang"
+        }
+    ]
 }

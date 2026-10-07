@@ -82,9 +82,9 @@
     "entry.tiangongkaiwu.naili_mai.name": "Wheat",
     "entry.tiangongkaiwu.naili_mai.page1": "Wheat has many kinds: common wheat is called Lai, the best of wheats; barley Mou or Kuang; misc wheats Que and Qiao. They share one sowing season, similar flowers, and the same use as flour, hence all claim the name of wheat. Buckwheat is no true wheat, yet since its flour relieves hunger, the name stuck.",
     "entry.tiangongkaiwu.naili_mai.page2": "Northern wheat endures the four seasons: sown in autumn, not harvested until early summer next year. Wheat drinks very little water. A Yangzhou proverb says: a foot of water cannot drown an inch of wheat - young shoots survive even submersion - but an inch of water can ruin a foot of wheat: at ripening it softens the roots, and the grains rot upon the ground.",
-    "entry.tiangongkaiwu.naili_mai.page3": "Wheat and rice are ploughed alike, but after sowing all the weeding and hilling belong to rice; wheat asks only a hoe. Manure the wheat field before sowing - once sown, there is no applying more. And after harvest the field lies open for another crop: half a year from early summer to late autumn, to use as one pleases.",
+    "entry.tiangongkaiwu.naili_mai.page3": "Wheat and rice are ploughed alike, but after sowing all the weeding and hilling belong to rice; wheat asks only a hoe. [Manure the wheat field before sowing](entry://naili_dao_yi@fen_fei) (see \"Rice Proper\") - once sown, there is no applying more. And after harvest the field lies open for another crop: half a year from early summer to late autumn, to use as one pleases.",
     "entry.tiangongkaiwu.naili_shu.name": "Beans",
-    "entry.tiangongkaiwu.naili_shu.page1": "Beans are as various as rice and millet, their sowing and harvest following one another through all four seasons. Their gift of filling bellies lives in daily meals, present from first mouthful to last. Fermented beans, bean paste, bean curd - all take their substance from the soybean.",
+    "entry.tiangongkaiwu.naili_shu.page1": "Beans are as various as rice and millet, their sowing and harvest following one another through all four seasons. Their gift of filling bellies lives in daily meals, present from first mouthful to last. Fermented beans, bean paste, bean curd - all take their substance from the soybean. Bean stubble enriches the field - ground that has grown beans is better ground, and rotation is best (see [Manuring](entry://naili_dao_yi@fen_fei)).",
     "entry.tiangongkaiwu.naili_shu.page2": "Hoe fields of beans shallow, never deep. The bean's roots are short, its stem upright; dig deep and the clods bend the roots, and half the stand is lost. The word 'deep ploughing' must never be applied to beans - a truth even the ancient farmers never set down.",
     "entry.tiangongkaiwu.naili_shuili.craft_jian": "Crafting the Water Trough",
     "entry.tiangongkaiwu.naili_shuili.craft_shaft": "Crafting the Drive Shaft",
@@ -242,5 +242,8 @@
     "entry.tiangongkaiwu.naili_shu.spot_doujiang.title": "Split Beans, Soymilk in a Bowl",
     "entry.tiangongkaiwu.naili_shu.spot_doujiang.text": "Pound soybeans into splits; two splits in a bowl make a bowl of soy milk. Of all the grains the bean serves the most uses - and enriches the soil best of all.",
     "item.tiangongkaiwu.bao_dao_hua": "Puffed Rice",
-    "block.tiangongkaiwu.he_tian": "Drained Paddy"
+    "block.tiangongkaiwu.he_tian": "Drained Paddy",
+    "entry.tiangongkaiwu.naili_mai.craft_maifan": "Building Mai Fan (Wheat Rice)",
+    "entry.tiangongkaiwu.naili_shuji.craft_zhou": "Building Millet Porridge",
+    "entry.tiangongkaiwu.naili_shu.craft_doujiang": "Building Dou Jiang (Soy Milk)"
 }

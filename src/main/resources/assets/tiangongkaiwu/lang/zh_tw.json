@@ -82,9 +82,9 @@
     "entry.tiangongkaiwu.naili_mai.name": "麥",
     "entry.tiangongkaiwu.naili_mai.page1": "麥子有好多品種：小麥叫「來」，是麥中的上品；大麥叫「牟」，也叫「穬」；雜麥叫「雀麥」「蕎麥」。它們播種期相同、花形相似、磨粉吃法一樣，所以都歸入麥名之下。蕎麥其實不算麥類，只因磨粉能充飢，傳著傳著也掛了麥的名號。",
     "entry.tiangongkaiwu.naili_mai.page2": "北方的小麥歷經四季：秋天下種，來年初夏才收。麥子吃水極少。揚州有句農諺：「寸麥不怕尺水，尺麥只怕寸水」——苗小時水淹過頂都無妨，成熟時一寸水泡軟了根，麥粒就全爛在地裡。",
-    "entry.tiangongkaiwu.naili_mai.page3": "麥和稻，開墾耕地的方法相同；但播下種之後，耘田、壅根這些辛苦活都歸稻，麥只要鋤鋤草就行。麥田施底肥要趕在播種之前，種下去就沒法再施了。收麥之後的空檔還能再種一茬別的——從初夏到深秋有半年時間，種什麼，隨人取用。",
+    "entry.tiangongkaiwu.naili_mai.page3": "麥和稻，開墾耕地的方法相同；但播下種之後，耘田、壅根這些辛苦活都歸稻，麥只要鋤鋤草就行。麥田[施底肥要趕在播種之前](entry://naili_dao_yi@fen_fei)（糞田養地，見「稻宜」），種下去就沒法再施了。收麥之後的空檔還能再種一茬別的——從初夏到深秋有半年時間，種什麼，隨人取用。",
     "entry.tiangongkaiwu.naili_shu.name": "菽",
-    "entry.tiangongkaiwu.naili_shu.page1": "菽（豆）的種類和稻、黍一樣多，播種收穫的時節四季相接。它填飽肚子的功勞就藏在日常飲食裡，與人的一日三餐相伴始終。豆豉、豆醬、豆腐，都是拿大豆做底子的。",
+    "entry.tiangongkaiwu.naili_shu.page1": "菽（豆）的種類和稻、黍一樣多，播種收穫的時節四季相接。它填飽肚子的功勞就藏在日常飲食裡，與人的一日三餐相伴始終。豆豉、豆醬、豆腐，都是拿大豆做底子的。豆茬肥田——種過豆的地更養人，輪作最相宜（見[糞田養地](entry://naili_dao_yi@fen_fei)）。",
     "entry.tiangongkaiwu.naili_shu.page2": "鋤綠豆和大豆田，農具要淺，不能深挖。豆的根短、苗直，土翻得深、土塊把根壓彎，就有一半長不出來——「深耕」二字，用不得在豆田裡，這是前代農書都沒說透的道理。",
     "entry.tiangongkaiwu.naili_shuili.craft_jian": "梘的造法",
     "entry.tiangongkaiwu.naili_shuili.craft_shaft": "傳動軸的造法",
@@ -242,5 +242,8 @@
     "entry.tiangongkaiwu.naili_shu.spot_doujiang.title": "舂豆成瓣，磨漿作飲",
     "entry.tiangongkaiwu.naili_shu.spot_doujiang.text": "菽入碓舂成豆瓣；兩瓣盛一碗，便是一碗豆漿。豆之為用，飯、醬、豉、油無所不可——養地之功，更是五穀之最。",
     "item.tiangongkaiwu.bao_dao_hua": "爆稻花",
-    "block.tiangongkaiwu.he_tian": "涸田"
+    "block.tiangongkaiwu.he_tian": "涸田",
+    "entry.tiangongkaiwu.naili_mai.craft_maifan": "麥飯的造法",
+    "entry.tiangongkaiwu.naili_shuji.craft_zhou": "粟米粥的造法",
+    "entry.tiangongkaiwu.naili_shu.craft_doujiang": "豆漿的造法"
 }
