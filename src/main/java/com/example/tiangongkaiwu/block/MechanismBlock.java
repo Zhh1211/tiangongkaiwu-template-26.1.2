@@ -100,18 +100,24 @@ public class MechanismBlock extends Block implements EntityBlock {
         if (level.isClientSide) {
             return;
         }
-        BlockState below = level.getBlockState(pos.below());
-        if (!(below.getBlock() instanceof DuiBlock) || !below.getValue(DuiBlock.FORMED)) {
+        if (!isFormedCore(level.getBlockState(pos.below()))) {
             popAndRemove(level, pos);
         }
     }
 
-    /** 核心退回未成型态（杵位恒在核心正上方）。 */
+    /** 正下方是不是一块已成型的机器核心（碓/桔槔/辘轳……凡 Formable 皆认）。 */
+    public static boolean isFormedCore(BlockState state) {
+        return state.getBlock() instanceof com.example.tiangongkaiwu.multiblock.Formable f
+                && f.isFormed(state);
+    }
+
+    /** 核心退回未成型态（运动件恒在核心正上方）。 */
     private static void unformCore(Level level, BlockPos mechanismPos) {
         BlockPos core = mechanismPos.below();
         BlockState coreState = level.getBlockState(core);
-        if (coreState.getBlock() instanceof DuiBlock && coreState.getValue(DuiBlock.FORMED)) {
-            level.setBlock(core, coreState.setValue(DuiBlock.FORMED, false), 3);
+        if (coreState.getBlock() instanceof com.example.tiangongkaiwu.multiblock.Formable f
+                && f.isFormed(coreState)) {
+            f.unformCore((net.minecraft.server.level.ServerLevel) level, core);
         }
     }
 

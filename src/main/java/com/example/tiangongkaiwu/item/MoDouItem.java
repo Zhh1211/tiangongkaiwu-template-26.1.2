@@ -1,7 +1,6 @@
 package com.example.tiangongkaiwu.item;
 
 import com.example.tiangongkaiwu.TiangongKaiwu;
-import com.example.tiangongkaiwu.block.DuiBlock;
 import com.example.tiangongkaiwu.block.GearBlock;
 import com.example.tiangongkaiwu.block.JianBlock;
 import com.example.tiangongkaiwu.block.MechanismBlock;
@@ -48,14 +47,6 @@ public class MoDouItem extends Item {
 
     public MoDouItem(Properties properties) {
         super(properties);
-    }
-
-    /** 机器方块 → 模板 id。 */
-    private static String templateFor(Block block) {
-        if (block instanceof DuiBlock) {
-            return "dui";
-        }
-        return null;
     }
 
     /** 扳手轮转轴向：x→y→z→x。 */
@@ -108,22 +99,21 @@ public class MoDouItem extends Item {
             return InteractionResult.CONSUME;
         }
 
-        // ---- 装配：机器核心成型 / 拆线 ----
-        String machine = templateFor(state.getBlock());
-        if (machine == null) {
+        // ---- 装配：机器核心成型 / 拆线（D15 泛化：碓/桔槔/辘轳……凡 Formable 皆认） ----
+        if (!(state.getBlock() instanceof com.example.tiangongkaiwu.multiblock.Formable formable)) {
             return InteractionResult.PASS;
         }
         if (client) {
             return InteractionResult.SUCCESS;
         }
-        StructureTemplate template = MultiBlockTemplates.get(machine);
+        StructureTemplate template = MultiBlockTemplates.get(formable.templateId());
         if (template == null) {
             return InteractionResult.PASS;
         }
 
-        if (state.getValue(DuiBlock.FORMED)) {
+        if (formable.isFormed(state)) {
             // 拆线还原
-            DuiBlock.unform((ServerLevel) level, pos);
+            formable.unformCore((ServerLevel) level, pos);
             if (player != null) {
                 player.displayClientMessage(Component.translatable("block.tiangongkaiwu.modou.unformed"), true);
             }
@@ -156,10 +146,16 @@ public class MoDouItem extends Item {
         }
 
         // ---- 成型：优先匹配自动成型，但不自动变出方块——
-        //      只换运动件（SLIDER），WOOD 框架保持原方块、FEED 料口不动、
-        //      SHAFT_SOCKET 的杆保持原样（包壳由 ShaftRenderer 按邻接自动显示）。----
+        //      只换运动件（SLIDER/PIVOT/ROTOR 三种语义位），WOOD 框架保持原方块、
+        //      FEED 料口不动、SHAFT_SOCKET 的杆保持原样（包壳由 ShaftRenderer 按邻接自动显示）。----
         for (StructureTemplate.Part part : template.parts()) {
-            if (part.role() != StructureTemplate.Role.SLIDER) {
+            MechanismBlock.Semantic semantic = switch (part.role()) {
+                case SLIDER -> MechanismBlock.Semantic.SLIDER;
+                case PIVOT -> MechanismBlock.Semantic.PIVOT;
+                case ROTOR -> MechanismBlock.Semantic.ROTOR;
+                default -> null;
+            };
+            if (semantic == null) {
                 continue;
             }
             BlockPos p = pos.offset(StructureTemplate.spin(part.pos(), rot));
@@ -173,15 +169,15 @@ public class MoDouItem extends Item {
                 level.removeBlock(p, false);
             }
             // 顺序：先立核心成型态，再放机构方块（否则机构件的邻块自检会在成型前自毁）
-            level.setBlock(pos, state.setValue(DuiBlock.FORMED, true), 3);
+            level.setBlock(pos, formable.withFormed(state, true), 3);
             level.setBlock(p, TiangongKaiwu.MECHANISM.get().defaultBlockState()
-                    .setValue(MechanismBlock.SEMANTIC, MechanismBlock.Semantic.SLIDER), 3);
+                    .setValue(MechanismBlock.SEMANTIC, semantic), 3);
             if (level.getBlockEntity(p) instanceof MechanismBlockEntity mbe) {
                 mbe.original = old;
             }
         }
-        if (!state.getValue(DuiBlock.FORMED)) {
-            level.setBlock(pos, state.setValue(DuiBlock.FORMED, true), 3);
+        if (!formable.isFormed(state)) {
+            level.setBlock(pos, formable.withFormed(state, true), 3);
         }
         if (player != null) {
             player.displayClientMessage(Component.translatable("block.tiangongkaiwu.modou.formed"), true);

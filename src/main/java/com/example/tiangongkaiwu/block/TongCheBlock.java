@@ -36,9 +36,9 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  * <p><b>单方块大轮</b>：一个方块，模型把整台 3×3 大轮越界画出去（Create 同款思路），
  * 轮子立在竖直平面里，`plane` 记轮面朝向（x/z）。
  *
- * <p><b>要激流才转（flowScore 门槛判据，D13）</b>：对轮子触水那排（及下方）的每格水取
- * `getFlow` 动量矢量、投影到轮底切向求和——**静水塘动量和为 0 不转**；过门槛即转，
- * 转速与劲恒定，不随流速涨落（要产量堆数量）。所以玩家在河滨垒堰"堰陂障流"造出水流即可。
+ * <p><b>要激流才转（flowScore 门槛判据，D13 + P0-3）</b>：轮子触水下沿 3 格至少 2 格是
+ * 流动水（非水源），且动量切向投影和过门槛——**静水塘不转，挖一格河岸也不转**；只有
+ * 垒堰收窄河道逼出连续激流才转。过门槛即恒速恒劲，不随流速涨落（要产量堆数量）。
  *
  * <p><b>两件事</b>：① 提水灌田——挨着的梘会从它这里"接到水"，由梘把水引到田里；
  * ② 输出动力 12 点给传动轴（书里效率刻度最高的装置，"昼夜不息，百亩无忧"）。
@@ -61,6 +61,8 @@ public class TongCheBlock extends Block implements net.minecraft.world.level.blo
     public static final int INTERVAL = 20;
     /** flowScore 门槛：触水格动量切向分量之和 ≥ 此值即「激轮」成功（静水=0 不过）。 */
     public static final double FLOW_SCORE_MIN = 0.015D;
+    /** 堰陂障流（P0-3）：触水下沿 3 格至少要有几格流动水（非水源）才算激流。 */
+    public static final int MIN_FLOWING_CELLS = 2;
     /** 直接灌周边田的概率门（1/4 → 平均 4 秒补 1 格）。 */
     private static final int IRRIGATE_CHANCE = 4;
 
@@ -137,19 +139,60 @@ public TongCheBlock(Properties properties) {
             }
             if (random.nextInt(4) == 0) {
                 level.playSound(null, pos, SoundEvents.BUCKET_EMPTY, SoundSource.BLOCKS, 0.35F, 1.4F);
+                // 辅助反馈：轮下溅水花（轮底那排水格上方起溅）
+                for (int w = -1; w <= 1; w += 2) {
+                    BlockPos p = plane == Direction.Axis.X ? pos.offset(0, -1, w) : pos.offset(w, -1, 0);
+                    if (level.getFluidState(p).is(FluidTags.WATER)) {
+                        level.sendParticles(net.minecraft.core.particles.ParticleTypes.SPLASH,
+                                p.getX() + 0.5D, p.getY() + 0.9D, p.getZ() + 0.5D, 6, 0.2D, 0.1D, 0.2D, 0.0D);
+                    }
+                }
             }
+        } else {
+            // 引导反馈：轮触着静水但不转——偶起一圈涟漪，暗示"水是活的但流不动，去垒堰"
+            if (random.nextInt(8) == 0 && touchesWater(level, pos, plane)) {
+                level.sendParticles(net.minecraft.core.particles.ParticleTypes.SPLASH,
+                        pos.getX() + 0.5D, pos.getY() - 0.6D, pos.getZ() + 0.5D, 2, 0.4D, 0.0D, 0.4D, 0.0D);
+            }
+            // 吱呀木轴音效留待自定义音资源（不拿原版音效凑数）
         }
         level.scheduleTick(pos, this, INTERVAL);
+    }
+
+    /** 轮底那排水格是否触水（静水也算）。 */
+    private static boolean touchesWater(Level level, BlockPos pos, Direction.Axis plane) {
+        for (int w = -1; w <= 1; w++) {
+            BlockPos p = plane == Direction.Axis.X ? pos.offset(0, -1, w) : pos.offset(w, -1, 0);
+            if (level.getFluidState(p).is(FluidTags.WATER)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
      * flowScore：轮子触水那排（横向三格及正下方）所有水的动量矢量，
      * 投影到轮底切向取绝对值求和。静水塘=0；有流即过门槛（方向不问，轮正转反转都能被水推）。
      *
+     * <p><b>堰陂障流硬门槛（P0-3）</b>：触水下沿那 3 格中至少 2 格必须是**流动水**
+     * （非水源）——静水塘 0 格、挖一格河岸的散流 1 格，都过不去；只有垒堰收窄河道、
+     * 逼出连续激流才转（书：「堰陂障流，激轮使转」）。原版水机制天然支持，无需新方块。
+     *
      * <p>切向推导：轮面在竖直平面里绕 PLANE 轴转——plane=Z（轮面 XY）轮底切向是 X；
      * plane=X（轮面 ZY）轮底切向是 Z。
      */
     public static double flowScore(Level level, BlockPos pos, Direction.Axis plane) {
+        int flowingCells = 0;
+        for (int w = -1; w <= 1; w++) {
+            BlockPos p = plane == Direction.Axis.X ? pos.offset(0, -1, w) : pos.offset(w, -1, 0);
+            FluidState fluid = level.getFluidState(p);
+            if (fluid.is(FluidTags.WATER) && !fluid.isSource()) {
+                flowingCells++;
+            }
+        }
+        if (flowingCells < MIN_FLOWING_CELLS) {
+            return 0.0D;
+        }
         double score = 0.0D;
         for (int w = -1; w <= 1; w++) {
             BlockPos base = plane == Direction.Axis.X ? pos.offset(0, -1, w) : pos.offset(w, -1, 0);

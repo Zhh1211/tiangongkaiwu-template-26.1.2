@@ -45,8 +45,13 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  *
  * <p>所以进度感是：水桶（自己挑）→ 桔槔／辘轳（浅池边，慢）→ 拔车／踏车／牛车（要动力网）→ 筒车（垒堰引激流，昼夜不息）。
  * 两台井具也会喂**梘**（{@link WaterDevices#isRunning}），但**不输出动力**。
+ *
+ * <p><b>拼装成型（D15，2026-10-07 批 3 收口）</b>：核心上方摆一根原木（横杆/轮轴），
+ * 墨斗右键弹线成型——原木位换装 PIVOT（桔槔杠杆）/ROTOR（辘轳绞轮）机构方块，
+ * BER 画真动画；未成型保持原来的静态小模型。拆机构件或拆框架自动退回未成型态。
  */
-public class WellLiftBlock extends Block {
+public class WellLiftBlock extends Block
+        implements com.example.tiangongkaiwu.multiblock.Formable {
 
     /** 两种井具。chanceDenominator 越大越慢（每次 20 tick 结算里提一格的概率是 1/它）。 */
     public enum Kind {
@@ -68,6 +73,8 @@ public class WellLiftBlock extends Block {
     public static final EnumProperty<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
     /** 是否在提水（也驱动动画贴图）。 */
     public static final BooleanProperty ACTIVE = BooleanProperty.create("active");
+    /** 是否已拼装成型（D15：运动件已换装机构方块，静态模型只画底座）。 */
+    public static final BooleanProperty FORMED = BooleanProperty.create("formed");
 
     /** 结算间隔：每 20 tick（1 秒）。 */
     public static final int INTERVAL = 20;
@@ -81,12 +88,13 @@ public class WellLiftBlock extends Block {
         this.kind = kind;
         this.registerDefaultState(this.stateDefinition.any()
                 .setValue(FACING, Direction.NORTH)
-                .setValue(ACTIVE, false));
+                .setValue(ACTIVE, false)
+                .setValue(FORMED, false));
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(FACING, ACTIVE);
+        builder.add(FACING, ACTIVE, FORMED);
     }
 
     @Override
@@ -104,6 +112,14 @@ public class WellLiftBlock extends Block {
 
     @Override
     protected void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
+        // ① 成型自检（D15）：运动件机构件被拆/被换 → 退回未成型态（底座照用，不散架）。
+        if (state.getValue(FORMED)
+                && !(level.getBlockState(pos.above()).getBlock() instanceof MechanismBlock)) {
+            level.setBlock(pos, state.setValue(FORMED, false), 3);
+            state = level.getBlockState(pos);
+            level.playSound(null, pos, SoundEvents.WOOD_BREAK, SoundSource.BLOCKS, 0.6F, 0.7F);
+        }
+
         boolean running = hasWater(level, pos) && (!this.kind.needsOperator || hasOperator(level, pos));
         if (running != state.getValue(ACTIVE)) {
             level.setBlock(pos, state.setValue(ACTIVE, running), 3);
@@ -164,6 +180,45 @@ public class WellLiftBlock extends Block {
                               BlockEntity blockEntity, ItemStack tool) {
         super.playerDestroy(level, player, pos, state, blockEntity, tool);
         popResource(level, pos, new ItemStack(itemOf()));
+    }
+
+    /** 挖掉成型核心 → 运动件机构方块一并还原移除（不写战利品表，路径确定）。 */
+    @Override
+    public BlockState playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
+        if (!level.isClientSide && state.getValue(FORMED)
+                && level.getBlockState(pos.above()).getBlock() instanceof MechanismBlock) {
+            MechanismBlock.popAndRemove(level, pos.above());
+        }
+        return super.playerWillDestroy(level, pos, state, player);
+    }
+
+    // ==================== Formable（D15 泛化墨斗） ====================
+
+    @Override
+    public String templateId() {
+        return this.kind.id;
+    }
+
+    @Override
+    public boolean isFormed(BlockState state) {
+        return state.getValue(FORMED);
+    }
+
+    @Override
+    public BlockState withFormed(BlockState state, boolean formed) {
+        return state.setValue(FORMED, formed);
+    }
+
+    @Override
+    public void unformCore(ServerLevel level, BlockPos core) {
+        BlockState coreState = level.getBlockState(core);
+        if (!coreState.getValue(FORMED)) {
+            return;
+        }
+        if (level.getBlockState(core.above()).getBlock() instanceof MechanismBlock) {
+            MechanismBlock.popAndRemove(level, core.above());
+        }
+        level.setBlock(core, coreState.setValue(FORMED, false), 3);
     }
 
     private Item itemOf() {

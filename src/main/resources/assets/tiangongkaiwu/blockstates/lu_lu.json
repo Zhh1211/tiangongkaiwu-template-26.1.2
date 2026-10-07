@@ -1,34 +1,58 @@
 {
   "variants": {
-    "facing=north,active=false": {
+    "formed=false,facing=north,active=false": {
       "model": "tiangongkaiwu:block/lu_lu"
     },
-    "facing=north,active=true": {
+    "formed=true,facing=north,active=false": {
+      "model": "tiangongkaiwu:block/lu_lu_formed"
+    },
+    "formed=false,facing=north,active=true": {
       "model": "tiangongkaiwu:block/lu_lu_active"
     },
-    "facing=east,active=false": {
+    "formed=true,facing=north,active=true": {
+      "model": "tiangongkaiwu:block/lu_lu_formed"
+    },
+    "formed=false,facing=east,active=false": {
       "model": "tiangongkaiwu:block/lu_lu",
       "y": 90
     },
-    "facing=east,active=true": {
+    "formed=true,facing=east,active=false": {
+      "model": "tiangongkaiwu:block/lu_lu_formed"
+    },
+    "formed=false,facing=east,active=true": {
       "model": "tiangongkaiwu:block/lu_lu_active",
       "y": 90
     },
-    "facing=south,active=false": {
+    "formed=true,facing=east,active=true": {
+      "model": "tiangongkaiwu:block/lu_lu_formed"
+    },
+    "formed=false,facing=south,active=false": {
       "model": "tiangongkaiwu:block/lu_lu",
       "y": 180
     },
-    "facing=south,active=true": {
+    "formed=true,facing=south,active=false": {
+      "model": "tiangongkaiwu:block/lu_lu_formed"
+    },
+    "formed=false,facing=south,active=true": {
       "model": "tiangongkaiwu:block/lu_lu_active",
       "y": 180
     },
-    "facing=west,active=false": {
+    "formed=true,facing=south,active=true": {
+      "model": "tiangongkaiwu:block/lu_lu_formed"
+    },
+    "formed=false,facing=west,active=false": {
       "model": "tiangongkaiwu:block/lu_lu",
       "y": 270
     },
-    "facing=west,active=true": {
+    "formed=true,facing=west,active=false": {
+      "model": "tiangongkaiwu:block/lu_lu_formed"
+    },
+    "formed=false,facing=west,active=true": {
       "model": "tiangongkaiwu:block/lu_lu_active",
       "y": 270
+    },
+    "formed=true,facing=west,active=true": {
+      "model": "tiangongkaiwu:block/lu_lu_formed"
     }
   }
 }

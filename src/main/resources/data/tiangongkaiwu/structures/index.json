@@ -1,6 +1,8 @@
 {
   "templates": [
     "dui",
-    "dui_test"
+    "dui_test",
+    "jie_gao",
+    "lu_lu"
   ]
 }

@@ -1,0 +1,15 @@
+{
+  "machine": "jie_gao",
+  "note": "D15: core + one mechanism cell above (wood/lever placed by player, swapped on forming)",
+  "parts": [
+    {
+      "pos": [
+        0,
+        1,
+        0
+      ],
+      "role": "pivot",
+      "sample": "minecraft:oak_log"
+    }
+  ]
+}

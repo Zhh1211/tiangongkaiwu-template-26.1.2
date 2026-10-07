@@ -47,7 +47,8 @@ import net.minecraft.world.phys.BlockHitResult;
  * 按「全网劲总量 ÷ 全网机器（坐标序）」分劲——两台碓抢一台踏车的劲，谁也舂不透，
  * 对应书里「不及則粗」。分到的劲 ≥ 配方 {@code min_power} 出白米，&gt;0 但不足出**糙米**，=0 停。
  */
-public class DuiBlock extends Block {
+public class DuiBlock extends Block
+        implements com.example.tiangongkaiwu.multiblock.Formable {
 
     /** 碓头／木架朝向（放置时 = 玩家面朝方向）。 */
     public static final EnumProperty<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
@@ -243,6 +244,28 @@ public class DuiBlock extends Block {
     }
 
     private record Work(int slot, PoundingRecipe recipe) {
+    }
+
+    // ==================== Formable（D15 泛化墨斗） ====================
+
+    @Override
+    public String templateId() {
+        return "dui";
+    }
+
+    @Override
+    public boolean isFormed(BlockState state) {
+        return state.getValue(FORMED);
+    }
+
+    @Override
+    public BlockState withFormed(BlockState state, boolean formed) {
+        return state.setValue(FORMED, formed);
+    }
+
+    @Override
+    public void unformCore(ServerLevel level, BlockPos core) {
+        unform(level, core);
     }
 
     // ==================== 右键：问一句怎么用 ====================

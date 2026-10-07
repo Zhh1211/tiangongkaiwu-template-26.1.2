@@ -2,9 +2,9 @@ package com.example.tiangongkaiwu.client.render;
 
 import com.example.tiangongkaiwu.block.DuiBlock;
 import com.example.tiangongkaiwu.block.MechanismBlock;
+import com.example.tiangongkaiwu.block.WellLiftBlock;
 import com.example.tiangongkaiwu.block.entity.MechanismBlockEntity;
 
-import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
@@ -12,6 +12,7 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.Material;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.inventory.InventoryMenu;
@@ -22,6 +23,7 @@ import net.minecraft.world.phys.Vec3;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.PoseStack.Pose;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Axis;
 
 import org.joml.Matrix4f;
 
@@ -32,17 +34,28 @@ import org.joml.Matrix4f;
  * 核心 ACTIVE 时按世界时间上下舂（D13 恒速，phase 取模防浮点漂移），静止时冻在低位。
  * 杵体细长，越出本格向下探进臼口（BER 不受格界限制，shouldRenderOffScreen 兜住邻格视角）。
  *
- * <p>PIVOT / ROTOR：后续批次（桔槔/辘轳）实现，届时按 BE 记录的原方块材质采样渲染。
+ * <p>PIVOT（桔槔横杆）：画一根架在支点上的长杆，ACTIVE 时绕支点小幅摆动（配重一压一翘），
+ * 杆一端吊桶随摆起落；ROTOR（辘轳绞轮）：画横置滚筒加摇柄，ACTIVE（有人摇）时恒速自转。
+ * 两者都读正下方核心（WellLiftBlock）的 FACING 与 ACTIVE，木料贴图采样原版原木。
  */
 public class MechanismRenderer implements BlockEntityRenderer<MechanismBlockEntity> {
 
     /** 舂击周期：24 tick（1.2 秒一舂，与碓约 1 秒一份的出料节奏同量级）。 */
     private static final long PERIOD_TICKS = 24L;
+    /** 桔槔摆动 / 辘轳自转周期：32 tick（约 1.6 秒一摆/一圈，恒速不随快慢变）。 */
+    private static final long SWING_PERIOD_TICKS = 32L;
     /** 杵的抬升幅度（像素）。 */
     private static final float LIFT_PX = 6.0F;
+    /** 桔槔摆幅（弧度，约 9°）。 */
+    private static final float SWING_RAD = 0.16F;
     /** 杵贴图（沿用碓的杵：木身钢箍）。 */
     private static final ResourceLocation PESTLE_TEX =
             ResourceLocation.fromNamespaceAndPath("tiangongkaiwu", "block/dui_pestle");
+    /** 桔槔杆 / 辘轳轮：原版橡木贴图（明暗由纹理自带）。 */
+    private static final ResourceLocation LOG_TEX =
+            ResourceLocation.fromNamespaceAndPath("minecraft", "block/oak_log");
+    private static final ResourceLocation PLANKS_TEX =
+            ResourceLocation.fromNamespaceAndPath("minecraft", "block/oak_planks");
 
     public MechanismRenderer(BlockEntityRendererProvider.Context context) {
     }
@@ -51,26 +64,33 @@ public class MechanismRenderer implements BlockEntityRenderer<MechanismBlockEnti
     public void render(MechanismBlockEntity be, float partialTick, PoseStack poseStack,
                        MultiBufferSource buffer, int light, int overlay) {
         BlockState state = be.getBlockState();
-        if (state.getValue(MechanismBlock.SEMANTIC) != MechanismBlock.Semantic.SLIDER) {
-            return;
-        }
         Level level = be.getLevel();
         if (level == null) {
             return;
         }
         BlockPos core = be.getBlockPos().below();
         BlockState coreState = level.getBlockState(core);
-        if (!(coreState.getBlock() instanceof DuiBlock) || !coreState.getValue(DuiBlock.FORMED)) {
+        if (!MechanismBlock.isFormedCore(coreState)) {
             return;
         }
 
+        switch (state.getValue(MechanismBlock.SEMANTIC)) {
+            case SLIDER -> renderSlider(coreState, level, partialTick, poseStack, buffer, light);
+            case PIVOT -> renderPivot(coreState, level, partialTick, poseStack, buffer, light);
+            case ROTOR -> renderRotor(coreState, level, partialTick, poseStack, buffer, light);
+        }
+    }
+
+    // ==================== SLIDER（碓杵） ====================
+
+    private void renderSlider(BlockState coreState, Level level, float partialTick,
+                              PoseStack poseStack, MultiBufferSource buffer, int light) {
         float lift = 0.0F;
         if (coreState.getValue(DuiBlock.ACTIVE)) {
             long t = level.getGameTime() % PERIOD_TICKS;
             float phase = (t + partialTick) / PERIOD_TICKS * Mth.TWO_PI;
             lift = (float) Math.max(0.0D, Math.sin(phase)) * LIFT_PX;
         }
-        int blockLight = light;
 
         poseStack.pushPose();
         poseStack.translate(0.0D, lift / 16.0D, 0.0D);
@@ -78,12 +98,99 @@ public class MechanismRenderer implements BlockEntityRenderer<MechanismBlockEnti
         VertexConsumer vc = buffer.getBuffer(RenderType.cutout());
         Pose pose = poseStack.last();
         Matrix4f mat = pose.pose();
-        Material atlas = new Material(InventoryMenu.BLOCK_ATLAS, PESTLE_TEX);
-        TextureAtlasSprite sprite = atlas.sprite();
+        TextureAtlasSprite sprite = new Material(InventoryMenu.BLOCK_ATLAS, PESTLE_TEX).sprite();
 
         // 杵体：细杆（吊到梁底）+ 杵头（探进臼口）；lift 已由整体平移带起
-        box(vc, pose, mat, sprite, blockLight, 7, -8, 7, 9, 16, 9);    // 杆
-        box(vc, pose, mat, sprite, blockLight, 5, -12, 5, 11, -8, 11); // 头
+        box(vc, pose, mat, sprite, light, 7, -8, 7, 9, 16, 9);    // 杆
+        box(vc, pose, mat, sprite, light, 5, -12, 5, 11, -8, 11); // 头
+
+        poseStack.popPose();
+    }
+
+    // ==================== PIVOT（桔槔横杆：绕支点摆） ====================
+
+    private void renderPivot(BlockState coreState, Level level, float partialTick,
+                             PoseStack poseStack, MultiBufferSource buffer, int light) {
+        Direction facing = coreState.getValue(WellLiftBlock.FACING);
+        boolean active = coreState.getValue(WellLiftBlock.ACTIVE);
+
+        float angle = 0.0F;
+        if (active) {
+            long t = level.getGameTime() % SWING_PERIOD_TICKS;
+            float phase = (t + partialTick) / SWING_PERIOD_TICKS * Mth.TWO_PI;
+            angle = (float) Math.sin(phase) * SWING_RAD;
+        }
+
+        VertexConsumer vc = buffer.getBuffer(RenderType.cutout());
+        TextureAtlasSprite log = new Material(InventoryMenu.BLOCK_ATLAS, LOG_TEX).sprite();
+        TextureAtlasSprite planks = new Material(InventoryMenu.BLOCK_ATLAS, PLANKS_TEX).sprite();
+
+        // 支点：机构格中部。摆动绕面向轴（杆垂直于面向方向架设，桶端下压、坠石端上翘）。
+        poseStack.pushPose();
+        poseStack.translate(0.5D, 0.15D, 0.5D);
+        poseStack.mulPose(swingAround(facing).rotation(angle));
+        poseStack.translate(-0.5D, -0.15D, -0.5D);
+
+        Pose pose = poseStack.last();
+        Matrix4f mat = pose.pose();
+
+        boolean alongX = facing.getAxis() == Direction.Axis.Z; // 面向北南 → 杆沿东西(X)
+        if (alongX) {
+            // 长杆：支点不在正中——长端吊水桶、短端坠石（桔槔的本相）
+            box(vc, pose, mat, log, light, -7, 5.5F, 7.25F, 19, 7.5F, 8.75F);      // 杆
+            box(vc, pose, mat, log, light, 14.5F, 7.5F, 7.6F, 15.5F, 19, 8.4F);    // 长端吊绳
+            box(vc, pose, mat, planks, light, 12.5F, 19, 6.6F, 17.5F, 24, 9.4F);   // 水桶
+            box(vc, pose, mat, log, light, -9.5F, 7.5F, 6.6F, -3.5F, 10.5F, 9.4F); // 短端坠石
+        } else {
+            box(vc, pose, mat, log, light, 7.25F, 5.5F, -7, 8.75F, 7.5F, 19);
+            box(vc, pose, mat, log, light, 7.6F, 7.5F, 14.5F, 8.4F, 19, 15.5F);
+            box(vc, pose, mat, planks, light, 6.6F, 19, 12.5F, 9.4F, 24, 17.5F);
+            box(vc, pose, mat, log, light, 6.6F, 7.5F, -9.5F, 9.4F, 10.5F, -3.5F);
+        }
+
+        poseStack.popPose();
+    }
+
+    /** 摆动轴：面向南北（杆沿 X）绕 Z 摆；面向东西（杆沿 Z）绕 X 摆。 */
+    private static Axis swingAround(Direction facing) {
+        return facing.getAxis() == Direction.Axis.Z ? Axis.ZP : Axis.XP;
+    }
+
+    // ==================== ROTOR（辘轳绞轮：绕水平轴自转） ====================
+
+    private void renderRotor(BlockState coreState, Level level, float partialTick,
+                             PoseStack poseStack, MultiBufferSource buffer, int light) {
+        Direction facing = coreState.getValue(WellLiftBlock.FACING);
+        boolean active = coreState.getValue(WellLiftBlock.ACTIVE);
+
+        float spin = 0.0F;
+        if (active) {
+            spin = (level.getGameTime() % SWING_PERIOD_TICKS + partialTick)
+                    / SWING_PERIOD_TICKS * Mth.TWO_PI;
+        }
+
+        VertexConsumer vc = buffer.getBuffer(RenderType.cutout());
+        TextureAtlasSprite log = new Material(InventoryMenu.BLOCK_ATLAS, LOG_TEX).sprite();
+
+        // 滚筒沿左右方向（垂直面向），绕自身水平轴恒速转（有人摇才转）
+        poseStack.pushPose();
+        poseStack.translate(0.5D, 0.5D, 0.5D);
+        poseStack.mulPose(swingAround(facing).rotation(-spin));
+        poseStack.translate(-0.5D, -0.5D, -0.5D);
+
+        Pose pose = poseStack.last();
+        Matrix4f mat = pose.pose();
+
+        boolean alongX = facing.getAxis() == Direction.Axis.Z;
+        if (alongX) {
+            box(vc, pose, mat, log, light, 1, 6.5F, 6.5F, 15, 11.5F, 11.5F);          // 滚筒
+            box(vc, pose, mat, log, light, 15, 7.5F, 7.5F, 19, 9.5F, 9.5F);           // 摇柄臂
+            box(vc, pose, mat, log, light, 17.5F, 7.5F, 5.5F, 19.5F, 9.5F, 11.5F);    // 摇柄把
+        } else {
+            box(vc, pose, mat, log, light, 6.5F, 6.5F, 1, 11.5F, 11.5F, 15);
+            box(vc, pose, mat, log, light, 7.5F, 7.5F, 15, 9.5F, 9.5F, 19);
+            box(vc, pose, mat, log, light, 5.5F, 7.5F, 17.5F, 11.5F, 9.5F, 19.5F);
+        }
 
         poseStack.popPose();
     }
@@ -146,7 +253,7 @@ public class MechanismRenderer implements BlockEntityRenderer<MechanismBlockEnti
 
     @Override
     public boolean shouldRenderOffScreen(MechanismBlockEntity be) {
-        return true; // 杵体越出本格向下，相机在邻格时也要画
+        return true; // 杵体/长杆越出本格，相机在邻格时也要画
     }
 
     @Override

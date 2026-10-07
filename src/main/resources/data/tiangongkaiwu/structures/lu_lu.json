@@ -1,0 +1,15 @@
+{
+  "machine": "lu_lu",
+  "note": "D15: core + one mechanism cell above (wood/lever placed by player, swapped on forming)",
+  "parts": [
+    {
+      "pos": [
+        0,
+        1,
+        0
+      ],
+      "role": "rotor",
+      "sample": "minecraft:oak_log"
+    }
+  ]
+}
