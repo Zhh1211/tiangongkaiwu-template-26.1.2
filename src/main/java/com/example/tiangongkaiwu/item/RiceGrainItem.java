@@ -44,6 +44,28 @@ public class RiceGrainItem extends Item {
 
     @Override
     public InteractionResult useOn(UseOnContext ctx) {
+        // 旱插（批 4 排涝造田）：右键**涸田**顶面 → 无水插秧，田水从潮润低档（2/7）起步。
+        // 书：「去澤水以便栽種」——筒排涝沉降的涸田从此可栽种。
+        Level level = ctx.getLevel();
+        if (ctx.getClickedFace() == net.minecraft.core.Direction.UP) {
+            BlockPos pos = ctx.getClickedPos();
+            if (level.getBlockState(pos).is(TiangongKaiwu.HE_TIAN.get())
+                    && level.getBlockState(pos.above()).isAir()) {
+                if (level.isClientSide) {
+                    return InteractionResult.sidedSuccess(true);
+                }
+                level.setBlock(pos.above(), TiangongKaiwu.RICE_STALK.get().defaultBlockState()
+                        .setValue(RiceStalkBlock.WATERLOGGED, false)
+                        .setValue(RiceStalkBlock.MOISTURE, 2), 3);
+                if (!ctx.getPlayer().getAbilities().instabuild) {
+                    ctx.getItemInHand().shrink(1);
+                }
+                level.playSound(ctx.getPlayer(), pos, SoundEvents.CROP_PLANTED, SoundSource.BLOCKS, 1.0F, 1.0F);
+                level.gameEvent(ctx.getPlayer(), GameEvent.BLOCK_PLACE, pos.above());
+                return InteractionResult.sidedSuccess(false);
+            }
+        }
+
         // 玩家点击水格旁的固体（最常见：水下的田底）时，useOn 拿到的 hit 是那个固体，
         // 但 use() 兜底并不会触发——所以必须在这里就用含流体准星射线找水源格。
         return plantIntoWater(ctx.getLevel(), ctx.getPlayer(), ctx.getItemInHand());

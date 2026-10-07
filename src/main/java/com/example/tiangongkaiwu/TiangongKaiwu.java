@@ -53,6 +53,7 @@ import com.example.tiangongkaiwu.block.RiceStalkBlock;
 import com.example.tiangongkaiwu.block.RiceStalkBlockDry;
 import com.example.tiangongkaiwu.block.DragonBoneCarBlock;
 import com.example.tiangongkaiwu.block.GearBlock;
+import com.example.tiangongkaiwu.block.HeTianBlock;
 import com.example.tiangongkaiwu.block.DuiBlock;
 import com.example.tiangongkaiwu.block.FengFanBlock;
 import com.example.tiangongkaiwu.block.JianBlock;
@@ -308,10 +309,25 @@ public class TiangongKaiwu {
         BLOCK_ENTITY_TYPES.register("shaft",
             () -> BlockEntityType.Builder.of(ShaftBlockEntity::new, SHAFT.get()).build(null));
 
+    /** 涸田（批 4 排涝造田）：筒·滑轮抽干小水体后沉降的旱作田，可直接插秧。 */
+    public static final DeferredBlock<HeTianBlock> HE_TIAN = BLOCKS.register(
+        "he_tian",
+        () -> new HeTianBlock(
+            BlockBehaviour.Properties.of()
+                .mapColor(MapColor.TERRACOTTA_WHITE)
+                .strength(0.6f)
+                .sound(SoundType.MUD)
+        )
+    );
+
     /** 机构方块实体：存被替换的原方块（拆解还原）。 */
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<MechanismBlockEntity>> MECHANISM_BE_TYPE =
         BLOCK_ENTITY_TYPES.register("mechanism",
             () -> BlockEntityType.Builder.of(MechanismBlockEntity::new, TiangongKaiwu.MECHANISM.get()).build(null));
+
+    /** 涸田物品。 */
+    public static final DeferredItem<BlockItem> HE_TIAN_ITEM =
+        ITEMS.registerSimpleBlockItem("he_tian", HE_TIAN);
 
     public static final DeferredItem<BlockItem> TONG_CHE_ITEM =
             ITEMS.registerSimpleBlockItem("tong_che", TONG_CHE);
@@ -669,6 +685,7 @@ public class TiangongKaiwu {
                         output.accept(MAI_REN);
                         output.accept(MAI_FAN);
                         output.accept(BAO_DAO_HUA);
+                        output.accept(HE_TIAN_ITEM);
                         output.accept(SU_GU);
                         output.accept(SU_MI);
                         output.accept(SU_MI_ZHOU);

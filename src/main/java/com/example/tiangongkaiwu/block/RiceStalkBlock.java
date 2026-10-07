@@ -135,7 +135,8 @@ public class RiceStalkBlock extends Block implements SimpleWaterloggedBlock, Bon
         return isPaddySoil(level.getBlockState(pos.below()));
     }
 
-    /** 可作稻田的底土：泥土系、泥巴，以及书里点名的沙（沙田）、砂砾/粗泥（磽）、黏土（膩）。 */
+    /** 可作稻田的底土：泥土系、泥巴，书里点名的沙（沙田）、砂砾/粗泥（磽）、黏土（膩），
+     *  以及**涸田**（筒排涝沉降的旱作田，批 4）。 */
     public static boolean isPaddySoil(BlockState below) {
         Block b = below.getBlock();
         return below.is(BlockTags.DIRT)
@@ -143,7 +144,8 @@ public class RiceStalkBlock extends Block implements SimpleWaterloggedBlock, Bon
                 || b == Blocks.SAND
                 || b == Blocks.RED_SAND
                 || b == Blocks.GRAVEL
-                || b == Blocks.CLAY;
+                || b == Blocks.CLAY
+                || b == com.example.tiangongkaiwu.TiangongKaiwu.HE_TIAN.get();
     }
 
     /** 土性之一：**冷浆土**（书「土性帶冷漿者，宜骨灰蘸秧根……石灰淹苗足」）。黏土保水最强、地温最低。 */

@@ -217,9 +217,13 @@ public class TubeBlock extends Block implements EntityBlock {
             }
             ObjectOpenHashSet<BlockPos> body = collectBody(level, start, fs, SMALL_BODY + 1);
             if (body.size() <= SMALL_BODY) {
-                // 小水体：整抽消散
+                // 小水体：整抽消散；抽干格下是可作田的土 → 沉降一格涸田
+                // （批 4 排涝造田，书：「去澤水以便栽種」）
                 for (BlockPos p : body) {
                     level.removeBlock(p, false);
+                    if (RiceStalkBlock.isPaddySoil(level.getBlockState(p.below()))) {
+                        level.setBlock(p, TiangongKaiwu.HE_TIAN.get().defaultBlockState(), 3);
+                    }
                 }
             } else {
                 // 大水体：只抽半径内的一格（抽不干）
