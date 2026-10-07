@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/crop",
+  "textures": {
+    "crop": "tiangongkaiwu:block/ma_stage7"
+  }
+}
