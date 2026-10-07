@@ -1,7 +1,8 @@
 {
-    "variants": {
-        "": {
-            "model": "tiangongkaiwu:block/rice_panicle"
-        }
+  "render_type": "minecraft:cutout",
+  "variants": {
+    "": {
+      "model": "tiangongkaiwu:block/rice_panicle"
     }
+  }
 }

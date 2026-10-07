@@ -136,9 +136,13 @@ public class MoDouItem extends Item {
             if (player != null) {
                 int rot2 = template.bestRotAt(level, pos);
                 int[] missing = template.missingAt(level, pos, rot2);
+                // 运动件位（PIVOT/ROTOR）也是拿木料补的——缺件并入「缺木」口径
+                int woodMissing = missing[StructureTemplate.Role.WOOD.ordinal()]
+                        + missing[StructureTemplate.Role.PIVOT.ordinal()]
+                        + missing[StructureTemplate.Role.ROTOR.ordinal()];
                 player.displayClientMessage(Component.translatable(
                         "block.tiangongkaiwu.modou.missing",
-                        missing[StructureTemplate.Role.WOOD.ordinal()],
+                        woodMissing,
                         missing[StructureTemplate.Role.FEED.ordinal()],
                         missing[StructureTemplate.Role.SHAFT_SOCKET.ordinal()]), true);
             }
@@ -165,7 +169,8 @@ public class MoDouItem extends Item {
                 continue;
             }
             if (replacedWood) {
-                Block.dropResources(old, level, p);
+                // 原木被「收进」机构方块（original 记录，拆解时归还）——
+                // 这里不能 dropResources，否则成型弹一次+拆解还一次=刷木头（2026-10-07 实测）
                 level.removeBlock(p, false);
             }
             // 顺序：先立核心成型态，再放机构方块（否则机构件的邻块自检会在成型前自毁）
@@ -202,7 +207,7 @@ public class MoDouItem extends Item {
         for (StructureTemplate.Part part : template.parts()) {
             StructureTemplate.Role role = part.role();
             if (role == StructureTemplate.Role.SLIDER) {
-                continue; // 运动件成型时免费生成
+                continue; // SLIDER 位成型时免费生成（模板无此位则不涉及）
             }
             if (template.checkPart(level, core, part, rot)) {
                 continue; // 该位已合格
@@ -214,7 +219,10 @@ public class MoDouItem extends Item {
             }
 
             BlockState ps = null;
-            if (role == StructureTemplate.Role.WOOD) {
+            if (role == StructureTemplate.Role.WOOD
+                    || role == StructureTemplate.Role.PIVOT
+                    || role == StructureTemplate.Role.ROTOR) {
+                // 木料位与运动件位：都从背包扣原木/木板补（桔槔/辘轳的运动件位=核心上方原木）
                 ItemStack taken = instabuild ? null : takeOne(player, MoDouItem::isWoodItem);
                 Block wood = taken != null ? Block.byItem(taken.getItem()) : Blocks.OAK_LOG;
                 if (!StructureTemplate.isWoodish(wood.defaultBlockState())) {
@@ -236,8 +244,13 @@ public class MoDouItem extends Item {
                 ps = templateState;
             }
 
-            // 木料的轴向顺着部件相对核心的方向（横梁放横、立柱放竖）
-            if (ps.hasProperty(BlockStateProperties.AXIS)) {
+            // 木料的轴向顺着部件相对核心的方向（横梁放横、立柱放竖）——
+            // 只对木料/运动件位做几何猜轴；SHAFT_SOCKET 必须信模板样例轴
+            // （含旋转换算），按 offset 猜会把碓的横梁轴猜成竖轴（2026-10-07 实测）
+            if (ps.hasProperty(BlockStateProperties.AXIS)
+                    && (role == StructureTemplate.Role.WOOD
+                        || role == StructureTemplate.Role.PIVOT
+                        || role == StructureTemplate.Role.ROTOR)) {
                 var off = StructureTemplate.spin(part.pos(), rot);
                 int ax = Math.abs(off.getX());
                 int ay = Math.abs(off.getY());

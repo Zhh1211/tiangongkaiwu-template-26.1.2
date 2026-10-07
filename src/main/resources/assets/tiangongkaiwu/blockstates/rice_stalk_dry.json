@@ -1,28 +1,29 @@
 {
-    "variants": {
-        "age=0": {
-            "model": "tiangongkaiwu:block/rice_stalk_dry"
-        },
-        "age=1": {
-            "model": "tiangongkaiwu:block/rice_stalk_dry"
-        },
-        "age=2": {
-            "model": "tiangongkaiwu:block/rice_stalk_dry"
-        },
-        "age=3": {
-            "model": "tiangongkaiwu:block/rice_stalk_dry"
-        },
-        "age=4": {
-            "model": "tiangongkaiwu:block/rice_stalk_dry"
-        },
-        "age=5": {
-            "model": "tiangongkaiwu:block/rice_stalk_dry"
-        },
-        "age=6": {
-            "model": "tiangongkaiwu:block/rice_stalk_dry"
-        },
-        "age=7": {
-            "model": "tiangongkaiwu:block/rice_stalk_dry"
-        }
+  "render_type": "minecraft:cutout",
+  "variants": {
+    "age=0": {
+      "model": "tiangongkaiwu:block/rice_stalk_dry"
+    },
+    "age=1": {
+      "model": "tiangongkaiwu:block/rice_stalk_dry"
+    },
+    "age=2": {
+      "model": "tiangongkaiwu:block/rice_stalk_dry"
+    },
+    "age=3": {
+      "model": "tiangongkaiwu:block/rice_stalk_dry"
+    },
+    "age=4": {
+      "model": "tiangongkaiwu:block/rice_stalk_dry"
+    },
+    "age=5": {
+      "model": "tiangongkaiwu:block/rice_stalk_dry"
+    },
+    "age=6": {
+      "model": "tiangongkaiwu:block/rice_stalk_dry"
+    },
+    "age=7": {
+      "model": "tiangongkaiwu:block/rice_stalk_dry"
     }
+  }
 }

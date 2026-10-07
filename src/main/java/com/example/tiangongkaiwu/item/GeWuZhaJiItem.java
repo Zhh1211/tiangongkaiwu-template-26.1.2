@@ -90,20 +90,51 @@ public class GeWuZhaJiItem extends Item {
         if (!(state.getBlock() instanceof GearBlock)) {
             return InteractionResult.PASS; // 只对结构件判定
         }
-        if (level instanceof ServerLevel server) {
+        if (level instanceof ServerLevel server && player != null) {
+            boolean matched = false;
             for (Research r : RESEARCHES) {
                 if (!r.matcher().matches(server, pos)) {
                     continue;
                 }
                 if (grant(server, (ServerPlayer) player, r)) {
                     context.getItemInHand().shrink(1); // 札记用完即毁（残页同款）
-                } else if (player != null) {
+                } else {
                     player.displayClientMessage(Component.translatable("ge_wu.already_known"), true);
                 }
+                matched = true;
                 break;
+            }
+            if (!matched) {
+                // 摆错了也给话（2026-10-07 实测反馈：无提示像坏了）——分「缺轮」与「轴向不对」
+                player.displayClientMessage(Component.translatable(
+                        diagnoseHeLun(server, pos) ? "ge_wu.axis_wrong" : "ge_wu.structure_mismatch"), true);
+                server.playSound(null, pos, SoundEvents.NOTE_BLOCK_BASS.value(), SoundSource.BLOCKS, 0.4F, 0.6F);
             }
         }
         return InteractionResult.sidedSuccess(level.isClientSide);
+    }
+
+    /** 轴向诊断：四个水平邻全是牙轮（数量够）但轴不指中心 → 提示转轴而不是缺件。 */
+    private static boolean diagnoseHeLun(ServerLevel level, BlockPos clicked) {
+        for (Direction d : Direction.Plane.HORIZONTAL) {
+            BlockPos center = clicked.relative(d);
+            boolean allGear = true;
+            boolean axisWrong = false;
+            for (Direction dd : Direction.Plane.HORIZONTAL) {
+                BlockState s = level.getBlockState(center.relative(dd));
+                if (!(s.getBlock() instanceof GearBlock)) {
+                    allGear = false;
+                    break;
+                }
+                if (s.getValue(GearBlock.AXIS) != dd.getAxis()) {
+                    axisWrong = true;
+                }
+            }
+            if (allGear && axisWrong) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /** 致知：grant 奖励 advancement（advancement rewards 挂配方解锁）。 */

@@ -1,4 +1,5 @@
 {
+  "render_type": "minecraft:cutout",
   "variants": {
     "age=0": {
       "model": "tiangongkaiwu:block/dou_stage0"
