@@ -11,7 +11,6 @@ import com.example.tiangongkaiwu.block.ShaftBlock;
 import com.example.tiangongkaiwu.block.TongCheBlock;
 import com.example.tiangongkaiwu.block.TubeBlock;
 import com.example.tiangongkaiwu.block.WaterDevices;
-import com.example.tiangongkaiwu.block.WellLiftBlock;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -53,7 +52,7 @@ public class TiangongKaiwuJadePlugin implements IWailaPlugin {
         for (Class<? extends Block> type : new Class[]{
                 RiceStalkBlock.class, RiceStalkBlockDry.class,
                 TongCheBlock.class, ShaftBlock.class, JianBlock.class,
-                DragonBoneCarBlock.class, WellLiftBlock.class, FengFanBlock.class,
+                DragonBoneCarBlock.class, FengFanBlock.class,
                 TubeBlock.class, DuiBlock.class}) {
             registration.registerBlockComponent(DEVICE_STATE, type);
         }
@@ -143,7 +142,7 @@ public class TiangongKaiwuJadePlugin implements IWailaPlugin {
                 return;
             }
 
-            if (block instanceof DragonBoneCarBlock || block instanceof WellLiftBlock
+            if (block instanceof DragonBoneCarBlock
                     || block instanceof FengFanBlock) {
                 boolean running = WaterDevices.isRunning(state);
                 tooltip.add(Component.translatable(running

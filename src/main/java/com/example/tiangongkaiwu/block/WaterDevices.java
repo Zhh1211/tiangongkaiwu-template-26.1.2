@@ -33,16 +33,12 @@ public final class WaterDevices {
     }
 
     /**
-     * 这台井具在提水吗（桔槔/辘轳的本职：井上提水可以直接喂梘，不经筒）。
+     * 梘下方是否有井具直喂（历史接口，2026-10-12 井具下线后恒 false——保留以稳 Jade/梘调用点）。
      *
-     * <p>D16 车系拆分（2026-10-05）：**车系（筒车/牛车/踏车/拔车）不再直接喂梘**——
-     * 车只产劲，流体做功归筒（泵形态/滑轮形态）。风帆车依旧**故意不在**这里
-     * （书：去水非取水也；排涝走筒·滑轮形态）。
+     * <p>D16 车系拆分：车系不直接喂梘；2026-10-12 拍板：桔槔/辘轳下线——梘的进水
+     * 全走筒（泵形态/滑轮形态）与未来的龙骨刮板（D19）。
      */
     public static boolean isRunning(BlockState state) {
-        if (state.getBlock() instanceof WellLiftBlock lift) {
-            return lift.isRunning(state);
-        }
         return false;
     }
 

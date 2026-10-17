@@ -98,24 +98,6 @@
     {
       "type": "modonomicon:spotlight",
       "item": {
-        "item": "tiangongkaiwu:jie_gao"
-      },
-      "title": "entry.tiangongkaiwu.naili_shuili.spot_jie_gao.title",
-      "text": "entry.tiangongkaiwu.naili_shuili.spot_jie_gao.text",
-      "anchor": "jie_gao"
-    },
-    {
-      "type": "modonomicon:spotlight",
-      "item": {
-        "item": "tiangongkaiwu:lu_lu"
-      },
-      "title": "entry.tiangongkaiwu.naili_shuili.spot_lu_lu.title",
-      "text": "entry.tiangongkaiwu.naili_shuili.spot_lu_lu.text",
-      "anchor": "lu_lu"
-    },
-    {
-      "type": "modonomicon:spotlight",
-      "item": {
         "item": "tiangongkaiwu:feng_fan_che"
       },
       "title": "entry.tiangongkaiwu.naili_shuili.spot_feng_fan_che.title",
