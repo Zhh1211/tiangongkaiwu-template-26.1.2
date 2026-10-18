@@ -1,3 +1,6 @@
 {
-  "parent": "tiangongkaiwu:block/tong"
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "tiangongkaiwu:item/tong"
+  }
 }

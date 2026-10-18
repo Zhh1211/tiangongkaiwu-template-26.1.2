@@ -1,3 +1,6 @@
 {
-  "parent": "tiangongkaiwu:block/gear_box"
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "tiangongkaiwu:item/gear_box"
+  }
 }
