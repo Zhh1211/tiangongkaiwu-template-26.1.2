@@ -209,9 +209,8 @@
     "ge_wu.he_lun.desc": "四轮相衔而劲分赴四方——十字齿轮箱已可合成",
     "ge_wu.already_known": "此中巧法，早已了然于心。",
     "item.tiangongkaiwu.mai_ren": "麦仁",
-    "item.tiangongkaiwu.mai_fan": "麦饭",
-    "entry.tiangongkaiwu.naili_mai.spot_jiagong.title": "舂麦成仁，麦饭豆羹",
-    "entry.tiangongkaiwu.naili_mai.spot_jiagong.text": "麦粒入碓，借水力舂捣，去壳成仁；两份麦仁盛一碗，便是「麦饭豆羹」里的麦饭——古人贯贱通食，虽粗粝而耐饥。",
+    "entry.tiangongkaiwu.naili_mai.spot_jiagong.title": "舂麦成仁，以待磨面",
+    "entry.tiangongkaiwu.naili_mai.spot_jiagong.text": "麦粒入碓，借水力舂捣，去壳成仁。麦之作也，磨而后为面食——其事在粹精卷，此卷惟舂仁以待。",
     "block.tiangongkaiwu.su": "粟",
     "block.tiangongkaiwu.shu": "黍",
     "block.tiangongkaiwu.ma": "麻",
@@ -235,9 +234,10 @@
     "entry.tiangongkaiwu.naili_shu.spot_doujiang.text": "菽入碓舂成豆瓣；两瓣盛一碗，便是一碗豆浆。豆之为用，饭、酱、豉、油无所不可——养地之功，更是五谷之最。",
     "item.tiangongkaiwu.bao_dao_hua": "爆稻花",
     "block.tiangongkaiwu.he_tian": "涸田",
-    "entry.tiangongkaiwu.naili_mai.craft_maifan": "麦饭的造法",
     "entry.tiangongkaiwu.naili_shuji.craft_zhou": "粟米粥的造法",
     "entry.tiangongkaiwu.naili_shu.craft_doujiang": "豆浆的造法",
     "ge_wu.structure_mismatch": "格物未成——对照札记再摆：四枚牙轮围一圈，中心留空，缺一不可",
-    "ge_wu.axis_wrong": "轮数够了，但轴向不对——四枚牙轮的轴须都指向中心（东西沿东西、南北沿南北）"
+    "ge_wu.axis_wrong": "轮数够了，但轴向不对——四枚牙轮的轴须都指向中心（东西沿东西、南北沿南北）",
+    "item.tiangongkaiwu.mi_fan": "米饭",
+    "entry.tiangongkaiwu.naili_do.craft_mifan": "米饭的造法"
 }

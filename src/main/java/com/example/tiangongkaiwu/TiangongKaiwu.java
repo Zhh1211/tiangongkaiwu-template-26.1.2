@@ -516,8 +516,8 @@ public class TiangongKaiwu {
     /** 麦仁：碓舂小麦所得（舂透 ×2），麦饭的原料——加工中间品，不可生食。 */
     public static final DeferredItem<Item> MAI_REN = ITEMS.registerSimpleItem("mai_ren");
 
-    /** 麦饭：「麦饭豆羹」——两份麦仁盛一碗，正餐档，吃完还碗。 */
-    public static final DeferredItem<Item> MAI_FAN = ITEMS.registerSimpleItem("mai_fan",
+    /** 米饭：两份米盛一碗，正餐档，吃完还碗。 */
+    public static final DeferredItem<Item> MI_FAN = ITEMS.registerSimpleItem("mi_fan",
         new Item.Properties().food(new net.minecraft.world.food.FoodProperties.Builder()
             .nutrition(6)
             .saturationModifier(0.6F)
@@ -652,7 +652,7 @@ public class TiangongKaiwu {
                         output.accept(SONGYAN_MO);
                         output.accept(XUAN_ZHI);
                         output.accept(MAI_REN);
-                        output.accept(MAI_FAN);
+                        output.accept(MI_FAN);
                         output.accept(BAO_DAO_HUA);
                         output.accept(HE_TIAN_ITEM);
                         output.accept(SU_GU);

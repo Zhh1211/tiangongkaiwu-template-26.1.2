@@ -1,7 +1,0 @@
-{
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "minecraft:item/bowl",
-    "layer1": "tiangongkaiwu:item/mai_fan_food"
-  }
-}

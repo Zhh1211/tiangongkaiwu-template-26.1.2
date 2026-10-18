@@ -209,9 +209,8 @@
     "ge_wu.he_lun.desc": "Four wheels interlocked, power flows to all sides - the Cross Gearbox can now be crafted",
     "ge_wu.already_known": "This trick is already known to you.",
     "item.tiangongkaiwu.mai_ren": "Wheat Groats",
-    "item.tiangongkaiwu.mai_fan": "Wheat Rice",
-    "entry.tiangongkaiwu.naili_mai.spot_jiagong.title": "Pounding Wheat into Groats",
-    "entry.tiangongkaiwu.naili_mai.spot_jiagong.text": "Feed wheat to the pestle-driven Du; hulled by water power, it yields groats. Two groats in a bowl make Wheat Rice - the humble staple of 'wheat rice and bean soup' that rich and poor alike ate to fill the belly.",
+    "entry.tiangongkaiwu.naili_mai.spot_jiagong.title": "Pounding Wheat into Kernels",
+    "entry.tiangongkaiwu.naili_mai.spot_jiagong.text": "Wheat grains go into the pestle, pounded by water power and hulled into kernels. Wheat becomes food only after the mill turns it to flour - a matter for the Purity volume; here we merely pound and wait.",
     "block.tiangongkaiwu.su": "Foxtail Millet",
     "block.tiangongkaiwu.shu": "Broomcorn Millet",
     "block.tiangongkaiwu.ma": "Hemp",
@@ -235,9 +234,10 @@
     "entry.tiangongkaiwu.naili_shu.spot_doujiang.text": "Pound soybeans into splits; two splits in a bowl make a bowl of soy milk. Of all the grains the bean serves the most uses - and enriches the soil best of all.",
     "item.tiangongkaiwu.bao_dao_hua": "Puffed Rice",
     "block.tiangongkaiwu.he_tian": "Drained Paddy",
-    "entry.tiangongkaiwu.naili_mai.craft_maifan": "Building Mai Fan (Wheat Rice)",
     "entry.tiangongkaiwu.naili_shuji.craft_zhou": "Building Millet Porridge",
     "entry.tiangongkaiwu.naili_shu.craft_doujiang": "Building Dou Jiang (Soy Milk)",
     "ge_wu.structure_mismatch": "Not yet formed - four gears in a ring around an empty centre, none missing.",
-    "ge_wu.axis_wrong": "Four gears but wrong axes - every gear shaft must point at the centre (E-W along X, N-S along Z)."
+    "ge_wu.axis_wrong": "Four gears but wrong axes - every gear shaft must point at the centre (E-W along X, N-S along Z).",
+    "item.tiangongkaiwu.mi_fan": "Steamed Rice",
+    "entry.tiangongkaiwu.naili_do.craft_mifan": "Cooking Steamed Rice"
 }

@@ -1,0 +1,19 @@
+{
+    "type": "minecraft:crafting_shapeless",
+    "category": "misc",
+    "ingredients": [
+        {
+            "item": "tiangongkaiwu:rice"
+        },
+        {
+            "item": "tiangongkaiwu:rice"
+        },
+        {
+            "item": "minecraft:bowl"
+        }
+    ],
+    "result": {
+        "id": "tiangongkaiwu:mi_fan",
+        "count": 1
+    }
+}
