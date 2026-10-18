@@ -1,6 +1,7 @@
 {
   "textures": {
-    "1": "tiangongkaiwu:block/ya_lun_wood"
+    "1": "tiangongkaiwu:block/ya_lun_wood",
+    "2": "tiangongkaiwu:block/shaft"
   },
   "elements": [
     {
@@ -23,7 +24,7 @@
             11,
             11
           ],
-          "texture": "#1"
+          "texture": "#2"
         },
         "east": {
           "uv": [
@@ -32,7 +33,7 @@
             16,
             11
           ],
-          "texture": "#1"
+          "texture": "#2"
         },
         "south": {
           "uv": [
@@ -41,7 +42,7 @@
             11,
             11
           ],
-          "texture": "#1"
+          "texture": "#2"
         },
         "west": {
           "uv": [
@@ -50,7 +51,7 @@
             16,
             11
           ],
-          "texture": "#1"
+          "texture": "#2"
         },
         "up": {
           "uv": [
@@ -59,7 +60,7 @@
             11,
             16
           ],
-          "texture": "#1"
+          "texture": "#2"
         },
         "down": {
           "uv": [
@@ -68,7 +69,7 @@
             11,
             16
           ],
-          "texture": "#1"
+          "texture": "#2"
         }
       }
     },
