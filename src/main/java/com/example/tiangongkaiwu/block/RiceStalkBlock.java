@@ -36,6 +36,8 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.BlockHitResult;
 
+import com.example.tiangongkaiwu.fertility.FertilityData;
+
 /**
  * 水培稻的下部秆块（两段式结构中的下段，参考农夫乐事 RiceBlock）。
  *
@@ -209,7 +211,11 @@ public class RiceStalkBlock extends Block implements SimpleWaterloggedBlock, Bon
             return random.nextFloat() < CHANNEL_REFILL && refill(state, level, pos);
         }
         // ③ 蒸发
-        if (random.nextFloat() < drynessChance(level.getBlockState(pos.below()))) {
+        float dryChance = drynessChance(level.getBlockState(pos.below()));
+        if (FertilityData.fertilityAt(level, pos.below()) > 0) {
+            dryChance *= 0.5F; // 地力养熟的土地更保水（稻宜·地力 v2）
+        }
+        if (random.nextFloat() < dryChance) {
             int moisture = state.getValue(MOISTURE) - 1;
             if (moisture <= 0) {
                 // 干涸见底 → 枯秆（把 AGE 一并带走，倒水可原样救回）
@@ -403,6 +409,8 @@ public class RiceStalkBlock extends Block implements SimpleWaterloggedBlock, Bon
         }
         ServerLevel server = (ServerLevel) level;
         boost(server, pos, state, 2 + server.getRandom().nextInt(2));
+        // 稻宜·地力 v2：施粪养地——脚下这片地 +1~2（书「勤農糞田」；地力跟地走，土种不变）
+        FertilityData.add(server, pos.below(), 1 + server.getRandom().nextInt(2));
         if (player == null || !player.getAbilities().instabuild) {
             stack.shrink(1);
         }

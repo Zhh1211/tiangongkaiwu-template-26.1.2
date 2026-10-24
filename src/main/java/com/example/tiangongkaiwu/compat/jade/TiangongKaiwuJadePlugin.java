@@ -2,6 +2,9 @@ package com.example.tiangongkaiwu.compat.jade;
 
 import com.example.tiangongkaiwu.TiangongKaiwu;
 import com.example.tiangongkaiwu.block.DragonBoneCarBlock;
+import com.example.tiangongkaiwu.fertility.FertilityData;
+
+import net.minecraft.server.level.ServerLevel;
 import com.example.tiangongkaiwu.block.DuiBlock;
 import com.example.tiangongkaiwu.block.FengFanBlock;
 import com.example.tiangongkaiwu.block.JianBlock;
@@ -80,6 +83,12 @@ public class TiangongKaiwuJadePlugin implements IWailaPlugin {
                         moisture, RiceStalkBlock.MAX_MOISTURE));
                 tooltip.add(Component.translatable("jade.tiangongkaiwu.growth",
                         state.getValue(RiceStalkBlock.AGE), RiceStalkBlock.MAX_AGE));
+                if (accessor.getLevel() instanceof ServerLevel server) {
+                    int fertility = FertilityData.fertilityAt(server, accessor.getPosition().below());
+                    if (fertility > 0) {
+                        tooltip.add(Component.translatable("jade.tiangongkaiwu.fertility", fertility));
+                    }
+                }
                 if (moisture < RiceStalkBlock.WATER_VISIBLE_MIN) {
                     tooltip.add(Component.translatable("jade.tiangongkaiwu.need_water"));
                 }

@@ -46,7 +46,11 @@ import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredItem;
+import com.mojang.serialization.MapCodec;
+import net.neoforged.neoforge.common.loot.IGlobalLootModifier;
+import com.example.tiangongkaiwu.fertility.FertilityBonusModifier;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import net.neoforged.neoforge.registries.NeoForgeRegistries;
 
 import com.example.tiangongkaiwu.block.RicePanicleBlock;
 import com.example.tiangongkaiwu.block.RiceStalkBlock;
@@ -103,6 +107,10 @@ public class TiangongKaiwu {
     // ========== 加工配方：碓（舂米）==========
     // 数据驱动：data/tiangongkaiwu/recipe/*.json，type 写 "tiangongkaiwu:pounding"。
     // 详见 PoundingRecipe（input / min_power / result+byproduct / coarse 四件）。
+    /** 全局掉落修改器序列化器（地力增产等「掉落海关」关卡挂这里）。 */
+    public static final DeferredRegister<MapCodec<? extends IGlobalLootModifier>> GLOBAL_LOOT_MODIFIERS =
+            DeferredRegister.create(NeoForgeRegistries.Keys.GLOBAL_LOOT_MODIFIER_SERIALIZERS, MODID);
+
     public static final DeferredRegister<RecipeType<?>> RECIPE_TYPES =
             DeferredRegister.create(Registries.RECIPE_TYPE, MODID);
     public static final DeferredRegister<RecipeSerializer<?>> RECIPE_SERIALIZERS =
@@ -115,6 +123,10 @@ public class TiangongKaiwu {
             RECIPE_SERIALIZERS.register("pounding", PoundingRecipe.Serializer::new);
 
     // ========== 物品数据组件：残页状态（目标条目/是否已译/成绩经验） ==========
+    /** 地力增产（#40 v2）：作物掉落过海关时按脚下地力放大。 */
+    public static final java.util.function.Supplier<MapCodec<FertilityBonusModifier>> FERTILITY_BONUS =
+            GLOBAL_LOOT_MODIFIERS.register("fertility_bonus", () -> FertilityBonusModifier.CODEC);
+
     public static final DeferredRegister<DataComponentType<?>> DATA_COMPONENTS =
             DeferredRegister.create(Registries.DATA_COMPONENT_TYPE, MODID);
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<ResidualData>> RESIDUAL =

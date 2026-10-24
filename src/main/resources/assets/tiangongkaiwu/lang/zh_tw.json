@@ -239,5 +239,7 @@
     "ge_wu.structure_mismatch": "格物未成——對照札記再擺：四枚牙輪圍一圈，中心留空，缺一不可",
     "ge_wu.axis_wrong": "輪數夠了，但軸向不對——四枚牙輪的軸須都指向中心（東西沿東西、南北沿南北）",
     "item.tiangongkaiwu.mi_fan": "米飯",
-    "entry.tiangongkaiwu.naili_do.craft_mifan": "米飯的造法"
+    "entry.tiangongkaiwu.naili_do.craft_mifan": "米飯的造法",
+    "jade.tiangongkaiwu.fertility": "地力 %s",
+    "entry.tiangongkaiwu.naili_dao_yi.page_fertility": "「勤農糞田，多方以助之。」這卷書講的「地力」，是田地的底子：每施一次糞，腳下的地便多一分膏澤；每收一季，地力便耗損一分。地厚則穗實纍纍——同一株稻，熟田所穫遠勝新田；地薄則穗稀粒瘦，甚至顆粒難收。土性不改（沙、泥、磽、膩各有所宜），養的是地，不是換土。老農所以輪作糞養，不肯竭地而種也。"
 }
