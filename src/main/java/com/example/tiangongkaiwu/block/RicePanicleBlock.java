@@ -41,7 +41,9 @@ public class RicePanicleBlock extends Block {
 
     @Override
     public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
-        return level.getBlockState(pos.below()).is(TiangongKaiwu.RICE_STALK.get());
+        // 秆的两种形态都算底座：水中的秆 + 干透的枯秆（枯而不断，倒水救回后原样）
+        BlockState below = level.getBlockState(pos.below());
+        return below.is(TiangongKaiwu.RICE_STALK.get()) || below.is(TiangongKaiwu.RICE_STALK_DRY.get());
     }
 
     /** 邻居变化（下方秆被打/枯）：自毁 + 弹稻谷。 */
@@ -49,7 +51,11 @@ public class RicePanicleBlock extends Block {
     protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block block,
                                    BlockPos fromPos, boolean isMoving) {
         super.neighborChanged(state, level, pos, block, fromPos, isMoving);
-        if (!level.isClientSide && !level.getBlockState(pos.below()).is(TiangongKaiwu.RICE_STALK.get())) {
+        BlockState below = level.getBlockState(pos.below());
+        // 秆变枯（RICE_STALK_DRY）不算断：穗留在枯秆上，倒水救回后原样；
+        // 只有下方真的没了（被打/被挖）才自毁弹谷
+        if (!level.isClientSide && !below.is(TiangongKaiwu.RICE_STALK.get())
+                && !below.is(TiangongKaiwu.RICE_STALK_DRY.get())) {
             level.destroyBlock(pos, false);
             dropGrains(level, pos, 0);
         }
