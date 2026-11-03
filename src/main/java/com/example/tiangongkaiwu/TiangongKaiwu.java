@@ -56,6 +56,8 @@ import com.example.tiangongkaiwu.block.RicePanicleBlock;
 import com.example.tiangongkaiwu.block.RiceStalkBlock;
 import com.example.tiangongkaiwu.block.RiceStalkBlockDry;
 import com.example.tiangongkaiwu.block.DragonBoneCarBlock;
+import com.example.tiangongkaiwu.block.XuanDaiBlock;
+import com.example.tiangongkaiwu.block.entity.XuanDaiBlockEntity;
 import com.example.tiangongkaiwu.block.GearBlock;
 import com.example.tiangongkaiwu.block.HeTianBlock;
 import com.example.tiangongkaiwu.block.DuiBlock;
@@ -298,6 +300,10 @@ public class TiangongKaiwu {
     );
 
     /** 梘方块实体：存所装流体种类（BER 动态渲染 + IFluidHandler capability，D12/D9）。 */
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<XuanDaiBlockEntity>> XUAN_DAI_BE_TYPE =
+        BLOCK_ENTITY_TYPES.register("xuan_dai",
+            () -> BlockEntityType.Builder.of(XuanDaiBlockEntity::new, TiangongKaiwu.XUAN_DAI.get()).build(null));
+
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<JianBlockEntity>> JIAN_BE_TYPE =
         BLOCK_ENTITY_TYPES.register("jian",
             () -> BlockEntityType.Builder.of(JianBlockEntity::new, JIAN.get()).build(null));
@@ -480,6 +486,15 @@ public class TiangongKaiwu {
     /** 龙骨刮板（物流一期）：梘段附件——劲驱动刮水刮货，翻车之链。 */
     public static final DeferredItem<Item> LONG_GU_ITEM =
             ITEMS.registerSimpleItem("long_gu");
+
+    /** 悬袋（物流一期）：喂料器/重力接口——吸吐掉落物，漏斗职能。 */
+    public static final DeferredBlock<XuanDaiBlock> XUAN_DAI = BLOCKS.register(
+        "xuan_dai",
+        () -> new XuanDaiBlock(BlockBehaviour.Properties.of()
+            .mapColor(MapColor.WOOD).strength(0.8f).sound(SoundType.WOOD).noOcclusion()));
+
+    public static final DeferredItem<BlockItem> XUAN_DAI_ITEM =
+            ITEMS.registerSimpleBlockItem("xuan_dai", XUAN_DAI);
 
     public static final DeferredItem<BlockItem> TUBE_ITEM =
             ITEMS.register("tong", () -> new TubeBlock.TubeItem(TUBE.get(), new Item.Properties()));
@@ -685,6 +700,7 @@ public class TiangongKaiwu {
                         output.accept(HANMO_TAI_ITEM);
                         output.accept(TONG_CHE_ITEM);
                         output.accept(LONG_GU_ITEM);
+                        output.accept(XUAN_DAI_ITEM);
                         output.accept(TUBE_ITEM);
                         output.accept(GEAR_BOX_ITEM);
                         output.accept(GEAR_BOX_VERTICAL_ITEM);

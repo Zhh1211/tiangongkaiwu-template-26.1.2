@@ -346,7 +346,7 @@ public class JianBlock extends Block implements EntityBlock {
      * 刮动方向 = 劲去向：劲来向的对面优先（直链）；转角沿梘链择邻（岔口闸板二期再定规则）。
      * 无劲来向或梘链无出路 → null（不刮）。
      */
-    private Direction dragonFlowDir(ServerLevel level, BlockPos pos) {
+    public static Direction dragonFlowDir(ServerLevel level, BlockPos pos) {
         Direction inDir = null;
         for (Direction d : Direction.values()) {
             BlockState nb = level.getBlockState(pos.relative(d));

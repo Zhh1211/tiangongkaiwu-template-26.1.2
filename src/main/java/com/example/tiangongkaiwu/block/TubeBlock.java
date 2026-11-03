@@ -57,8 +57,10 @@ import java.util.ArrayDeque;
  */
 public class TubeBlock extends Block implements EntityBlock {
 
-    /** false=汲（进水） true=泻（出水）。 */
+    /** false=汲（进水） true=泻（出水）。旧档兼容保留；新机制方向看头顶龙骨刮动方向（D19 §12）。 */
     public static final BooleanProperty DRAINING = BooleanProperty.create("draining");
+    /** 物流一期：工作模式——false=单格操作 true=区域操作（墨斗右键筒切换）。 */
+    public static final BooleanProperty AREA_MODE = BooleanProperty.create("area_mode");
 
     /** 结算周期（tick）。 */
     public static final int INTERVAL = 20;
@@ -73,29 +75,33 @@ public class TubeBlock extends Block implements EntityBlock {
 
     public TubeBlock(Properties properties) {
         super(properties);
-        this.registerDefaultState(this.stateDefinition.any().setValue(DRAINING, false));
+        this.registerDefaultState(this.stateDefinition.any()
+                .setValue(DRAINING, false).setValue(AREA_MODE, false));
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(DRAINING);
+        builder.add(DRAINING, AREA_MODE);
     }
 
-    /** 空手/任意右键：切换汲⇄泻（模式切换优先于贴方块放置）。 */
+    /** 物流一期（D19 §12）：墨斗右键切「单格/区域」操作范围；方向（世界入网/网入世界）看头顶龙骨刮动方向。 */
     @Override
     protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos,
                                               Player player, InteractionHand hand, BlockHitResult hit) {
-        if (level.isClientSide) {
-            return ItemInteractionResult.sidedSuccess(true);
+        if (!stack.isEmpty() && stack.getItem() instanceof com.example.tiangongkaiwu.item.MoDouItem) {
+            if (level.isClientSide) {
+                return ItemInteractionResult.sidedSuccess(true);
+            }
+            boolean nowArea = !state.getValue(AREA_MODE);
+            level.setBlock(pos, state.setValue(AREA_MODE, nowArea), 3);
+            if (player != null) {
+                player.displayClientMessage(Component.translatable(nowArea
+                        ? "block.tiangongkaiwu.tong.mode_area" : "block.tiangongkaiwu.tong.mode_single"), true);
+            }
+            level.playSound(null, pos, SoundEvents.WOOD_PLACE, SoundSource.BLOCKS, 0.5F, 1.1F);
+            return ItemInteractionResult.sidedSuccess(false);
         }
-        boolean nowDraining = !state.getValue(DRAINING);
-        level.setBlock(pos, state.setValue(DRAINING, nowDraining), 3);
-        if (player != null) {
-            player.displayClientMessage(Component.translatable(nowDraining
-                    ? "block.tiangongkaiwu.tong.mode_drain" : "block.tiangongkaiwu.tong.mode_draw"), true);
-        }
-        level.playSound(null, pos, SoundEvents.WOOD_PLACE, SoundSource.BLOCKS, 0.5F, 1.1F);
-        return ItemInteractionResult.sidedSuccess(false);
+        return super.useItemOn(stack, state, level, pos, player, hand, hit);
     }
 
     @Override
@@ -124,18 +130,33 @@ public class TubeBlock extends Block implements EntityBlock {
             level.scheduleTick(pos, this, INTERVAL);
             return;
         }
-        boolean draining = state.getValue(DRAINING);
+        // 物流一期（D19 §12）：头顶是带龙骨的梘段 = 世界接口工位
+        // 方向看龙骨刮动方向：链尾（介质顺流到达）→ 泄（网入世界）；链头 → 汲（世界入网）
+        boolean draining;
+        if (level.getBlockState(pos.above()).getBlock() instanceof JianBlock
+                && level.getBlockState(pos.above()).getValue(JianBlock.DRAGON)) {
+            Direction flow = JianBlock.dragonFlowDir(level, pos.above());
+            if (flow == null) {
+                level.scheduleTick(pos, this, INTERVAL);
+                return; // 链没方向（无劲/无出路）：闲置
+            }
+            draining = level.getBlockState(pos.above().relative(flow.getOpposite()))
+                    .getBlock() instanceof JianBlock; // 后方有链 = 介质顺流到达 = 泄
+        } else {
+            draining = state.getValue(DRAINING); // 旧档/未接链：汲泻按旧状态位
+        }
+        boolean area = state.getValue(AREA_MODE);
         if (draining) {
-            if (nearJian(level, pos)) {
-                drainSingle(level, pos); // 泻·单格（守恒）
+            if (area) {
+                fillUnlimited(level, pos); // 泄·区域（梘库存灌区，守恒）
             } else {
-                fillUnlimited(level, pos); // 泻·无限（梘库存灌区，守恒）
+                drainSingle(level, pos);   // 泄·单格（守恒）
             }
         } else {
-            if (nearJian(level, pos)) {
-                fillSingle(level, pos); // 汲·单格（守恒）
+            if (area) {
+                drainUnlimited(level, pos, random); // 汲·区域（销毁，排涝）
             } else {
-                drainUnlimited(level, pos, random); // 汲·无限（销毁，排涝）
+                fillSingle(level, pos);             // 汲·单格（守恒）
             }
         }
         level.scheduleTick(pos, this, INTERVAL);

@@ -1,0 +1,11 @@
+{
+  "variants": {
+    "sucking=true": {
+      "model": "tiangongkaiwu:block/xuan_dai"
+    },
+    "sucking=false": {
+      "model": "tiangongkaiwu:block/xuan_dai",
+      "x": 180
+    }
+  }
+}

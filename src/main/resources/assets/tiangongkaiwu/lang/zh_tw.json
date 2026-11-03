@@ -244,5 +244,10 @@
     "entry.tiangongkaiwu.naili_dao_yi.page_fertility": "「勤農糞田，多方以助之。」這卷書講的「地力」，是田地的底子：每施一次糞，腳下的地便多一分膏澤；每收一季，地力便耗損一分。地厚則穗實纍纍——同一株稻，熟田所穫遠勝新田；地薄則穗稀粒瘦，甚至顆粒難收。土性不改（沙、泥、磽、膩各有所宜），養的是地，不是換土。老農所以輪作糞養，不肯竭地而種也。",
     "item.tiangongkaiwu.long_gu": "龍骨",
     "block.tiangongkaiwu.modou.bottom_opened": "梘底開口已開——貨物液體將向下漏",
-    "block.tiangongkaiwu.modou.bottom_closed": "梘底開口已閉"
+    "block.tiangongkaiwu.modou.bottom_closed": "梘底開口已閉",
+    "block.tiangongkaiwu.xuan_dai": "懸袋",
+    "block.tiangongkaiwu.tong.mode_single": "筒：單格操作（墨斗切換）",
+    "block.tiangongkaiwu.tong.mode_area": "筒：區域操作（墨斗切換）",
+    "block.tiangongkaiwu.xuan_dai.mode_suck": "懸袋：吸（收貨漏斗）",
+    "block.tiangongkaiwu.xuan_dai.mode_spit": "懸袋：吐（發貨卸貨）"
 }
