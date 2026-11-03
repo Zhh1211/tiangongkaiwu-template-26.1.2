@@ -249,5 +249,6 @@
     "block.tiangongkaiwu.tong.mode_single": "Tube: single-block operation (mo-dou to switch)",
     "block.tiangongkaiwu.tong.mode_area": "Tube: area operation (mo-dou to switch)",
     "block.tiangongkaiwu.xuan_dai.mode_suck": "Hanging Bag: sucking (collecting)",
-    "block.tiangongkaiwu.xuan_dai.mode_spit": "Hanging Bag: spitting (unloading)"
+    "block.tiangongkaiwu.xuan_dai.mode_spit": "Hanging Bag: spitting (unloading)",
+    "entry.tiangongkaiwu.naili_shuili.page_long_gu": "The chain of the dragon-bone lift carries more than water. Fit a longgu chain onto a chute section (right-click with the chain in hand) and let power drive it: the scrapers push goods along the trough, one bundle per section, corners turning on their own. Climbing costs power; downhill, cargo slides by gravity alone. Open the chute floor (tap it with the mo-dou) and both goods and fluid drop through - into a hanging bag below for storage, or into a tube that draws from the world into the net, or pours the net back into the world, as the chain flows. The tube scope (single block or area) is switched with the mo-dou."
 }

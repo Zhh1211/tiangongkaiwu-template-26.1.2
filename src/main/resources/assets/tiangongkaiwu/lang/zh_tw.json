@@ -249,5 +249,6 @@
     "block.tiangongkaiwu.tong.mode_single": "筒：單格操作（墨斗切換）",
     "block.tiangongkaiwu.tong.mode_area": "筒：區域操作（墨斗切換）",
     "block.tiangongkaiwu.xuan_dai.mode_suck": "懸袋：吸（收貨漏斗）",
-    "block.tiangongkaiwu.xuan_dai.mode_spit": "懸袋：吐（發貨卸貨）"
+    "block.tiangongkaiwu.xuan_dai.mode_spit": "懸袋：吐（發貨卸貨）",
+    "entry.tiangongkaiwu.naili_shuili.page_long_gu": "翻車之鏈，不止運水。梘上裝龍骨（手持龍骨右鍵梘段），勁驅之：鏈上刮板推著貨物沿槽而行，一段一物，轉角自拐；上坡吃勁，下坡憑重力自滑，不費一勁。梘底開口（墨斗點底面），貨物液體皆可漏下——下接懸袋收貨入倉；下接筒，則依龍骨方向汲世界入網或瀉網入世界（筒的操作範圍單格/區域，墨斗右鍵筒可切）。"
 }
