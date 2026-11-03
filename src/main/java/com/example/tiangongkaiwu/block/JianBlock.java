@@ -10,6 +10,8 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -67,6 +69,10 @@ public class JianBlock extends Block implements EntityBlock {
     public static final BooleanProperty SEAL_WEST = BooleanProperty.create("seal_west");
     /** 泵附着（筒按在该段上，D16）：有劲则把水从低处搬向劲去向。 */
     public static final BooleanProperty TUBE = BooleanProperty.create("tube");
+    /** 龙骨刮板（物流一期 D19）：本段装有龙骨链——劲驱动刮水刮货，方向=劲去向。 */
+    public static final BooleanProperty DRAGON = BooleanProperty.create("dragon");
+    /** 向下开口（物流一期 D19）：墨斗开关底口——货物/液体向正下方漏。 */
+    public static final BooleanProperty OPEN_BOTTOM = BooleanProperty.create("open_bottom");
 
     /** 结算周期（tick）。 */
     public static final int INTERVAL = 10;
@@ -95,13 +101,15 @@ public class JianBlock extends Block implements EntityBlock {
                 .setValue(SEAL_SOUTH, false)
                 .setValue(SEAL_EAST, false)
                 .setValue(SEAL_WEST, false)
-                .setValue(TUBE, false));
+                .setValue(TUBE, false)
+                .setValue(DRAGON, false)
+                .setValue(OPEN_BOTTOM, false));
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(CONNECT_NORTH, CONNECT_SOUTH, CONNECT_EAST, CONNECT_WEST,
-                SEAL_NORTH, SEAL_SOUTH, SEAL_EAST, SEAL_WEST, TUBE);
+                SEAL_NORTH, SEAL_SOUTH, SEAL_EAST, SEAL_WEST, TUBE, DRAGON, OPEN_BOTTOM);
     }
 
     /** 方向 → 该侧隔板属性。 */
@@ -214,6 +222,9 @@ public class JianBlock extends Block implements EntityBlock {
                 jbe.drainMb(spent);
             }
         }
+
+        // ④b 物流一期：无龙骨段的重力自滑（货物落给下方梘段）
+        trySelfSlide(level, pos, jbe);
 
         // ⑤ 邻接成型：两侧都没隔板才开口（隔板=墙板闭合）
         boolean cn = canConnect(state, level, pos, Direction.NORTH);
@@ -348,13 +359,63 @@ public class JianBlock extends Block implements EntityBlock {
         return spent; // 只实浇才扣水（0 = 没花出去）
     }
 
+    // ====== 物流一期：掉落物落入 → 吸收进段内货物 ======
+    @Override
+    protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
+        if (level.isClientSide || !(entity instanceof ItemEntity drop)) {
+            return;
+        }
+        if (!(level.getBlockEntity(pos) instanceof JianBlockEntity jbe)) {
+            return;
+        }
+        jbe.acceptCargo(drop.getItem()); // split 原地扣减
+        if (drop.getItem().isEmpty()) {
+            entity.discard();
+        }
+    }
+
+    // ====== 物流一期：无龙骨自滑（重力白送）——货物落给下方梘段 ======
+    private void trySelfSlide(ServerLevel level, BlockPos pos, JianBlockEntity jbe) {
+        if (jbe.getCargo().isEmpty()) {
+            return;
+        }
+        if (level.getBlockEntity(pos.below()) instanceof JianBlockEntity below) {
+            if (below.acceptCargo(jbe.takeCargo()) > 0) {
+                level.scheduleTick(pos.below(), this, INTERVAL);
+            }
+        }
+    }
+
     // ============================================================
-    // 交互：拆泵 / BE
+    // 交互：装拆龙骨 / 拆泵 / BE
     // ============================================================
 
     @Override
     protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos,
                                               Player player, InteractionHand hand, BlockHitResult hit) {
+        // 物流一期：手持龙骨 → 装刮板；潜行空手 → 拆（退龙骨+段内货物）
+        if (state.getValue(DRAGON)) {
+            if (player != null && player.isShiftKeyDown() && stack.isEmpty()) {
+                if (!level.isClientSide) {
+                    level.setBlock(pos, state.setValue(DRAGON, false), 3);
+                    Block.popResource(level, pos, new ItemStack(TiangongKaiwu.LONG_GU_ITEM.get()));
+                    if (level.getBlockEntity(pos) instanceof JianBlockEntity jbe && !jbe.getCargo().isEmpty()) {
+                        Block.popResource(level, pos, jbe.takeCargo());
+                    }
+                    level.playSound(null, pos, SoundEvents.WOOD_BREAK, SoundSource.BLOCKS, 0.6F, 0.9F);
+                }
+                return ItemInteractionResult.sidedSuccess(level.isClientSide);
+            }
+        } else if (!stack.isEmpty() && stack.is(TiangongKaiwu.LONG_GU_ITEM.get())) {
+            if (!level.isClientSide) {
+                level.setBlock(pos, state.setValue(DRAGON, true), 3);
+                if (player == null || !player.getAbilities().instabuild) {
+                    stack.shrink(1);
+                }
+                level.playSound(null, pos, SoundEvents.WOOD_PLACE, SoundSource.BLOCKS, 0.6F, 1.1F);
+            }
+            return ItemInteractionResult.sidedSuccess(level.isClientSide);
+        }
         if (!stack.isEmpty() || !state.getValue(TUBE)) {
             return super.useItemOn(stack, state, level, pos, player, hand, hit);
         }
@@ -379,6 +440,12 @@ public class JianBlock extends Block implements EntityBlock {
                               BlockEntity blockEntity, ItemStack tool) {
         super.playerDestroy(level, player, pos, state, blockEntity, tool);
         popResource(level, pos, new ItemStack(TiangongKaiwu.JIAN_ITEM.get()));
+        if (state.getValue(DRAGON)) {
+            popResource(level, pos, new ItemStack(TiangongKaiwu.LONG_GU_ITEM.get()));
+        }
+        if (blockEntity instanceof JianBlockEntity jbe && !jbe.getCargo().isEmpty()) {
+            popResource(level, pos, jbe.takeCargo());
+        }
     }
 
     // ====== 碰撞箱（浅槽：低位碰撞，能踩过去）======

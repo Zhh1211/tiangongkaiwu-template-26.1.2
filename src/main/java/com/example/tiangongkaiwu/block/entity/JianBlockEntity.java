@@ -31,7 +31,52 @@ public class JianBlockEntity extends BlockEntity {
     public static final int SEGMENT_CAPACITY = 1000;
 
     private FluidStack fluid = FluidStack.EMPTY;
+    /** 段内货物（物流一期 D19）：一段一物一组，龙骨刮动时沿梘链移动；非实体，渲染虚拟画。 */
+    private net.minecraft.world.item.ItemStack cargo = net.minecraft.world.item.ItemStack.EMPTY;
     private final FluidHandler handler = new FluidHandler();
+
+    // ============ 货物存取（物流一期） ============
+
+    public net.minecraft.world.item.ItemStack getCargo() {
+        return this.cargo;
+    }
+
+    /** 收货：空段或同物未满一组才收。 @return 实际收下的数量（0=拒收） */
+    public int acceptCargo(net.minecraft.world.item.ItemStack stack) {
+        if (stack.isEmpty()) {
+            return 0;
+        }
+        if (this.cargo.isEmpty()) {
+            int taken = Math.min(stack.getCount(), stack.getMaxStackSize());
+            this.cargo = stack.split(taken);
+            this.setChanged();
+            this.sync();
+            return taken;
+        }
+        if (!net.minecraft.world.item.ItemStack.isSameItemSameComponents(stack, this.cargo)) {
+            return 0;
+        }
+        int room = this.cargo.getMaxStackSize() - this.cargo.getCount();
+        int taken = Math.min(stack.getCount(), room);
+        if (taken > 0) {
+            this.cargo.grow(taken);
+            stack.shrink(taken);
+            this.setChanged();
+            this.sync();
+        }
+        return taken;
+    }
+
+    /** 整段货物取走（刮动/开口漏下时用）。 */
+    public net.minecraft.world.item.ItemStack takeCargo() {
+        net.minecraft.world.item.ItemStack out = this.cargo;
+        this.cargo = net.minecraft.world.item.ItemStack.EMPTY;
+        if (!out.isEmpty()) {
+            this.setChanged();
+            this.sync();
+        }
+        return out;
+    }
 
     public JianBlockEntity(BlockPos pos, BlockState state) {
         super(TiangongKaiwu.JIAN_BE_TYPE.get(), pos, state);
@@ -107,6 +152,9 @@ public class JianBlockEntity extends BlockEntity {
         if (!this.fluid.isEmpty()) {
             tag.put("Fluid", this.fluid.save(registries));
         }
+        if (!this.cargo.isEmpty()) {
+            tag.put("Cargo", this.cargo.saveOptional(registries));
+        }
     }
 
     @Override
@@ -117,6 +165,11 @@ public class JianBlockEntity extends BlockEntity {
         } else {
             this.fluid = FluidStack.EMPTY;
         }
+        if (tag.contains("Cargo")) {
+            this.cargo = net.minecraft.world.item.ItemStack.parseOptional(registries, tag.getCompound("Cargo"));
+        } else {
+            this.cargo = net.minecraft.world.item.ItemStack.EMPTY;
+        }
     }
 
     @Override
@@ -124,6 +177,9 @@ public class JianBlockEntity extends BlockEntity {
         CompoundTag tag = super.getUpdateTag(registries);
         if (!this.fluid.isEmpty()) {
             tag.put("Fluid", this.fluid.save(registries));
+        }
+        if (!this.cargo.isEmpty()) {
+            tag.put("Cargo", this.cargo.saveOptional(registries));
         }
         return tag;
     }

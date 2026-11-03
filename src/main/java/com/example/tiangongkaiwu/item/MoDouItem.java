@@ -85,6 +85,19 @@ public class MoDouItem extends Item {
             if (client) {
                 return InteractionResult.SUCCESS;
             }
+            // 物流一期：点底面 = 开关向下开口（货物/液体向正下方漏）
+            if (context.getClickedFace() == net.minecraft.core.Direction.DOWN) {
+                boolean opening = !state.getValue(JianBlock.OPEN_BOTTOM);
+                level.setBlock(pos, state.setValue(JianBlock.OPEN_BOTTOM, opening), 3);
+                if (player != null) {
+                    player.displayClientMessage(Component.translatable(opening
+                            ? "block.tiangongkaiwu.modou.bottom_opened"
+                            : "block.tiangongkaiwu.modou.bottom_closed"), true);
+                }
+                level.playSound(null, pos, SoundEvents.WOOD_PLACE, SoundSource.BLOCKS, 0.6F,
+                        opening ? 1.3F : 0.9F);
+                return InteractionResult.CONSUME;
+            }
             Direction side = context.getClickedFace().getAxis().isHorizontal()
                     ? context.getClickedFace()
                     : context.getHorizontalDirection();

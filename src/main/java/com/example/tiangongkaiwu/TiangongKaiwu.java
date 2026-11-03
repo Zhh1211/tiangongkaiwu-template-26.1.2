@@ -477,6 +477,10 @@ public class TiangongKaiwu {
         )
     );
 
+    /** 龙骨刮板（物流一期）：梘段附件——劲驱动刮水刮货，翻车之链。 */
+    public static final DeferredItem<Item> LONG_GU_ITEM =
+            ITEMS.registerSimpleItem("long_gu");
+
     public static final DeferredItem<BlockItem> TUBE_ITEM =
             ITEMS.register("tong", () -> new TubeBlock.TubeItem(TUBE.get(), new Item.Properties()));
 
@@ -680,6 +684,7 @@ public class TiangongKaiwu {
                         output.accept(DOU_JIANG);
                         output.accept(HANMO_TAI_ITEM);
                         output.accept(TONG_CHE_ITEM);
+                        output.accept(LONG_GU_ITEM);
                         output.accept(TUBE_ITEM);
                         output.accept(GEAR_BOX_ITEM);
                         output.accept(GEAR_BOX_VERTICAL_ITEM);

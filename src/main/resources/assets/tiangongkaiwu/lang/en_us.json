@@ -241,5 +241,8 @@
     "item.tiangongkaiwu.mi_fan": "Steamed Rice",
     "entry.tiangongkaiwu.naili_do.craft_mifan": "Cooking Steamed Rice",
     "jade.tiangongkaiwu.fertility": "Fertility %s",
-    "entry.tiangongkaiwu.naili_dao_yi.page_fertility": "\"Manure the fields diligently, and aid them by every means.\" Fertility is the foundation of a field: each manuring adds richness to the ground beneath; each harvest wears it away. Rich ground bears heavy, crowded ears - the same rice plant yields far more on old, well-fed soil than on new; poor ground gives thin ears and sparse grain, sometimes none at all. The nature of the soil is never changed (sand, mud, lean grit, rich clay - each has its proper crop); what is fed is the ground itself, not replaced. Hence the old farmers rotate and manure, and refuse to sow their land to death."
+    "entry.tiangongkaiwu.naili_dao_yi.page_fertility": "\"Manure the fields diligently, and aid them by every means.\" Fertility is the foundation of a field: each manuring adds richness to the ground beneath; each harvest wears it away. Rich ground bears heavy, crowded ears - the same rice plant yields far more on old, well-fed soil than on new; poor ground gives thin ears and sparse grain, sometimes none at all. The nature of the soil is never changed (sand, mud, lean grit, rich clay - each has its proper crop); what is fed is the ground itself, not replaced. Hence the old farmers rotate and manure, and refuse to sow their land to death.",
+    "item.tiangongkaiwu.long_gu": "Longgu Chain",
+    "block.tiangongkaiwu.modou.bottom_opened": "Chute opened - items and fluid drop below",
+    "block.tiangongkaiwu.modou.bottom_closed": "Chute closed"
 }
