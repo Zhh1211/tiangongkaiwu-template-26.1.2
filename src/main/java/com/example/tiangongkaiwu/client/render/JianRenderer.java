@@ -40,7 +40,10 @@ public class JianRenderer implements BlockEntityRenderer<JianBlockEntity> {
     /** 面内边距：水柱四边缩进 1px，让槽壁包住水。 */
     private static final float INSET = 1.0F / 16.0F;
 
+    private final BlockEntityRendererProvider.Context context;
+
     public JianRenderer(BlockEntityRendererProvider.Context context) {
+        this.context = context;
     }
 
     @Override
@@ -128,6 +131,21 @@ public class JianRenderer implements BlockEntityRenderer<JianBlockEntity> {
         quad(vc, pose, mat,
                 x1, y0, z0, x1, y0, z1, x1, y1, z1, x1, y1, z0,
                 u0, v1, u1, v1, u1, v0, u0, v0, r, g, b, light);
+
+        // 物流一期：段内货物虚拟渲染（不造实体，浮在槽心）
+        if (!be.getCargo().isEmpty()) {
+            com.mojang.blaze3d.vertex.PoseStack cargoPose = poseStack;
+            cargoPose.pushPose();
+            double bob = Math.sin((be.getLevel() != null ? be.getLevel().getGameTime() % 40L : 0L) * 0.15D) * 0.03D;
+            cargoPose.translate(0.5D, 7.0D / 16.0D + 0.12D + bob, 0.5D);
+            cargoPose.scale(0.45F, 0.45F, 0.45F);
+            cargoPose.mulPose(com.mojang.math.Axis.YP.rotationDegrees(
+                    (be.getLevel() != null ? be.getLevel().getGameTime() : 0L) * 1.2F));
+            this.context.getItemRenderer().renderStatic(be.getCargo(),
+                    net.minecraft.world.item.ItemDisplayContext.FIXED,
+                    light, packedOverlay, cargoPose, buffers, be.getLevel(), 0);
+            cargoPose.popPose();
+        }
     }
 
     /** 按已给定的 4 角坐标与 UV 画一个四边形。 */

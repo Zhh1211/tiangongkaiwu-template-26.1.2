@@ -223,8 +223,26 @@ public class JianBlock extends Block implements EntityBlock {
             }
         }
 
-        // ④b 物流一期：无龙骨段的重力自滑（货物落给下方梘段）
-        trySelfSlide(level, pos, jbe);
+        // ④b 物流一期：下开口漏（货物弹出/液体凝源漏下）；否则无龙骨自滑
+        if (state.getValue(OPEN_BOTTOM)) {
+            BlockPos under = pos.below();
+            if (!jbe.getCargo().isEmpty() && !(level.getBlockEntity(under) instanceof JianBlockEntity)) {
+                Block.popResource(level, under, jbe.takeCargo());
+            }
+            if (jbe.getMb() >= SEGMENT_MB && !jbe.getFluid().isEmpty()
+                    && jbe.getFluid().getFluid().isSame(Fluids.WATER)
+                    && level.getBlockState(under).isAir()) {
+                level.setBlock(under, Fluids.WATER.defaultFluidState().createLegacyBlock(), 3);
+                jbe.drainMb(SEGMENT_MB);
+            }
+        } else {
+            trySelfSlide(level, pos, jbe);
+        }
+
+        // ④c 物流一期：龙骨刮动（劲驱动：刮货顺链、刮水定向可上山）
+        if (state.getValue(DRAGON)) {
+            tickDragon(state, level, pos, jbe);
+        }
 
         // ⑤ 邻接成型：两侧都没隔板才开口（隔板=墙板闭合）
         boolean cn = canConnect(state, level, pos, Direction.NORTH);
@@ -279,6 +297,77 @@ public class JianBlock extends Block implements EntityBlock {
             return false;
         }
         return JianBlock.transfer(level, best, outPos, SEGMENT_MB);
+    }
+
+    /**
+     * 龙骨刮动（物流一期 D19）：劲驱动——
+     * <ul>
+     * <li>刮货：段内货物推给顺流段；链尾无承接 → 弹出（悬袋/容器/地面接）；</li>
+     * <li>刮水：逆流段水位足 → 顺流段转一笔（定向搬水，可上山）。</li>
+     * </ul>
+     * D13：劲不足 → 停（货停原位不消失）；刮动恒速。
+     */
+    private void tickDragon(BlockState state, ServerLevel level, BlockPos pos, JianBlockEntity jbe) {
+        if (PowerNetwork.allocate(level, pos, PowerNetwork.DEFAULT_DEMAND) <= 0) {
+            return;
+        }
+        Direction flow = dragonFlowDir(level, pos);
+        if (flow == null) {
+            return;
+        }
+        BlockPos ahead = pos.relative(flow);
+
+        // 刮货
+        if (!jbe.getCargo().isEmpty()) {
+            ItemStack moving = jbe.takeCargo();
+            int accepted = 0;
+            if (level.getBlockEntity(ahead) instanceof JianBlockEntity tbe) {
+                accepted = tbe.acceptCargo(moving);
+                if (accepted > 0) {
+                    level.scheduleTick(ahead, this, INTERVAL);
+                }
+            }
+            if (accepted < moving.getCount()) {
+                // 链尾弹出（带方向落下，悬袋侧口/容器承接，落空则在地面）
+                ItemStack rest = moving.copyWithCount(moving.getCount() - accepted);
+                Block.popResource(level, ahead.above(), rest);
+            }
+        }
+
+        // 刮水（定向：逆流段 → 顺流段）
+        BlockPos behind = pos.relative(flow.getOpposite());
+        if (level.getBlockEntity(behind) instanceof JianBlockEntity bbe && bbe.getMb() >= TRANSFER_MB
+                && level.getBlockEntity(ahead) instanceof JianBlockEntity) {
+            JianBlock.transfer(level, behind, ahead, TRANSFER_MB);
+        }
+    }
+
+    /**
+     * 刮动方向 = 劲去向：劲来向的对面优先（直链）；转角沿梘链择邻（岔口闸板二期再定规则）。
+     * 无劲来向或梘链无出路 → null（不刮）。
+     */
+    private Direction dragonFlowDir(ServerLevel level, BlockPos pos) {
+        Direction inDir = null;
+        for (Direction d : Direction.values()) {
+            BlockState nb = level.getBlockState(pos.relative(d));
+            if (nb.getBlock() instanceof ShaftBlock || WaterDevices.emittedPower(nb) > 0) {
+                inDir = d;
+                break;
+            }
+        }
+        if (inDir == null) {
+            return null;
+        }
+        Direction out = inDir.getOpposite();
+        if (level.getBlockState(pos.relative(out)).getBlock() instanceof JianBlock) {
+            return out;
+        }
+        for (Direction d : Direction.Plane.HORIZONTAL) {
+            if (d != inDir && d != out && level.getBlockState(pos.relative(d)).getBlock() instanceof JianBlock) {
+                return d; // 转角：劲从轴来，梘链拐弯——沿链走
+            }
+        }
+        return null;
     }
 
     /** 段间转移：同流体、目标容量内；成功返回 true。 */

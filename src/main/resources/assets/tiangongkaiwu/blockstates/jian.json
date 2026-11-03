@@ -74,6 +74,14 @@
         "model": "tiangongkaiwu:block/jian_lip",
         "y": 270
       }
+    },
+    {
+      "when": {
+        "dragon": true
+      },
+      "apply": {
+        "model": "tiangongkaiwu:block/jian_dragon"
+      }
     }
   ]
 }
